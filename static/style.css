@@ -1,24 +1,13 @@
-main {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-areas: 'chat alerts';
+.btn {
+  background-color: brown !important;
 }
 
-section.char {
-  grid-area: chat;
-}
-
-section.alerts {
-  grid-area: alerts;
-}
-
-.alerts {
-  border: 1px solid #ccc;
-  padding: 10px;
-}
-.alert {
-  margin-bottom: 10px;
-  padding: 10px;
-  background-color: #f2f2f2;
-  border: 1px solid #ddd;
+.Clints button {
+  background-color: blue; /* Green */
+  color: white;
+  padding: 5px 5px;
+  margin: 10px 10px;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
 }
