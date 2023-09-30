@@ -7,7 +7,8 @@ async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const publicPath = (0, path_1.join)(__dirname, '../static');
     app.useStaticAssets(publicPath);
-    await app.listen(3000);
+    app.enableCors();
+    await app.listen(3333);
 }
 bootstrap();
 //# sourceMappingURL=main.js.map

@@ -16,14 +16,16 @@ let AppService = class AppService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async creatUser(user) {
-        const u = await this.prisma.user.create({
-            data: user,
+    async checkUser(query) {
+        const { username, password } = query;
+        const user = await this.prisma.user.findFirst({
+            where: { name: username },
         });
-    }
-    async getAllUser() {
-        const user = this.prisma.user.findMany();
-        return user;
+        console.log(user);
+        if (user && user.password === password) {
+            return true;
+        }
+        return false;
     }
 };
 exports.AppService = AppService;

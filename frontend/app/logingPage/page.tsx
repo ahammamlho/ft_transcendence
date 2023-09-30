@@ -1,7 +1,13 @@
 'use client';
+import { toast } from 'react-toastify';
 import styles from './styles.module.css';
+import { useRouter } from 'next/navigation';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function LoginPage() {
+  const router = useRouter();
+
   let username = '';
   let password = '';
   const handleUserName = (e: any) => {
@@ -10,12 +16,21 @@ export default function LoginPage() {
     else password = value;
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    console.log(username, password);
+    const apiUrl = `http://localhost:3333/check?username=${username}&password=${password}`;
+    const res = await fetch(apiUrl);
+    const result = await res.json();
+    if (result) {
+      router.push('/chatPage');
+    } else {
+      toast.error('error', {});
+    }
   };
+
   return (
     <main className={styles.main}>
+      <ToastContainer />
       <div className={styles.content}>
         <form className={styles.form} onSubmit={handleSubmit}>
           <input

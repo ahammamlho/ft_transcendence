@@ -5,14 +5,17 @@ import { PrismaService } from './prisma/prisma.service';
 export class AppService {
   constructor(private prisma: PrismaService) {}
 
-  async creatUser(user: any) {
-    const u = await this.prisma.user.create({
-      data: user,
-    });
-  }
+  async checkUser(query) {
+    const { username, password } = query;
 
-  async getAllUser() {
-    const user = this.prisma.user.findMany();
-    return user;
+    // Fetch the user from the database based on the username
+    const user = await this.prisma.user.findFirst({
+      where: { name: username },
+    });
+    console.log(user);
+    if (user && user.password === password) {
+      return true;
+    }
+    return false;
   }
 }

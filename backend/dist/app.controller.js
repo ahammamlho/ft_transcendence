@@ -19,42 +19,18 @@ let AppController = class AppController {
     constructor(appService) {
         this.appService = appService;
     }
-    createUser(body) {
-        console.log(body);
-        return this.appService.creatUser(body);
+    checkIfUserExist(query) {
+        return this.appService.checkUser(query);
     }
-    getAllUser() {
-        return this.appService.getAllUser();
-    }
-    creatPost() { }
-    getAllPost() { }
 };
 exports.AppController = AppController;
 __decorate([
-    (0, common_1.Post)('user'),
-    __param(0, (0, common_1.Body)()),
+    (0, common_1.Get)('/check'),
+    __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
-], AppController.prototype, "createUser", null);
-__decorate([
-    (0, common_1.Get)('allUser'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], AppController.prototype, "getAllUser", null);
-__decorate([
-    (0, common_1.Post)('post'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], AppController.prototype, "creatPost", null);
-__decorate([
-    (0, common_1.Get)('allPost'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], AppController.prototype, "getAllPost", null);
+], AppController.prototype, "checkIfUserExist", null);
 exports.AppController = AppController = __decorate([
     (0, common_1.Controller)(),
     __metadata("design:paramtypes", [app_service_1.AppService])
