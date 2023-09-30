@@ -1,0 +1,16 @@
+body {
+  color: white;
+  background: black;
+}
+
+.main-start {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.btn-started {
+  padding: 5px;
+  background-color: yellow;
+}
