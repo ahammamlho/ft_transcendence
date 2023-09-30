@@ -1,9 +1,11 @@
-import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Home() {
   return (
     <main className="main-start">
-      <button className="btn-started">Get Started</button>
+      <Link href="/logingPage" replace>
+        <button className="btn-started">Get Started</button>
+      </Link>
     </main>
   );
 }
