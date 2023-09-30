@@ -1,0 +1,76 @@
+.main {
+  background-color: #151b2d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: black;
+}
+.listFriends {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 80vh;
+  width: 20vh;
+  margin-right: 10px;
+  border-radius: 20px;
+}
+.listMessage {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  width: 60vh;
+  margin-left: 10px;
+  border-radius: 20px;
+}
+
+/* chat and + button */
+.topList {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 18vh;
+}
+
+.addChanls {
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 3vh;
+  width: 4vh;
+  background-color: blue;
+  border-radius: 20%;
+}
+
+/* icon + title + time */
+.divProfile {
+  display: flex;
+  width: 20vh;
+  align-items: center;
+  position: relative;
+  margin-bottom: 5px;
+  border-bottom: 0.01px solid #000;
+}
+
+.imgProfile {
+  border-radius: 50%;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.timeLastmsg {
+  color: grey;
+  font-size: 15px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 5px;
+}
+
+.container {
+  overflow: auto;
+}

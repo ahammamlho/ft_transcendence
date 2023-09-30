@@ -1,0 +1,80 @@
+/*!**************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[7].use[3]!./app/chatPage/styles.module.css ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************/
+.styles_main__N8uhw {
+  background-color: #151b2d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: black;
+}
+.styles_listFriends__N5wL4 {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 80vh;
+  width: 20vh;
+  margin-right: 10px;
+  border-radius: 20px;
+}
+.styles_listMessage__1Ljxi {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  width: 60vh;
+  margin-left: 10px;
+  border-radius: 20px;
+}
+
+/* chat and + button */
+.styles_topList__YL_3F {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 18vh;
+}
+
+.styles_addChanls__JYaxJ {
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 3vh;
+  width: 4vh;
+  background-color: blue;
+  border-radius: 20%;
+}
+
+/* icon + title + time */
+.styles_divProfile__DkFBb {
+  display: flex;
+  width: 20vh;
+  align-items: center;
+  position: relative;
+  margin-bottom: 5px;
+  border-bottom: 0.01px solid #000;
+}
+
+.styles_imgProfile__aFsb7 {
+  border-radius: 50%;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.styles_timeLastmsg__e9uPZ {
+  color: grey;
+  font-size: 15px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 5px;
+}
+
+.styles_container__r5pmE {
+  overflow: auto;
+}
+
