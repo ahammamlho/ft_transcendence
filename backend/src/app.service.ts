@@ -18,4 +18,10 @@ export class AppService {
     }
     return false;
   }
+
+  async getAllUser() {
+    const users = await this.prisma.user.findMany();
+    console.log(users);
+    return users;
+  }
 }

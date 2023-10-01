@@ -27,6 +27,11 @@ let AppService = class AppService {
         }
         return false;
     }
+    async getAllUser() {
+        const users = await this.prisma.user.findMany();
+        console.log(users);
+        return users;
+    }
 };
 exports.AppService = AppService;
 exports.AppService = AppService = __decorate([

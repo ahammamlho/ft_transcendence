@@ -22,6 +22,9 @@ let AppController = class AppController {
     checkIfUserExist(query) {
         return this.appService.checkUser(query);
     }
+    getAllUsers() {
+        return this.appService.getAllUser();
+    }
 };
 exports.AppController = AppController;
 __decorate([
@@ -31,6 +34,12 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], AppController.prototype, "checkIfUserExist", null);
+__decorate([
+    (0, common_1.Get)('allUsers'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], AppController.prototype, "getAllUsers", null);
 exports.AppController = AppController = __decorate([
     (0, common_1.Controller)(),
     __metadata("design:paramtypes", [app_service_1.AppService])
