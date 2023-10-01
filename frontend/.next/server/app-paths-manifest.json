@@ -1,3 +1,6 @@
 {
-  "/chatPage/page": "app/chatPage/page.js"
+  "/not-found": "app/not-found.js",
+  "/page": "app/page.js",
+  "/chatPage/page": "app/chatPage/page.js",
+  "/logingPage/page": "app/logingPage/page.js"
 }

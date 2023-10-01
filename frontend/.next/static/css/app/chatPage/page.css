@@ -45,7 +45,7 @@
   align-items: center;
   height: 3vh;
   width: 4vh;
-  background-color: blue;
+  background-color: #254bd6;
   border-radius: 20%;
 }
 
@@ -55,7 +55,6 @@
   width: 20vh;
   align-items: center;
   position: relative;
-  margin-bottom: 5px;
   border-bottom: 0.01px solid #000;
 }
 
@@ -70,11 +69,42 @@
   font-size: 15px;
   position: absolute;
   bottom: 0;
-  right: 0;
+  right: 5px;
   margin: 5px;
 }
 
 .styles_container__r5pmE {
   overflow: auto;
 }
+
+/* part msg */
+.styles_Wrapper__2UdiU {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-left: 10px;
+  margin-right: 10px;
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 5px;
+}
+
+.styles_InputText__1JTXA {
+  /* width: 50vh; */
+  height: 2.1vh;
+  border: none;
+  width: 90%;
+}
+.styles_InputText__1JTXA:focus {
+  outline: none;
+  border: none;
+}
+.styles_ImageSendMsg__X5Yie {
+  border-radius: 5px;
+}
+
+/* .formMsg {
+ 
+} */
 

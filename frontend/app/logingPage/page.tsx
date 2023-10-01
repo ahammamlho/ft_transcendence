@@ -2,6 +2,7 @@
 import { toast } from 'react-toastify';
 import styles from './styles.module.css';
 import { useRouter } from 'next/navigation';
+
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -22,7 +23,7 @@ export default function LoginPage() {
     const res = await fetch(apiUrl);
     const result = await res.json();
     if (result) {
-      router.push('/chatPage');
+      router.push(`/chatPage?username=${username}`);
     } else {
       toast.error('error', {});
     }
