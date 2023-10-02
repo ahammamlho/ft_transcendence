@@ -15,3 +15,10 @@ module.exports = {
     ],
   },
 };
+
+module.exports = {
+  env: {
+    SECRET: 'LlKq6ZtYbr+hTC073mAmAh9/h2HwMfsFo4hrfCx6gtsg',
+    NEXTAUTH_URL_INTERNAL: 'http://localhost:3000',
+  },
+};

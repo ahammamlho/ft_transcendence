@@ -12,7 +12,6 @@ export class AppService {
     const user = await this.prisma.user.findFirst({
       where: { name: username },
     });
-    console.log(user);
     if (user && user.password === password) {
       return true;
     }
@@ -21,7 +20,6 @@ export class AppService {
 
   async getAllUser() {
     const users = await this.prisma.user.findMany();
-    console.log(users);
     return users;
   }
 }

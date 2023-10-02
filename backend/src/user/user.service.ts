@@ -13,6 +13,7 @@ export class UserService {
         email: dto.email,
       },
     });
+
     if (user) throw new ConflictException('Email duplicated');
 
     const newUser = await this.prisma.user.create({

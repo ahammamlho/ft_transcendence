@@ -5,30 +5,20 @@ import { useRouter } from 'next/navigation';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useSession } from 'next-auth/react';
 
 export default function LoginPage() {
   const router = useRouter();
 
-  let username = '';
-  let password = '';
-  const handleUserName = (e: any) => {
-    const { name, value } = e.target;
-    if (name === 'username') username = value;
-    else password = value;
-  };
-
+  const handleUserName = (e: any) => {};
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    const apiUrl = `http://localhost:3333/check?username=${username}&password=${password}`;
-    const res = await fetch(apiUrl);
-    const result = await res.json();
-    if (result) {
-      router.push(`/chatPage?username=${username}`);
-    } else {
-      toast.error('error', {});
-    }
   };
 
+  const { data: session } = useSession();
+  if (session && session.user) {
+    router.push(`/chatPage?username=aklsj`);
+  }
   return (
     <main className={styles.main}>
       <ToastContainer />
