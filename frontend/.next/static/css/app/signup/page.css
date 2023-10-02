@@ -1,0 +1,76 @@
+/*!************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[7].use[3]!./app/signup/styles.module.css ***!
+  \************************************************************************************************************************************************************************************************************************************************************************/
+.styles_main__mqV5J {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.styles_content__TLAf6 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  width: 400px;
+  background-color: gray;
+  border-radius: 20px;
+  border: 1px solid white;
+}
+
+.styles_form__uzJ63 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  width: 400px;
+  background-color: gray;
+  border-radius: 20px;
+  border: 1px solid white;
+}
+
+.styles_inputText__YT3Zq {
+  width: 300px;
+  padding: 10px;
+  margin: 10px;
+  font-size: 18px;
+  background: linear-gradient(to left top, #000, #22132e) fixed;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.styles_inputText__YT3Zq:hover {
+  border: 2px solid rgba(255, 255, 255, 0.5);
+}
+.styles_inputText__YT3Zq:focus {
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  background: linear-gradient(to left top, #000, #4e2d69) fixed;
+}
+
+.styles_button___V5nR {
+  width: 300px;
+  padding: 10px;
+  margin-top: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  outline: none;
+  background: linear-gradient(to left top, #000, #4e2d69) fixed;
+  border-radius: 10px;
+  border: 5px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.8);
+  transition: all 0.5s;
+}
+
+.styles_button___V5nR:hover {
+  border: 5px solid rgba(255, 255, 255, 0.5);
+  background: linear-gradient(to left top, #000, #8b5db0) fixed;
+}
+
+.styles_button___V5nR:focus {
+  background: linear-gradient(to left top, #8b5db0, #000) fixed;
+}
+

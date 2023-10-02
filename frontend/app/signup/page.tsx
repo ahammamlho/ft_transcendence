@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import styles from './styles.module.css';
 import { Backend_URL } from '../lib/constants';
+import Link from 'next/link';
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
@@ -76,6 +77,17 @@ export default function SignupPage() {
             <input type="submit" value="Enter" className={styles.button} />
           </form>
         </div>
+        <Link
+          href="/"
+          style={{
+            color: 'white',
+            display: 'flex',
+            justifyContent: 'end',
+            paddingTop: '10px',
+          }}
+        >
+          Sign in
+        </Link>
       </div>
     </main>
   );

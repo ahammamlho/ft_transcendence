@@ -7,7 +7,6 @@ type Props = {
 
 export default async function ChatLayout(props: Props) {
   const session = await getServerSession(authOptions);
-  console.log(session);
   return (
     <div>
       fasdjkadsghjahsdgjkhaksghajksdghkl
