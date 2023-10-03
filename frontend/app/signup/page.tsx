@@ -1,10 +1,16 @@
 'use client';
+
 import React, { useState } from 'react';
 import styles from './styles.module.css';
 import { Backend_URL } from '../lib/constants';
 import Link from 'next/link';
+// import router from 'next/router';
+import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 
 export default function SignupPage() {
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -19,7 +25,7 @@ export default function SignupPage() {
   };
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-
+    const index = Math.floor(Math.random() * 100) + 1;
     const { username, email, password } = formData;
 
     const res = await fetch(Backend_URL + 'auth/register', {
@@ -28,7 +34,7 @@ export default function SignupPage() {
         name: username,
         email: email,
         password: password,
-        avatar: 'avatar',
+        avatar: `https://randomuser.me/api/portraits/women/${index}.jpg`,
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -39,8 +45,12 @@ export default function SignupPage() {
       return;
     }
     const response = await res.json();
-    alert('user Registred');
-    console.log({ response });
+    await signIn('credentials', {
+      username: email,
+      password: password,
+      redirect: true,
+      callbackUrl: '/chatPage',
+    });
   };
   return (
     <main className={styles.main}>

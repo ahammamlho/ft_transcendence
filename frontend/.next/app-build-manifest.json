@@ -18,6 +18,18 @@
       "static/css/app/signup/page.css",
       "static/chunks/app/signup/page.js"
     ],
+    "/chatPage/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/chatPage/page.css",
+      "static/chunks/app/chatPage/page.js"
+    ],
+    "/chatPage/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/chatPage/layout.css",
+      "static/chunks/app/chatPage/layout.js"
+    ],
     "/not-found": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",

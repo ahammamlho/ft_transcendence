@@ -10,14 +10,15 @@ module.exports = {
   },
 };
 
-// module.exports = {
-//   async redirects() {
-//     return [
-//       {
-//         source: '/api/auth/signin',
-//         destination: '/',
-//         permanent: true,
-//       },
-//     ];
-//   },
-// };
+module.exports = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'randomuser.me',
+        port: '',
+        pathname: '/api/**',
+      },
+    ],
+  },
+};

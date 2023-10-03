@@ -1,20 +1,24 @@
 // 'use client';
 
+import { Backend_URL } from '@/app/lib/constants';
 import styles from '../styles.module.css';
 import Image from 'next/image';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
-export default async function ListFriends({ params }: any) {
-  const apiUrl = `http://localhost:3333/allUsers`;
-  const res = await fetch(apiUrl, {
-    next: {
-      revalidate: 1,
+export default async function ListFriends() {
+  const session = await getServerSession(authOptions);
+  const res = await fetch(Backend_URL + 'user/all', {
+    method: 'GET',
+    headers: {
+      authorization: `Bearer ${session?.backendTokens.accessToken}`,
+      'Content-Type': 'application/json',
     },
   });
   const result = await res.json();
-  let users = result;
-  console.log(params);
-  const profile = users.map((map: any) => {
-    return params !== map['name'] ? (
+  console.log(result);
+  const profile = result.map((map: any) => {
+    return (
       <div className={styles.divProfile}>
         <Image
           className={styles.imgProfile}
@@ -28,8 +32,6 @@ export default async function ListFriends({ params }: any) {
           <p className={styles.timeLastmsg}>4m</p>
         </div>
       </div>
-    ) : (
-      <div></div>
     );
   });
 

@@ -7,6 +7,7 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/',
   },
+  session: { strategy: 'jwt' },
   providers: [
     CredntialsProvider({
       name: 'Credentials',
@@ -20,6 +21,7 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials, req) {
         if (!credentials?.username || !credentials?.password) return null;
+
         const { username, password } = credentials;
 
         const res = await fetch(Backend_URL + 'auth/login', {
@@ -32,8 +34,8 @@ export const authOptions: NextAuthOptions = {
             'Content-Type': 'application/json',
           },
         });
-
         const user = await res.json();
+
         if (res.ok && user) {
           return user;
         }
