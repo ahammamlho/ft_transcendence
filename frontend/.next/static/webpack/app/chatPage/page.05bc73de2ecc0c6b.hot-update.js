@@ -1,0 +1,21 @@
+/*
+ * ATTENTION: An "eval-source-map" devtool has been used.
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+self["webpackHotUpdate_N_E"]("app/chatPage/page",{
+
+/***/ "(app-pages-browser)/./app/chatPage/styles.module.css":
+/*!****************************************!*\
+  !*** ./app/chatPage/styles.module.css ***!
+  \****************************************/
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+eval(__webpack_require__.ts("// extracted by mini-css-extract-plugin\nmodule.exports = {\"mainLayout\":\"styles_mainLayout__rpNxJ\",\"main\":\"styles_main__N8uhw\",\"listFriends\":\"styles_listFriends__N5wL4\",\"partMessage\":\"styles_partMessage__Xadql\",\"sendMessage\":\"styles_sendMessage__bK4LR\",\"listMessage\":\"styles_listMessage__1Ljxi\",\"topList\":\"styles_topList__YL_3F\",\"addChanls\":\"styles_addChanls__JYaxJ\",\"divProfile\":\"styles_divProfile__DkFBb\",\"imgProfile\":\"styles_imgProfile__aFsb7\",\"timeLastmsg\":\"styles_timeLastmsg__e9uPZ\",\"container\":\"styles_container__r5pmE\",\"Wrapper\":\"styles_Wrapper__2UdiU\",\"InputText\":\"styles_InputText__1JTXA\",\"ImageSendMsg\":\"styles_ImageSendMsg__X5Yie\"};\n    if(true) {\n      // 1696330656298\n      var cssReload = __webpack_require__(/*! ./node_modules/next/dist/compiled/mini-css-extract-plugin/hmr/hotModuleReplacement.js */ \"(app-pages-browser)/./node_modules/next/dist/compiled/mini-css-extract-plugin/hmr/hotModuleReplacement.js\")(module.id, {\"publicPath\":\"/_next/\",\"esModule\":false,\"locals\":true});\n      module.hot.dispose(cssReload);\n      \n    }\n  \nmodule.exports.__checksum = \"47a11b79b00e\"\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwcC1wYWdlcy1icm93c2VyKS8uL2FwcC9jaGF0UGFnZS9zdHlsZXMubW9kdWxlLmNzcyIsIm1hcHBpbmdzIjoiQUFBQTtBQUNBLGtCQUFrQjtBQUNsQixPQUFPLElBQVU7QUFDakI7QUFDQSxzQkFBc0IsbUJBQU8sQ0FBQyx3TUFBdUksY0FBYyxzREFBc0Q7QUFDek8sTUFBTSxVQUFVO0FBQ2hCO0FBQ0E7QUFDQTtBQUNBLHlCQUF5QiIsInNvdXJjZXMiOlsid2VicGFjazovL19OX0UvLi9hcHAvY2hhdFBhZ2Uvc3R5bGVzLm1vZHVsZS5jc3M/ZjIwOCJdLCJzb3VyY2VzQ29udGVudCI6WyIvLyBleHRyYWN0ZWQgYnkgbWluaS1jc3MtZXh0cmFjdC1wbHVnaW5cbm1vZHVsZS5leHBvcnRzID0ge1wibWFpbkxheW91dFwiOlwic3R5bGVzX21haW5MYXlvdXRfX3JwTnhKXCIsXCJtYWluXCI6XCJzdHlsZXNfbWFpbl9fTjh1aHdcIixcImxpc3RGcmllbmRzXCI6XCJzdHlsZXNfbGlzdEZyaWVuZHNfX041d0w0XCIsXCJwYXJ0TWVzc2FnZVwiOlwic3R5bGVzX3BhcnRNZXNzYWdlX19YYWRxbFwiLFwic2VuZE1lc3NhZ2VcIjpcInN0eWxlc19zZW5kTWVzc2FnZV9fYks0TFJcIixcImxpc3RNZXNzYWdlXCI6XCJzdHlsZXNfbGlzdE1lc3NhZ2VfXzFManhpXCIsXCJ0b3BMaXN0XCI6XCJzdHlsZXNfdG9wTGlzdF9fWUxfM0ZcIixcImFkZENoYW5sc1wiOlwic3R5bGVzX2FkZENoYW5sc19fSllheEpcIixcImRpdlByb2ZpbGVcIjpcInN0eWxlc19kaXZQcm9maWxlX19Ea0ZCYlwiLFwiaW1nUHJvZmlsZVwiOlwic3R5bGVzX2ltZ1Byb2ZpbGVfX2FGc2I3XCIsXCJ0aW1lTGFzdG1zZ1wiOlwic3R5bGVzX3RpbWVMYXN0bXNnX19lOXVQWlwiLFwiY29udGFpbmVyXCI6XCJzdHlsZXNfY29udGFpbmVyX19yNXBtRVwiLFwiV3JhcHBlclwiOlwic3R5bGVzX1dyYXBwZXJfXzJVZGlVXCIsXCJJbnB1dFRleHRcIjpcInN0eWxlc19JbnB1dFRleHRfXzFKVFhBXCIsXCJJbWFnZVNlbmRNc2dcIjpcInN0eWxlc19JbWFnZVNlbmRNc2dfX1g1WWllXCJ9O1xuICAgIGlmKG1vZHVsZS5ob3QpIHtcbiAgICAgIC8vIDE2OTYzMzA2NTYyOThcbiAgICAgIHZhciBjc3NSZWxvYWQgPSByZXF1aXJlKFwiL1VzZXJzL2xhaGFtbWFtL0Rlc2t0b3AvZnRfdHJhbnNjZW5kZW5jZS9mcm9udGVuZC9ub2RlX21vZHVsZXMvbmV4dC9kaXN0L2NvbXBpbGVkL21pbmktY3NzLWV4dHJhY3QtcGx1Z2luL2htci9ob3RNb2R1bGVSZXBsYWNlbWVudC5qc1wiKShtb2R1bGUuaWQsIHtcInB1YmxpY1BhdGhcIjpcIi9fbmV4dC9cIixcImVzTW9kdWxlXCI6ZmFsc2UsXCJsb2NhbHNcIjp0cnVlfSk7XG4gICAgICBtb2R1bGUuaG90LmRpc3Bvc2UoY3NzUmVsb2FkKTtcbiAgICAgIFxuICAgIH1cbiAgXG5tb2R1bGUuZXhwb3J0cy5fX2NoZWNrc3VtID0gXCI0N2ExMWI3OWIwMGVcIlxuIl0sIm5hbWVzIjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(app-pages-browser)/./app/chatPage/styles.module.css\n"));
+
+/***/ })
+
+});

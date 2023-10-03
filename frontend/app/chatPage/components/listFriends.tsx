@@ -18,7 +18,7 @@ export default async function ListFriends() {
   const result = await res.json();
   console.log(result);
   const profile = result.map((map: any) => {
-    return (
+    return session?.user.id != map.id ? (
       <div className={styles.divProfile}>
         <Image
           className={styles.imgProfile}
@@ -32,6 +32,8 @@ export default async function ListFriends() {
           <p className={styles.timeLastmsg}>4m</p>
         </div>
       </div>
+    ) : (
+      <></>
     );
   });
 

@@ -4,20 +4,23 @@ import styles from '../styles.module.css';
 import Image from 'next/image';
 
 export default function ListMsgs() {
-  // const [msg, setMsg] = useState('');
-  // const input = document.getElementById(styles.input);
+  const [msg, setMsg] = useState('');
+  const input = document.getElementById(styles.input);
   const handleSubmit = (e: any) => {
-    // e.preventDefault();
-    // console.log(msg);
-    // setMsg('');
-    // input.value = '';
+    e.preventDefault();
+    console.log(msg);
+    setMsg('');
   };
 
   const onMessageChange = (e: any) => {
-    // setMsg(e.target.value);
+    setMsg(e.target.value);
+    console.log(msg);
   };
   return (
-    <div className={styles.listMessage}>
+    <div className={styles.partMessage}>
+      <div className={styles.listMessage}>
+        <h1>asfiodsfjsgjdskldslkvjdsklvjdsjkl</h1>
+      </div>
       <form className={styles.Wrapper} onSubmit={handleSubmit}>
         <input
           className={styles.InputText}
