@@ -1,0 +1,21 @@
+/*
+ * ATTENTION: An "eval-source-map" devtool has been used.
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+self["webpackHotUpdate_N_E"]("app/chatPage/page",{
+
+/***/ "(app-pages-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%2FUsers%2Flahammam%2FDesktop%2Fft_transcendence%2Ffrontend%2Fapp%2FchatPage%2Fcomponents%2FpartListFriends%2Fstyles.module.css&modules=%2FUsers%2Flahammam%2FDesktop%2Fft_transcendence%2Ffrontend%2Fapp%2FchatPage%2Fcomponents%2FpartListMsg%2FlistMsg.tsx&server=false!":
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%2FUsers%2Flahammam%2FDesktop%2Fft_transcendence%2Ffrontend%2Fapp%2FchatPage%2Fcomponents%2FpartListFriends%2Fstyles.module.css&modules=%2FUsers%2Flahammam%2FDesktop%2Fft_transcendence%2Ffrontend%2Fapp%2FchatPage%2Fcomponents%2FpartListMsg%2FlistMsg.tsx&server=false! ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+eval(__webpack_require__.ts("Promise.resolve(/*! import() eager */).then(__webpack_require__.t.bind(__webpack_require__, /*! ./app/chatPage/components/partListFriends/styles.module.css */ \"(app-pages-browser)/./app/chatPage/components/partListFriends/styles.module.css\", 23));\nPromise.resolve(/*! import() eager */).then(__webpack_require__.bind(__webpack_require__, /*! ./app/chatPage/components/partListMsg/listMsg.tsx */ \"(app-pages-browser)/./app/chatPage/components/partListMsg/listMsg.tsx\"))//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwcC1wYWdlcy1icm93c2VyKS8uL25vZGVfbW9kdWxlcy9uZXh0L2Rpc3QvYnVpbGQvd2VicGFjay9sb2FkZXJzL25leHQtZmxpZ2h0LWNsaWVudC1lbnRyeS1sb2FkZXIuanM/bW9kdWxlcz0lMkZVc2VycyUyRmxhaGFtbWFtJTJGRGVza3RvcCUyRmZ0X3RyYW5zY2VuZGVuY2UlMkZmcm9udGVuZCUyRmFwcCUyRmNoYXRQYWdlJTJGY29tcG9uZW50cyUyRnBhcnRMaXN0RnJpZW5kcyUyRnN0eWxlcy5tb2R1bGUuY3NzJm1vZHVsZXM9JTJGVXNlcnMlMkZsYWhhbW1hbSUyRkRlc2t0b3AlMkZmdF90cmFuc2NlbmRlbmNlJTJGZnJvbnRlbmQlMkZhcHAlMkZjaGF0UGFnZSUyRmNvbXBvbmVudHMlMkZwYXJ0TGlzdE1zZyUyRmxpc3RNc2cudHN4JnNlcnZlcj1mYWxzZSEiLCJtYXBwaW5ncyI6IkFBQUEsc1BBQWdKO0FBQ2hKIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vX05fRS8/NDg5MSJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQoLyogd2VicGFja01vZGU6IFwiZWFnZXJcIiAqLyBcIi9Vc2Vycy9sYWhhbW1hbS9EZXNrdG9wL2Z0X3RyYW5zY2VuZGVuY2UvZnJvbnRlbmQvYXBwL2NoYXRQYWdlL2NvbXBvbmVudHMvcGFydExpc3RGcmllbmRzL3N0eWxlcy5tb2R1bGUuY3NzXCIpO1xuaW1wb3J0KC8qIHdlYnBhY2tNb2RlOiBcImVhZ2VyXCIgKi8gXCIvVXNlcnMvbGFoYW1tYW0vRGVza3RvcC9mdF90cmFuc2NlbmRlbmNlL2Zyb250ZW5kL2FwcC9jaGF0UGFnZS9jb21wb25lbnRzL3BhcnRMaXN0TXNnL2xpc3RNc2cudHN4XCIpIl0sIm5hbWVzIjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(app-pages-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%2FUsers%2Flahammam%2FDesktop%2Fft_transcendence%2Ffrontend%2Fapp%2FchatPage%2Fcomponents%2FpartListFriends%2Fstyles.module.css&modules=%2FUsers%2Flahammam%2FDesktop%2Fft_transcendence%2Ffrontend%2Fapp%2FchatPage%2Fcomponents%2FpartListMsg%2FlistMsg.tsx&server=false!\n"));
+
+/***/ })
+
+});

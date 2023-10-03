@@ -1,7 +1,6 @@
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import AppBar from './components/appBar';
-import styles from './styles.module.css';
 type Props = {
   children: React.ReactNode;
 };

@@ -1,0 +1,73 @@
+.imgProfile {
+  border-radius: 50%;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.partMessage {
+  background-color: #f1f3f9;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  height: 60vh;
+  width: 40vh;
+  border-radius: 20px;
+}
+
+.topProfile {
+  background-color: white;
+  font-size: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 4vh;
+  width: 40vh;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+.formSendMsg {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 98%;
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.InputText {
+  background-color: #f1f3f9;
+  height: 2.1vh;
+  border: none;
+  width: 90%;
+}
+.InputText:focus {
+  outline: none;
+  border: none;
+}
+/* msg right */
+.sendMsgRight {
+  display: block;
+
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+
+  max-width: 95%;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-top: 10px;
+  word-wrap: break-word;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.msgList {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  float: right;
+}

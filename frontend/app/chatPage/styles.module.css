@@ -20,8 +20,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 80vh;
-  width: 20vh;
+  height: 60vh;
+  width: 18vh;
   margin-right: 10px;
   border-radius: 20px;
 }
@@ -31,7 +31,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 18vh;
+  width: 16vh;
 }
 
 .addChanls {
@@ -39,8 +39,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 3vh;
-  width: 4vh;
+  height: 2vh;
+  width: 3vh;
   background-color: #254bd6;
   border-radius: 20%;
 }
@@ -48,7 +48,7 @@
 /* icon + title + time */
 .divProfile {
   display: flex;
-  width: 20vh;
+  width: 18vh;
   align-items: center;
   position: relative;
   border-bottom: 0.01px solid #000;
@@ -76,13 +76,13 @@
 /* part msg */
 
 .partMessage {
-  background-color: white;
+  background-color: #f1f3f9;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
   align-items: center;
-  height: 80vh;
-  width: 60vh;
+  height: 60vh;
+  width: 40vh;
   /* padding: 10px; */
   /* margin-left: 10px; */
   border-radius: 20px;
@@ -98,9 +98,19 @@
   padding: 5px;
   margin-bottom: 10px;
 }
-
+.topProfile {
+  background-color: red;
+  font-size: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 4vh;
+  width: 40vh;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
 .InputText {
-  /* width: 50vh; */
+  background-color: #f1f3f9;
   height: 2.1vh;
   border: none;
   width: 90%;

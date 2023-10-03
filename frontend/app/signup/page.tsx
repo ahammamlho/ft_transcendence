@@ -34,7 +34,7 @@ export default function SignupPage() {
         name: username,
         email: email,
         password: password,
-        avatar: `https://randomuser.me/api/portraits/women/${index}.jpg`,
+        avatar: `https://randomuser.me/api/portraits/men/${index}.jpg`,
       }),
       headers: {
         'Content-Type': 'application/json',

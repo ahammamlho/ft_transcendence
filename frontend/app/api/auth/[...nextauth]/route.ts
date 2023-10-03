@@ -55,9 +55,9 @@ export const authOptions: NextAuthOptions = {
       session.backendTokens = token.backendTokens;
       return session;
     },
-    async redirect({ url, baseUrl }) {
-      return '/chatPage';
-    },
+    // async redirect({ url, baseUrl }) {
+    //   return '/chatPage';
+    // },
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
