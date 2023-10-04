@@ -6,6 +6,7 @@ import { Message } from './entities/message.entity';
 export class MessagesService {
   message: Message[] = [{ name: 'fasf', text: 'dafs' }];
   create(createMessageDto: CreateMessageDto) {
+    console.log('This action adds a new message');
     return 'This action adds a new message';
   }
 

@@ -8,7 +8,7 @@ import io from 'Socket.IO-client';
 
 type data = { users: any; session: any };
 export default function ListFriends({ session, users }: data) {
-  const [geust, setGeust] = useState(users[0]);
+  // const [geust, setGeust] = useState(users[0]);
   const user = session.user;
   const profile = users.map((map: any, index: number) => {
     return user.id != map.id ? (
@@ -40,22 +40,20 @@ export default function ListFriends({ session, users }: data) {
     );
   });
 
-  let socket;
   useEffect(() => {
+    console.log('rendeerer');
+    console.log(window);
     const socketInitializer = async () => {
-      // if (typeof window !== 'undefined') {
-      socket = io('http://localhost:3333', {
+      const socket = io('http://localhost:3333', {
         transports: ['websocket'],
       });
-
       socket.on('connect', () => {
-        console.log('connected');
+        console.log('connected ');
       });
-      // }
+      socket.emit('createMessage', 'alsj');
     };
     socketInitializer();
   }, []);
-
   return (
     <>
       <div className={styles.listFriends}>
@@ -66,7 +64,7 @@ export default function ListFriends({ session, users }: data) {
 
         <div className={styles.container}>{profile}</div>
       </div>
-      <ListMsgs props={geust} />
+      <ListMsgs props={users[0]} />
     </>
   );
 }
