@@ -1,4 +1,5 @@
 export class CreateMessageDto {
-  content: String;
-  recivedId: Number;
+  content: string;
+  senderId: number;
+  receivedId: number;
 }

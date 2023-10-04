@@ -24,8 +24,8 @@ model User {
 model DirectMessage {
   id    Int     @default(autoincrement()) @id
   content String  
-  date  DateTime  @default(now())
+  date  DateTime  @default(now())  // createdAt
   user User @relation(fields: [senderId], references: [id])
   senderId Int
-  recivedId Int
+  receivedId Int
 }
