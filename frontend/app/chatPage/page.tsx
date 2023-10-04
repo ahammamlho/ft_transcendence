@@ -17,7 +17,7 @@ export default async function ChatPage() {
 
   return (
     <div className={styles.main}>
-      <ListFriends user={session?.user} users={result} />
+      <ListFriends session={session} users={result} />
     </div>
   );
 }

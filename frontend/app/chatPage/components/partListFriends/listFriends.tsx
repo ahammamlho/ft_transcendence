@@ -3,10 +3,13 @@ import styles from './styles.module.css';
 import Image from 'next/image';
 import ListMsgs from '../partListMsg/listMsg';
 import { useState } from 'react';
+import { useEffect } from 'react';
+import io from 'Socket.IO-client';
 
-type data = { users: any; user: any };
-export default function ListFriends({ user, users }: data) {
+type data = { users: any; session: any };
+export default function ListFriends({ session, users }: data) {
   const [geust, setGeust] = useState(users[0]);
+  const user = session.user;
   const profile = users.map((map: any, index: number) => {
     return user.id != map.id ? (
       <button
@@ -14,7 +17,6 @@ export default function ListFriends({ user, users }: data) {
         key={map.id}
         onClick={() => {
           console.log(map.name);
-          setGeust(users[index]);
         }}
         style={{
           border: 'none',
@@ -37,6 +39,22 @@ export default function ListFriends({ user, users }: data) {
       <div key={map.id}></div>
     );
   });
+
+  let socket;
+  useEffect(() => {
+    const socketInitializer = async () => {
+      // if (typeof window !== 'undefined') {
+      socket = io('http://localhost:3333', {
+        transports: ['websocket'],
+      });
+
+      socket.on('connect', () => {
+        console.log('connected');
+      });
+      // }
+    };
+    socketInitializer();
+  }, []);
 
   return (
     <>

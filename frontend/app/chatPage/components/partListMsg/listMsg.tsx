@@ -7,13 +7,11 @@ export default function ListMsgs({ props }: any) {
   let msg = '';
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    console.log(msg);
     msg = '';
   };
 
   const onMessageChange = (e: any) => {
     msg = e.target.value;
-    console.log(msg);
   };
   return (
     <div className={styles.partMessage}>
@@ -31,7 +29,6 @@ export default function ListMsgs({ props }: any) {
         </div>
         <LongMenu />
       </div>
-
       <div style={{ width: '95%' }}>
         <div className={styles.msgList}>
           <div className={styles.sendMsgRight}>fafadsfadsfasdfjalsfskll</div>

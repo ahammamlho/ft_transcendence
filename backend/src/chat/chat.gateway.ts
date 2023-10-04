@@ -8,7 +8,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
-@WebSocketGateway({ namespace: '/chat' })
+@WebSocketGateway({ namespace: 'dsf' })
 export class ChatGateway implements OnGatewayInit, OnGatewayDisconnect {
   private logger: Logger = new Logger('ChatGateway');
   private connectedClients: Map<string, Socket> = new Map();

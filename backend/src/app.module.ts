@@ -6,9 +6,16 @@ import { ConfigModule } from '@nestjs/config';
 import { ChatGateway } from './chat/chat.gateway';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { MessagesModule } from './messages/messages.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), PrismaModule, UserModule, AuthModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    PrismaModule,
+    UserModule,
+    AuthModule,
+    MessagesModule,
+  ],
   controllers: [AppController],
   providers: [AppService, ChatGateway],
 })

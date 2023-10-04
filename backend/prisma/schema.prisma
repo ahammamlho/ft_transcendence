@@ -11,10 +11,21 @@ datasource db {
 }
 
 model User {
-  id    Int     @default(autoincrement()) @id
+  id   Int     @default(autoincrement()) @id
   email String  @unique
   name  String?
   password String
   avatar String
   start  DateTime  @default(now())
+  directMessage DirectMessage[]
+}
+
+
+model DirectMessage {
+  id    Int     @default(autoincrement()) @id
+  content String  
+  date  DateTime  @default(now())
+  user User @relation(fields: [senderId], references: [id])
+  senderId Int
+  recivedId Int
 }

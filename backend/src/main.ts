@@ -1,17 +1,16 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { join } from 'path';
-
-// import { CorsOptions } from '@nestjs/common';
-import * as express from 'express';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  const publicPath = join(__dirname, '../static');
-  app.useStaticAssets(publicPath);
-  app.enableCors();
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {});
+  app.enableCors({
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+    credentials: true,
+  });
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
