@@ -2,12 +2,19 @@
 import styles from './styles.module.css';
 import Image from 'next/image';
 import ListMsgs from '../partListMsg/listMsg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type data = { users: any; session: any };
 export default function ListFriends({ session, users }: data) {
   const [geust, setGeust] = useState(users[0]);
   const user = session.user;
+
+  useEffect(() => {
+    if (users[0].id == user.id) {
+      setGeust(users[1]);
+    }
+  }, []);
+
   const profile = users.map((map: any, index: number) => {
     return user.id != map.id ? (
       <button
@@ -25,8 +32,8 @@ export default function ListFriends({ session, users }: data) {
           className={styles.imgProfile}
           src={map['avatar']}
           alt="Picture of the author"
-          width={50}
-          height={50}
+          width={40}
+          height={40}
         />
         <div className={styles.userInfo}>
           <h5 className={styles.nameUser}>{map['name']}</h5>

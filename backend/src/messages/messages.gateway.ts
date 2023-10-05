@@ -24,29 +24,44 @@ export class MessagesGateway
   }
 
   async handleConnection(client: Socket, ...args: any[]) {
-    console.log(this.wss);
+    // console.log(this.wss.sockets);
     console.log(`Client connected: ${client.id}`);
-    // console.log(client.handshake.query.userId[0]);
     await this.messagesService.findMsg2Users(client, {
       content: '',
       senderId: parseInt(client.handshake.query.senderId as string),
       receivedId: parseInt(client.handshake.query.receivedId as string),
     });
+    const queryParameters = client.handshake.query;
+
+    // const clientReceived = this.wss.sockets.sockets[clientId];
   }
+
   handleDisconnect(client: any) {
     console.log(`Client disconnected: ${client.id}`);
   }
 
   @SubscribeMessage('createMessage')
-  create(
+  async create(
     @ConnectedSocket() client: Socket,
     @MessageBody() createMessageDto: CreateMessageDto,
   ) {
-    this.messagesService.create(client, createMessageDto);
+    await this.messagesService.create(client, createMessageDto);
+
+    this.wss.sockets.sockets.forEach(async (clt, idClient) => {
+      if (
+        parseInt(clt.handshake.query.receivedId as string) ==
+        createMessageDto.receivedId
+      ) {
+        await this.messagesService.findMsg2Users(clt, createMessageDto);
+      }
+    });
   }
 
-  @SubscribeMessage('findAllMessages')
-  findAll() {
-    return this.messagesService.findAll();
+  @SubscribeMessage('findMsg2Users')
+  findMsgUsers(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() createMessageDto: CreateMessageDto,
+  ) {
+    return this.messagesService.findMsg2Users(client, createMessageDto);
   }
 }

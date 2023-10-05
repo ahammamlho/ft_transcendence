@@ -25,6 +25,8 @@ export class MessagesService {
   }
 
   async findMsg2Users(socket: Socket, twoUsers: CreateMessageDto) {
+    console.log(twoUsers);
+
     const msgUser = await this.prisma.directMessage.findMany({
       where: {
         OR: [
@@ -34,12 +36,12 @@ export class MessagesService {
           },
           {
             senderId: twoUsers.receivedId,
-            receivedId: twoUsers.receivedId,
+            receivedId: twoUsers.senderId,
           },
         ],
       },
       orderBy: {
-        date: 'asc', // 'asc' for ascending, 'desc' for descending
+        date: 'asc',
       },
     });
     socket.emit('findMsg2UsersResponse', msgUser);

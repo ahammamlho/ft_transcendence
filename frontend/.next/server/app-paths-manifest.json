@@ -1,4 +1,6 @@
 {
   "/page": "app/page.js",
-  "/chatPage/page": "app/chatPage/page.js"
+  "/signup/page": "app/signup/page.js",
+  "/chatPage/page": "app/chatPage/page.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js"
 }

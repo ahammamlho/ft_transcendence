@@ -3,6 +3,8 @@ import styles from './styles.module.css';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { io, Socket } from 'Socket.IO-client';
+import MessageLeft from './components/messageLeft';
+import MessageRight from './components/messageRight';
 let socket: Socket;
 
 type data = { geust: any; user: any };
@@ -18,6 +20,7 @@ export default function ListMsgs({ geust, user }: data) {
   const onMessageChange = (e: any) => {
     setMessage(e.target.value);
   };
+
   useEffect(() => {
     const socketInitializer = async () => {
       socket = io('http://localhost:3333', {
@@ -28,11 +31,6 @@ export default function ListMsgs({ geust, user }: data) {
         },
       });
       socket.on('connect', () => {});
-      socket.emit('findMsg2Users', {
-        content: '',
-        senderId: user.id,
-        receivedId: geust.id,
-      });
       socket.on('findMsg2UsersResponse', (response) => {
         setAllMessage(response);
       });
@@ -40,6 +38,13 @@ export default function ListMsgs({ geust, user }: data) {
     socketInitializer();
   }, []);
 
+  useEffect(() => {
+    socket?.emit('findMsg2Users', {
+      content: '',
+      senderId: user.id,
+      receivedId: geust.id,
+    });
+  }, [geust]);
   const sendMsgToServer = () => {
     if (msg != '') {
       socket?.emit('createMessage', {
@@ -57,12 +62,15 @@ export default function ListMsgs({ geust, user }: data) {
     senderId: number;
     receivedId: number;
   };
+
   const msgAllTag = Allmsg.map((elm: msgdto) => {
-    return (
-      <div key={elm.id} className={styles.sendMsgRight}>
-        {elm.content}
-      </div>
-    );
+    const tag =
+      elm.senderId == user.id ? (
+        <MessageRight message={elm} key={elm.id} />
+      ) : (
+        <MessageLeft geust={geust} message={elm} key={elm.id} />
+      );
+    return tag;
   });
   return (
     <div className={styles.container}>
@@ -78,26 +86,10 @@ export default function ListMsgs({ geust, user }: data) {
         <div>{geust.name}</div>
       </div>
 
-      <div className={styles.msgsInbox}>
-        <div className={styles.chats}>
-          <Image
-            className={styles.imgProfile}
-            src={user.avatar}
-            alt="Picture of the author"
-            width={30}
-            height={30}
-          />
-          <div>
-            <div>{geust.name}</div>
-            <div className={styles.message}>
-              jgkdjsgkjgkdjsgkjgkdjsgkjgkdjsgkjgkdjsgkjgkdjsgkjgkdjsgkjgkdjsgk
-            </div>
-          </div>
-        </div>
-      </div>
+      <div className={styles.msgsInbox}>{msgAllTag}</div>
 
       <div className={styles.msgBotton}>
-        <div className={styles.inputGroup} onSubmit={handleSubmit}>
+        <form className={styles.inputGroup} onSubmit={handleSubmit}>
           <input
             onChange={onMessageChange}
             className={styles.InputText}
@@ -114,7 +106,7 @@ export default function ListMsgs({ geust, user }: data) {
             width="30"
             height="30"
           />
-        </div>
+        </form>
       </div>
     </div>
   );
