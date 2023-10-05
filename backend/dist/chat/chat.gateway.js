@@ -41,7 +41,6 @@ let ChatGateway = class ChatGateway {
     }
     handleMessage(client2, message) {
         const client = this.connectedClients.get(message.sendTo);
-        console.log(message);
         if (client) {
             client.emit('chatToClient', message);
         }

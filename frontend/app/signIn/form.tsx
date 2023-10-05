@@ -21,14 +21,12 @@ export default function LoginForm() {
     e.preventDefault();
     try {
       setFormValues({ email: '', password: '' });
-      console.log('Before signIn:', formValues);
       const res = await signIn('credentials', {
         username: formValues.email,
         password: formValues.password,
         redirect: true,
         callbackUrl: '/chatPage',
       });
-      console.log('After signIn:', res);
       if (res?.error === null) {
         console.log('callback calld');
       } else {

@@ -6,6 +6,7 @@ import {
   OnGatewayInit,
   OnGatewayDisconnect,
   WebSocketServer,
+  ConnectedSocket,
 } from '@nestjs/websockets';
 import { MessagesService } from './messages.service';
 import { CreateMessageDto } from './dto/create-message.dto';
@@ -15,31 +16,37 @@ export class MessagesGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
   constructor(private readonly messagesService: MessagesService) {}
-  socket: Socket;
+
+  private connectedClients: Map<number, Socket> = new Map();
+  @WebSocketServer() wss: Server;
   afterInit(server: any) {
     console.log('Gateway Initialized');
   }
 
-  handleConnection(client: any, ...args: any[]) {
+  async handleConnection(client: Socket, ...args: any[]) {
+    console.log(this.wss);
     console.log(`Client connected: ${client.id}`);
-    this.socket = client;
+    // console.log(client.handshake.query.userId[0]);
+    await this.messagesService.findMsg2Users(client, {
+      content: '',
+      senderId: parseInt(client.handshake.query.senderId as string),
+      receivedId: parseInt(client.handshake.query.receivedId as string),
+    });
   }
   handleDisconnect(client: any) {
     console.log(`Client disconnected: ${client.id}`);
   }
 
   @SubscribeMessage('createMessage')
-  create(@MessageBody() createMessageDto: CreateMessageDto) {
-    return this.messagesService.create(createMessageDto);
+  create(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() createMessageDto: CreateMessageDto,
+  ) {
+    this.messagesService.create(client, createMessageDto);
   }
 
   @SubscribeMessage('findAllMessages')
   findAll() {
     return this.messagesService.findAll();
-  }
-
-  @SubscribeMessage('findMsg2Users')
-  findMsg2Users(@MessageBody() twoUsers: CreateMessageDto) {
-    return this.messagesService.findMsg2Users(this.socket, twoUsers);
   }
 }

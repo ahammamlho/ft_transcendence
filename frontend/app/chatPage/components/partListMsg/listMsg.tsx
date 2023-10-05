@@ -1,5 +1,4 @@
 'use client';
-import LongMenu from '../kebabMenu/kabab';
 import styles from './styles.module.css';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
@@ -19,22 +18,23 @@ export default function ListMsgs({ geust, user }: data) {
   const onMessageChange = (e: any) => {
     setMessage(e.target.value);
   };
-
   useEffect(() => {
     const socketInitializer = async () => {
       socket = io('http://localhost:3333', {
         transports: ['websocket'],
+        query: {
+          senderId: user.id,
+          receivedId: geust.id,
+        },
       });
       socket.on('connect', () => {});
-
       socket.emit('findMsg2Users', {
         content: '',
         senderId: user.id,
         receivedId: geust.id,
       });
       socket.on('findMsg2UsersResponse', (response) => {
-        console.log('------------------------------------------------------');
-        console.log(response);
+        setAllMessage(response);
       });
     };
     socketInitializer();
@@ -42,59 +42,79 @@ export default function ListMsgs({ geust, user }: data) {
 
   const sendMsgToServer = () => {
     if (msg != '') {
-      console.log('msg sended');
       socket?.emit('createMessage', {
         content: msg,
         senderId: user.id,
         receivedId: geust.id,
       });
     }
-
     setMessage('');
   };
-
+  type msgdto = {
+    id: number;
+    content: string;
+    date: number;
+    senderId: number;
+    receivedId: number;
+  };
+  const msgAllTag = Allmsg.map((elm: msgdto) => {
+    return (
+      <div key={elm.id} className={styles.sendMsgRight}>
+        {elm.content}
+      </div>
+    );
+  });
   return (
-    <div className={styles.partMessage}>
-      <div className={styles.topProfile}>
-        <div className={styles.topProfile}>
+    <div className={styles.container}>
+      <div className={styles.msgHeader}>
+        <Image
+          className={styles.imgProfile}
+          style={{ paddingLeft: '5px' }}
+          src={geust.avatar}
+          alt="Picture of the author"
+          width={40}
+          height={40}
+        />
+        <div>{geust.name}</div>
+      </div>
+
+      <div className={styles.msgsInbox}>
+        <div className={styles.chats}>
           <Image
             className={styles.imgProfile}
-            style={{ paddingLeft: '5px' }}
-            src={geust.avatar}
+            src={user.avatar}
             alt="Picture of the author"
-            width={40}
-            height={40}
+            width={30}
+            height={30}
           />
-          <div>{geust.name}</div>
+          <div>
+            <div>{geust.name}</div>
+            <div className={styles.message}>
+              jgkdjsgkjgkdjsgkjgkdjsgkjgkdjsgkjgkdjsgkjgkdjsgkjgkdjsgkjgkdjsgk
+            </div>
+          </div>
         </div>
-        <LongMenu />
       </div>
-      <div style={{ width: '95%' }}>
-        <div className={styles.msgList}>
-          <div className={styles.sendMsgRight}>fafadsfadsfasdfjalsfskll</div>
-          <div className={styles.sendMsgRight}>fafadsfadsfasdfjalsfskll</div>
-          <div className={styles.sendMsgRight}>fafadsfadsfasdfjalsfskll</div>
-        </div>
-        <form className={styles.formSendMsg} onSubmit={handleSubmit}>
+
+      <div className={styles.msgBotton}>
+        <div className={styles.inputGroup} onSubmit={handleSubmit}>
           <input
-            className={styles.InputText}
             onChange={onMessageChange}
+            className={styles.InputText}
             type="text"
             id="input"
             value={msg}
             placeholder="Type your message"
           />
-          <button>
-            <Image
-              onClick={() => sendMsgToServer()}
-              className={styles.ImageSendMsg}
-              src="/images/sendMsgIcon.png"
-              alt=""
-              width="30"
-              height="30"
-            />
-          </button>
-        </form>
+          <Image
+            onClick={() => sendMsgToServer()}
+            className={styles.ImageSendMsg}
+            src="/images/sendMsgIcon.png"
+            alt=""
+            width="30"
+            height="30"
+          />
+        </div>
       </div>
     </div>
   );

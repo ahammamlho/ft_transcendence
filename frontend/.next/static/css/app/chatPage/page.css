@@ -1,78 +1,98 @@
 /*!*************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[7].use[3]!./app/chatPage/components/partListMsg/styles.module.css ***!
   \*************************************************************************************************************************************************************************************************************************************************************************************************/
-.styles_imgProfile__dV77a {
-  border-radius: 50%;
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
-.styles_partMessage__fuEna {
-  background-color: #f1f3f9;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  align-items: center;
+.styles_container__FV9ka {
+  position: relative;
   height: 60vh;
   width: 40vh;
-  border-radius: 20px;
 }
 
-.styles_topProfile__UGppQ {
+.styles_msgHeader__L_Yd4 {
+  position: absolute;
+  top: 0px;
+  width: 40vh;
   background-color: white;
-  font-size: 20px;
+  font-size: 18px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  height: 4vh;
-  width: 40vh;
+  height: 55px;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
 }
 
-.styles_formSendMsg__s9BER {
+.styles_imgProfile__dV77a {
+  border-radius: 50%;
+  margin-left: 1%;
+  margin-right: 2%;
+  margin-top: 1%;
+}
+
+.styles_msgBotton__YrGeY {
+  position: absolute;
+  height: 40px;
+  background-color: #f1f3f9;
+  width: 40vh;
+  bottom: 0px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 98%;
-  border: 1px solid #333;
-  border-radius: 10px;
-  padding: 5px;
-  margin-bottom: 10px;
+  justify-content: center;
+}
+.styles_inputGroup__XH93y {
+  width: 35vh;
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 15px;
+  padding-left: 10px;
+  padding-top: 2px;
+  padding-bottom: 2px;
 }
 
 .styles_InputText__sF4CB {
-  background-color: #f1f3f9;
-  height: 2.1vh;
   border: none;
+  background-color: white;
+  border-radius: 15px;
+  height: 20px;
   width: 90%;
 }
 .styles_InputText__sF4CB:focus {
   outline: none;
   border: none;
 }
-/* msg right */
-.styles_sendMsgRight__ekbie {
-  display: block;
 
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  border-bottom-left-radius: 10px;
-
-  max-width: 95%;
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin-top: 10px;
-  word-wrap: break-word;
-  align-items: center;
-  justify-content: space-between;
+.styles_ImageSendMsg__XtIQQ {
+  height: 25px;
+  width: 25px;
+  border-radius: 5px;
 }
 
-.styles_msgList__yTm0Y {
+.styles_msgsInbox__ctI9J {
+  position: absolute;
+  top: 55px;
+  bottom: 40px;
+  width: 40vh;
+  background-color: #f1f3f9;
+}
+
+.styles_chats__vRUbZ {
+  background-color: red;
+  /* width: 80%;width: 40vh; */
+  width: 30vh;
+  padding: 5px;
+  border-radius: 10px;
   display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  float: right;
+}
+
+.styles_message__4bjOj {
+  background-color: green;
+  padding: 10px;
+  border-radius: 10px;
+  width: 20vh;
+  display: flex;
+  flex-wrap: nowrap;
 }
 
 /*!*****************************************************************************************************************************************************************************************************************************************************************************************************!*\
@@ -110,11 +130,16 @@
 
 /* icon + title + time */
 .styles_divProfile___VLp1 {
+  background-color: pink !important;
+
   display: flex;
   width: 18vh;
   align-items: center;
   position: relative;
-  border-bottom: 0.01px solid #000 !important;
+  border-bottom: 5px solid red !important;
+  border-top: 5px solid yellow !important;
+  border-right: 5px solid green !important;
+  border-left: 5px solid blue !important;
 }
 
 .styles_imgProfile__lSHEX {
@@ -130,9 +155,5 @@
   bottom: 0;
   right: 5px;
   margin: 5px;
-}
-
-.styles_container__yAuqB {
-  overflow: auto;
 }
 

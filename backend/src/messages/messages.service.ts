@@ -11,14 +11,13 @@ export class MessagesService {
     private prisma: PrismaService,
     private userService: UserService,
   ) {}
-  async create(createMessageDto: CreateMessageDto) {
-    const newMsg = await this.prisma.directMessage.create({
+  async create(client: Socket, createMessageDto: CreateMessageDto) {
+    await this.prisma.directMessage.create({
       data: {
         ...createMessageDto,
       },
     });
-
-    return 'This action adds a new message';
+    await this.findMsg2Users(client, createMessageDto);
   }
 
   findAll() {
@@ -31,9 +30,11 @@ export class MessagesService {
         OR: [
           {
             senderId: twoUsers.senderId,
+            receivedId: twoUsers.receivedId,
           },
           {
             senderId: twoUsers.receivedId,
+            receivedId: twoUsers.receivedId,
           },
         ],
       },
@@ -42,5 +43,8 @@ export class MessagesService {
       },
     });
     socket.emit('findMsg2UsersResponse', msgUser);
+  }
+  getSocketClientById(userId: number): Socket {
+    return;
   }
 }

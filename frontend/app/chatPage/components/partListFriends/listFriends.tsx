@@ -14,7 +14,6 @@ export default function ListFriends({ session, users }: data) {
         className={styles.divProfile}
         key={map.id}
         onClick={() => {
-          console.log(map.name);
           setGeust(users[index]);
         }}
         style={{
@@ -38,7 +37,6 @@ export default function ListFriends({ session, users }: data) {
       <div key={map.id}></div>
     );
   });
-
   return (
     <>
       <div className={styles.listFriends}>

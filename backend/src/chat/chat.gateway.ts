@@ -45,7 +45,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayDisconnect {
     message: { sender: string; sendTo: string; message: string },
   ) {
     const client = this.connectedClients.get(message.sendTo);
-    console.log(message);
     if (client) {
       client.emit('chatToClient', message);
     } else {
