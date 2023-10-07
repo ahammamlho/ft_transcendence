@@ -16,26 +16,17 @@ export class MessagesGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
   constructor(private readonly messagesService: MessagesService) {}
-
-  private connectedClients: Map<number, Socket> = new Map();
   @WebSocketServer() wss: Server;
+
   afterInit(server: any) {
     console.log('Gateway Initialized');
   }
 
   async handleConnection(client: Socket, ...args: any[]) {
-    // console.log(this.wss.sockets);
     console.log(`Client connected: ${client.id}`);
-    await this.messagesService.findMsg2Users(client, {
-      content: '',
-      senderId: parseInt(client.handshake.query.senderId as string),
-      receivedId: parseInt(client.handshake.query.receivedId as string),
-    });
-    const queryParameters = client.handshake.query;
-
-    // const clientReceived = this.wss.sockets.sockets[clientId];
+    // console.log();
+    client.join(client.handshake.query.senderId);
   }
-
   handleDisconnect(client: any) {
     console.log(`Client disconnected: ${client.id}`);
   }
@@ -45,23 +36,17 @@ export class MessagesGateway
     @ConnectedSocket() client: Socket,
     @MessageBody() createMessageDto: CreateMessageDto,
   ) {
-    await this.messagesService.create(client, createMessageDto);
-
-    this.wss.sockets.sockets.forEach(async (clt, idClient) => {
-      if (
-        parseInt(clt.handshake.query.receivedId as string) ==
-        createMessageDto.receivedId
-      ) {
-        await this.messagesService.findMsg2Users(clt, createMessageDto);
-      }
-    });
+    console.log('server : recived message');
+    console.log(createMessageDto);
+    await this.messagesService.create(createMessageDto);
+    await this.messagesService.findMsg2Users(this.wss, createMessageDto);
   }
 
   @SubscribeMessage('findMsg2Users')
-  findMsgUsers(
-    @ConnectedSocket() client: Socket,
+  async findMsgUsers(
+    server: Socket,
     @MessageBody() createMessageDto: CreateMessageDto,
   ) {
-    return this.messagesService.findMsg2Users(client, createMessageDto);
+    await this.messagesService.findMsg2Users(this.wss, createMessageDto);
   }
 }

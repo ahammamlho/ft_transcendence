@@ -75,7 +75,7 @@
   bottom: 40px;
   width: 40vh;
   background-color: #f1f3f9;
-  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-y: scroll;
 }
 
 .styles_chats__vRUbZ {

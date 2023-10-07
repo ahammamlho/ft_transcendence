@@ -6,14 +6,8 @@ import { useEffect, useState } from 'react';
 
 type data = { users: any; session: any };
 export default function ListFriends({ session, users }: data) {
-  const [geust, setGeust] = useState(users[0]);
+  const [geust, setGeust] = useState([]);
   const user = session.user;
-
-  useEffect(() => {
-    if (users[0].id == user.id) {
-      setGeust(users[1]);
-    }
-  }, []);
 
   const profile = users.map((map: any, index: number) => {
     return user.id != map.id ? (
@@ -21,7 +15,7 @@ export default function ListFriends({ session, users }: data) {
         className={styles.divProfile}
         key={map.id}
         onClick={() => {
-          setGeust(users[index]);
+          setGeust(map);
         }}
         style={{
           border: 'none',

@@ -2,52 +2,69 @@
 import styles from './styles.module.css';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { io, Socket } from 'Socket.IO-client';
+
 import MessageLeft from './components/messageLeft';
 import MessageRight from './components/messageRight';
-let socket: Socket;
+import {
+  emitMessage,
+  ourSocket,
+  socketInitializer,
+} from '@/app/api/directMessage/dmSocket';
 
 type data = { geust: any; user: any };
 export default function ListMsgs({ geust, user }: data) {
   const [msg, setMessage] = useState('');
   const [Allmsg, setAllMessage] = useState([]);
 
+  useEffect(() => {
+    socketInitializer(user);
+  }, []);
+
+  useEffect(() => {
+    emitMessage('findMsg2Users', {
+      content: '',
+      senderId: user.id,
+      receivedId: geust.id,
+    });
+    console.log(`-------> ${geust.id}`);
+  }, [geust]);
+
+  const listeningToServer = () => {
+    ourSocket.on('findMsg2UsersResponse', (response) => {
+      if (geust!.id != undefined) {
+        if (
+          response.senderId == user.id ||
+          (response.receivedId == user.id && response.senderId == geust.id)
+        ) {
+          setAllMessage(response.msgUser);
+        } else {
+          console.log(
+            '*************************************************************',
+          );
+        }
+      }
+    });
+  };
+
+  setInterval(() => {
+    console.log(`-------> ${geust.id}`);
+  }, 2000);
+
+  useEffect(() => {
+    if (ourSocket) listeningToServer();
+  }, [ourSocket]);
+  const onMessageChange = (e: any) => {
+    setMessage(e.target.value);
+  };
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
     sendMsgToServer();
   };
 
-  const onMessageChange = (e: any) => {
-    setMessage(e.target.value);
-  };
-
-  useEffect(() => {
-    const socketInitializer = async () => {
-      socket = io('http://localhost:3333', {
-        transports: ['websocket'],
-        query: {
-          senderId: user.id,
-          receivedId: geust.id,
-        },
-      });
-      socket.on('connect', () => {});
-      socket.on('findMsg2UsersResponse', (response) => {
-        setAllMessage(response);
-      });
-    };
-    socketInitializer();
-  }, []);
-
-  useEffect(() => {
-    socket?.emit('findMsg2Users', {
-      content: '',
-      senderId: user.id,
-      receivedId: geust.id,
-    });
-  }, [geust]);
   const sendMsgToServer = () => {
     if (msg != '') {
-      socket?.emit('createMessage', {
+      emitMessage('createMessage', {
         content: msg,
         senderId: user.id,
         receivedId: geust.id,
@@ -55,15 +72,8 @@ export default function ListMsgs({ geust, user }: data) {
     }
     setMessage('');
   };
-  type msgdto = {
-    id: number;
-    content: string;
-    date: number;
-    senderId: number;
-    receivedId: number;
-  };
 
-  const msgAllTag = Allmsg.map((elm: msgdto) => {
+  const msgAllTag = Allmsg.map((elm: msgDbdto) => {
     const tag =
       elm.senderId == user.id ? (
         <MessageRight message={elm} key={elm.id} />
@@ -84,9 +94,12 @@ export default function ListMsgs({ geust, user }: data) {
           height={40}
         />
         <div>{geust.name}</div>
+        <div>---- {geust.id}</div>
       </div>
 
-      <div className={styles.msgsInbox}>{msgAllTag}</div>
+      <div className={styles.msgsInbox} id="scrollableDiv">
+        {msgAllTag}
+      </div>
 
       <div className={styles.msgBotton}>
         <form className={styles.inputGroup} onSubmit={handleSubmit}>

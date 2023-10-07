@@ -14,7 +14,7 @@ export default function MessageLeft({ geust, message }: any) {
       <div>
         <div className={styles.nameUser}>{geust.name}</div>
         <div className={styles.messageInfo}>
-          <div className={styles.message}>${message.content}</div>
+          <div className={styles.message}>{message.content}</div>
           <div className={styles.timeSend}> 10.25 </div>
         </div>
       </div>

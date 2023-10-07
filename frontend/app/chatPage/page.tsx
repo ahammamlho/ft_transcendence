@@ -3,6 +3,7 @@ import ListFriends from './components/partListFriends/listFriends';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import { Backend_URL } from '../lib/constants';
+import { socketInitializer } from '../api/directMessage/dmSocket';
 
 export default async function ChatPage() {
   const session = await getServerSession(authOptions);
