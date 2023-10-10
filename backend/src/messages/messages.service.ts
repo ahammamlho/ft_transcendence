@@ -12,49 +12,35 @@ export class MessagesService {
     private userService: UserService,
   ) {}
 
-  async create(createMessageDto: CreateMessageDto) {
-    await this.prisma.directMessage.create({
+  async create(server: Server, createMessageDto: CreateMessageDto) {
+    const msg = await this.prisma.directMessage.create({
       data: {
         ...createMessageDto,
       },
     });
+
+    server.to(msg.receivedId.toString()).emit('findMsg2UsersResponse', {
+      senderId: msg.senderId,
+      receivedId: msg.receivedId,
+      msgUser: msg,
+    });
   }
 
-  async createConnection(createMessageDto: CreateMessageDto) {}
-
-  async findMsg2Users(server: Server, twoUsers: CreateMessageDto) {
+  async getMessage(senderId: number, receivedId: number) {
     const msgUser = await this.prisma.directMessage.findMany({
       where: {
         OR: [
           {
-            senderId: twoUsers.senderId,
-            receivedId: twoUsers.receivedId,
+            senderId,
+            receivedId,
           },
           {
-            senderId: twoUsers.receivedId,
-            receivedId: twoUsers.senderId,
+            senderId: receivedId,
+            receivedId: senderId,
           },
         ],
       },
-      orderBy: {
-        date: 'asc',
-      },
     });
-    server.to(twoUsers.senderId.toString()).emit('findMsg2UsersResponse', {
-      senderId: twoUsers.senderId,
-      receivedId: twoUsers.receivedId,
-      msgUser: msgUser,
-    });
-    if (twoUsers.content != '') {
-      server.to(twoUsers.receivedId.toString()).emit('findMsg2UsersResponse', {
-        senderId: twoUsers.senderId,
-        receivedId: twoUsers.receivedId,
-        msgUser: msgUser,
-      });
-    }
-  }
-
-  getSocketClientById(userId: number): Socket {
-    return;
+    return msgUser;
   }
 }

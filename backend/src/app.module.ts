@@ -7,6 +7,8 @@ import { ChatGateway } from './chat/chat.gateway';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { MessagesModule } from './messages/messages.module';
+import { MessageController } from './messages/messages.controller';
+import { MessagesService } from './messages/messages.service';
 
 @Module({
   imports: [

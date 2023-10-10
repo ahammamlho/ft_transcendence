@@ -48,7 +48,7 @@ export default function ListFriends({ session, users }: data) {
 
         <div className={styles.container}>{profile}</div>
       </div>
-      <ListMsgs geust={geust} user={user} />
+      <ListMsgs geust={geust} user={user} setGeust={setGeust} />
     </>
   );
 }

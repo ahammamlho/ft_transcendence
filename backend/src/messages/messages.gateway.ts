@@ -22,11 +22,11 @@ export class MessagesGateway
     console.log('Gateway Initialized');
   }
 
-  async handleConnection(client: Socket, ...args: any[]) {
+  handleConnection(client: Socket, ...args: any[]) {
     console.log(`Client connected: ${client.id}`);
-    // console.log();
     client.join(client.handshake.query.senderId);
   }
+
   handleDisconnect(client: any) {
     console.log(`Client disconnected: ${client.id}`);
   }
@@ -36,17 +36,6 @@ export class MessagesGateway
     @ConnectedSocket() client: Socket,
     @MessageBody() createMessageDto: CreateMessageDto,
   ) {
-    console.log('server : recived message');
-    console.log(createMessageDto);
-    await this.messagesService.create(createMessageDto);
-    await this.messagesService.findMsg2Users(this.wss, createMessageDto);
-  }
-
-  @SubscribeMessage('findMsg2Users')
-  async findMsgUsers(
-    server: Socket,
-    @MessageBody() createMessageDto: CreateMessageDto,
-  ) {
-    await this.messagesService.findMsg2Users(this.wss, createMessageDto);
+    await this.messagesService.create(this.wss, createMessageDto);
   }
 }
