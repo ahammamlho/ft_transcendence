@@ -11,6 +11,8 @@ import {
   ourSocket,
   socketInitializer,
 } from '@/app/api/directMessage/dmSocket';
+import TypographyMenu from './components/dropMenu';
+import LongMenu from './components/dropMenu';
 
 type data = { geust: any; user: any; setGeust: (data: any) => void };
 export default function ListMsgs({ geust, user, setGeust }: data) {
@@ -108,6 +110,7 @@ export default function ListMsgs({ geust, user, setGeust }: data) {
           height={40}
         />
         <div>{geust.name}</div>
+        <LongMenu />
       </div>
 
       <div className={styles.msgsInbox} ref={scrollableRef} id="scrollableDiv">

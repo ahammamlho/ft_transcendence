@@ -18,14 +18,25 @@ model User {
   avatar String
   start  DateTime  @default(now())
   directMessage DirectMessage[]
+  frienRequest FriendRequest[]
 }
 
 
 model DirectMessage {
   id    Int     @default(autoincrement()) @id
   content String  
-  date  DateTime  @default(now())  // createdAt
+  createdAt  DateTime  @default(now())   
   user User @relation(fields: [senderId], references: [id])
   senderId Int
   receivedId Int
+}
+
+
+model FriendRequest {
+  id    Int     @default(autoincrement()) @id
+  createdAt  DateTime  @default(now())
+  user User @relation(fields: [senderId], references: [id])
+  senderId Int
+  receivedId Int
+
 }
