@@ -4,6 +4,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const options = ['Add friend', 'Block', 'Play'];
 
@@ -18,12 +19,14 @@ export default function LongMenu() {
     setAnchorEl(null);
   };
 
-  function sendFriendRequest(user: userDto, geust: userDto) {
-    axios
-      .get(`http://localhost:3333/messages/${geust.id}/${user.id}`)
-      .then(({ data }) => {});
-  }
+  // function sendFriendRequest(user: userDto, geust: userDto) {
+  //   axios
+  //     .get(`http://localhost:3333/messages/${geust.id}/${user.id}`)
+  //     .then(({ data }) => {});
+  // }
 
+  // const count = useSelector((state: any) => state.friends.value);
+  // console.log(count);
   return (
     <div>
       <IconButton onClick={handleClick}>

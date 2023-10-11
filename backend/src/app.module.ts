@@ -3,12 +3,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
-import { ChatGateway } from './chat/chat.gateway';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { MessagesModule } from './messages/messages.module';
-import { MessageController } from './messages/messages.controller';
-import { MessagesService } from './messages/messages.service';
 
 @Module({
   imports: [
@@ -19,6 +16,6 @@ import { MessagesService } from './messages/messages.service';
     MessagesModule,
   ],
   controllers: [AppController],
-  providers: [AppService, ChatGateway],
+  providers: [AppService],
 })
 export class AppModule {}

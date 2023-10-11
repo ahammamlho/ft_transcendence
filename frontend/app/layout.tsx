@@ -1,9 +1,8 @@
 'use client';
 import './globals.css';
-import { Provider } from 'react-redux';
 import { Inter } from 'next/font/google';
 import { SessionProviders } from './components/Providers';
-import store from './chatPage/store/store';
+import { ReduxProvider } from './chatPage/store/provider-redux';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -15,9 +14,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <SessionProviders>
-        <Provider store={store}>
-          <body className={inter.className}>{children}</body>
-        </Provider>
+        <body className={inter.className}>
+          <ReduxProvider> {children}</ReduxProvider>
+        </body>
       </SessionProviders>
     </html>
   );

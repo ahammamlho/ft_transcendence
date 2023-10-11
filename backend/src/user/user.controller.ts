@@ -9,6 +9,7 @@ export class UserController {
   @UseGuards(JwtGuard)
   @Get('/all')
   async getAllUser() {
+    console.log('get all user called');
     return await this.userService.findAllUsers();
   }
 

@@ -11,7 +11,6 @@ import {
   ourSocket,
   socketInitializer,
 } from '@/app/api/directMessage/dmSocket';
-import TypographyMenu from './components/dropMenu';
 import LongMenu from './components/dropMenu';
 
 type data = { geust: any; user: any; setGeust: (data: any) => void };
