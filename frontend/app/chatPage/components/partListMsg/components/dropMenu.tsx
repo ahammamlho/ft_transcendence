@@ -3,30 +3,27 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import axios from 'axios';
-import { useSelector } from 'react-redux';
+import sendRequistFriend from '@/app/chatPage/fetch/send-request';
+import getRequistFriends from '@/app/chatPage/fetch/fetch-requsetFriends';
 
 const options = ['Add friend', 'Block', 'Play'];
 
-export default function LongMenu() {
+type data = { geustId: any; userId: any };
+export default function LongMenu({ userId, geustId }: data) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = (option: any) => {
-    console.log(option);
+    if (option === 'Add friend') {
+      sendRequistFriend(userId, geustId);
+    } else {
+      getRequistFriends(userId, geustId);
+    }
     setAnchorEl(null);
   };
 
-  // function sendFriendRequest(user: userDto, geust: userDto) {
-  //   axios
-  //     .get(`http://localhost:3333/messages/${geust.id}/${user.id}`)
-  //     .then(({ data }) => {});
-  // }
-
-  // const count = useSelector((state: any) => state.friends.value);
-  // console.log(count);
   return (
     <div>
       <IconButton onClick={handleClick}>

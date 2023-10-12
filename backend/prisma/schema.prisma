@@ -38,5 +38,5 @@ model FriendRequest {
   user User @relation(fields: [senderId], references: [id])
   senderId Int
   receivedId Int
-
+  @@unique([senderId, receivedId], name: "Unique_Sender_Receiver")
 }

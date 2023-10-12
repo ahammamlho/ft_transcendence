@@ -14,14 +14,4 @@ export class MessageController {
 
     return this.messagesService.getMessage(s, r);
   }
-
-  @Post('friendRequest:send/:rec')
-  async addFriendRequest(
-    @Param('send') send: string,
-    @Param('rec') rec: string,
-  ) {
-    const r = parseInt(rec);
-    const s = parseInt(send);
-    console.log(`sender=${s}, recived=${r}`);
-  }
 }

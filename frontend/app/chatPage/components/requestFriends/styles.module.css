@@ -1,0 +1,31 @@
+.container {
+  margin: 10px;
+}
+
+.divProfile {
+  position: relative;
+  display: flex;
+  width: 18vh;
+  align-items: center;
+  background-color: aliceblue;
+  padding: 3px;
+  border-radius: 10px;
+  margin: 10px;
+}
+.imgProfile {
+  border-radius: 50%;
+}
+.nameUser {
+  color: black;
+  margin-left: 10px;
+}
+.twoButton {
+  position: absolute;
+  right: 5px;
+}
+
+.button {
+  margin: 5px;
+  border: none;
+  background: none;
+}

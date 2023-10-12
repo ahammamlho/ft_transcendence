@@ -105,7 +105,7 @@ export default function ListMsgs({ geust, user }: data) {
           height={40}
         />
         <div>{geust.name}</div>
-        <LongMenu />
+        <LongMenu userId={user.id} geustId={geust.id} />
       </div>
 
       <div className={styles.msgsInbox} ref={scrollableRef} id="scrollableDiv">

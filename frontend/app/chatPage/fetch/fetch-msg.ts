@@ -8,7 +8,6 @@ async function getMessageTwoUsers(
     `http://localhost:3333/messages/${recived}/${sender}`,
   );
   const allMessage = await response.data;
-  console.log('-------------------------->', allMessage);
   return allMessage;
 }
 

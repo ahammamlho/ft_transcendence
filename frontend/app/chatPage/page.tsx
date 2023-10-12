@@ -13,7 +13,6 @@ export default async function ChatPage() {
   const users = await getAllUsers(
     `Bearer ${session?.backendTokens.accessToken}`,
   );
-  console.log('----->', users);
   return (
     <div className={styles.main}>
       <ListFriends session={session} users={users} />

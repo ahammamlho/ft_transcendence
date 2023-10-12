@@ -1,3 +1,5 @@
 {
-  "/chatPage/page": "app/chatPage/page.js"
+  "/page": "app/page.js",
+  "/chatPage/page": "app/chatPage/page.js",
+  "/chatPage/components/requestFriends/page": "app/chatPage/components/requestFriends/page.js"
 }

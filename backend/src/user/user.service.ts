@@ -44,4 +44,34 @@ export class UserService {
   async findAllUsers() {
     return await this.prisma.user.findMany();
   }
+  async sendFriendRequist(sendId: number, recivedId: number) {
+    const req = await this.prisma.friendRequest.findUnique({
+      where: {
+        Unique_Sender_Receiver: {
+          senderId: sendId,
+          receivedId: recivedId,
+        },
+      },
+    });
+    console.log(req);
+    if (!req) {
+      const newReq = await this.prisma.friendRequest.create({
+        data: {
+          senderId: sendId,
+          receivedId: recivedId,
+        },
+      });
+      return newReq;
+    }
+    return req;
+  }
+
+  async getFriendsRequist(senderId: number) {
+    const requ = await this.prisma.friendRequest.findMany({
+      where: {
+        receivedId: senderId,
+      },
+    });
+    return requ;
+  }
 }

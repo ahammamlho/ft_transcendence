@@ -1,11 +1,3 @@
-.mainLayout {
-  display: flex;
-  justify-content: end;
-  color: white;
-  background-color: black;
-  padding: 10px;
-}
-
 .main {
   background-color: #151b2d;
   display: flex;
@@ -119,7 +111,3 @@
   outline: none;
   border: none;
 }
-
-/* .formMsg {
- 
-} */

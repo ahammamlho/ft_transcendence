@@ -2,8 +2,7 @@
 import styles from './styles.module.css';
 import Image from 'next/image';
 import ListMsgs from '../partListMsg/listMsg';
-import { useEffect, useState } from 'react';
-import SettingsChat from '../settingsChat/settings-chat';
+import { useState } from 'react';
 
 type data = { users: any; session: any };
 export default function ListFriends({ session, users }: data) {
@@ -51,8 +50,7 @@ export default function ListFriends({ session, users }: data) {
 
         <div className={styles.container}>{profile}</div>
       </div>
-      <ListMsgs geust={geust} user={user} setGeust={setGeust} />
-      <SettingsChat></SettingsChat>
+      <ListMsgs geust={geust} user={user} />
     </>
   );
 }
