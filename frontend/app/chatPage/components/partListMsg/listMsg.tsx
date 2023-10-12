@@ -2,19 +2,18 @@
 import styles from './styles.module.css';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
-import axios from 'axios';
-
 import MessageLeft from './components/messageLeft';
 import MessageRight from './components/messageRight';
 import {
   emitMessage,
   ourSocket,
   socketInitializer,
-} from '@/app/api/directMessage/dmSocket';
+} from '@/app/chatPage/fetch/init-socket';
 import LongMenu from './components/dropMenu';
+import getMessageTwoUsers from '../../fetch/fetch-msg';
 
-type data = { geust: any; user: any; setGeust: (data: any) => void };
-export default function ListMsgs({ geust, user, setGeust }: data) {
+type data = { geust: any; user: any };
+export default function ListMsgs({ geust, user }: data) {
   const [msg, setMessage] = useState('');
   const [Allmsg, setAllMessage] = useState<msgDbdto[]>([]);
   const [respo, setRespo] = useState<msgDbdto>();
@@ -28,15 +27,13 @@ export default function ListMsgs({ geust, user, setGeust }: data) {
   }, [Allmsg]);
 
   useEffect(() => {
-    console.log('udd');
-    function getData() {
-      axios
-        .get(`http://localhost:3333/messages/${geust.id}/${user.id}`)
-        .then(({ data }) => {
-          setAllMessage(data);
-        });
+    async function getData() {
+      const msgs = await getMessageTwoUsers(user.id, geust.id);
+      setAllMessage(msgs);
     }
-    if (geust.id) getData();
+    if (geust.id) {
+      getData();
+    }
     socketInitializer(user);
   }, [geust]);
 
@@ -49,9 +46,9 @@ export default function ListMsgs({ geust, user, setGeust }: data) {
         ourSocket.on('findMsg2UsersResponse', onRec);
       }
     }
-    return () => {
-      ourSocket.off('findMsg2UsersResponse', onRec);
-    };
+    // return () => {
+    //   ourSocket.off('findMsg2UsersResponse', onRec);
+    // };
   }, [ourSocket]);
 
   useEffect(() => {
@@ -59,15 +56,14 @@ export default function ListMsgs({ geust, user, setGeust }: data) {
       setAllMessage((msg) => [...msg, respo]);
     }
   }, [respo]);
+
   const onMessageChange = (e: any) => {
     setMessage(e.target.value);
   };
-
   const handleSubmit = (e: any) => {
     e.preventDefault();
     sendMsgToServer();
   };
-
   const sendMsgToServer = () => {
     if (msg.trim() != '') {
       emitMessage('createMessage', {
