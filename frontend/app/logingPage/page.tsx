@@ -17,7 +17,7 @@ export default function LoginPage() {
 
   const { data: session } = useSession();
   if (session && session.user) {
-    router.push(`/chatPage?username=aklsj`);
+    router.push(`/chat?username=aklsj`);
   }
   return (
     <main className={styles.main}>

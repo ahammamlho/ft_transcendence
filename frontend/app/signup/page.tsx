@@ -49,7 +49,7 @@ export default function SignupPage() {
       username: email,
       password: password,
       redirect: true,
-      callbackUrl: '/chatPage',
+      callbackUrl: '/chat',
     });
   };
   return (

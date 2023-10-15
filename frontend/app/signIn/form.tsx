@@ -25,7 +25,7 @@ export default function LoginForm() {
         username: formValues.email,
         password: formValues.password,
         redirect: true,
-        callbackUrl: '/chatPage',
+        callbackUrl: '/chat',
       });
       if (res?.error === null) {
         console.log('callback calld');

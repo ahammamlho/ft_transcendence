@@ -67,11 +67,21 @@ export class UserService {
   }
 
   async getFriendsRequist(senderId: number) {
-    const requ = await this.prisma.friendRequest.findMany({
+    const friendRequests = await this.prisma.friendRequest.findMany({
       where: {
         receivedId: senderId,
       },
     });
-    return requ;
+    const senderIds = friendRequests.map((request) => request.senderId);
+    const users = await Promise.all(
+      senderIds.map(async (senderId) => {
+        return this.prisma.user.findUnique({
+          where: {
+            id: senderId,
+          },
+        });
+      }),
+    );
+    return users;
   }
 }

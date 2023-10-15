@@ -1,5 +1,6 @@
 {
   "/page": "app/page.js",
-  "/chatPage/page": "app/chatPage/page.js",
-  "/chatPage/components/requestFriends/page": "app/chatPage/components/requestFriends/page.js"
+  "/signup/page": "app/signup/page.js",
+  "/chat/page": "app/chat/page.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js"
 }
