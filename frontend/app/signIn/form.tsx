@@ -33,12 +33,14 @@ export default function LoginForm() {
         console.log(formValues);
       }
     } catch (error: any) {
+      console.log('callback calld', error);
       console.error('Error signing in:', error);
     }
   };
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
+    console.log(`${name} <----> ${value}`)
     setFormValues({ ...formValues, [name]: value });
   };
   return (

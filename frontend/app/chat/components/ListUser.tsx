@@ -1,14 +1,21 @@
+"use client"
 import React from 'react';
 import { ScrollArea, Avatar, Flex, Box, Text, Heading } from '@radix-ui/themes';
 import { AiFillPlusSquare } from "react-icons/ai";
 
+interface Props {
+  users: userDto[],
+  geust: userDto
+}
 
+const ListUser = ({ users, geust }: Props) => {
 
-const ListUser = () => {
-
-  const users = [1, 2, 3, 4, 1, 2];
-  const userWidget = users.map((tr, index) => {
-    return <Flex align="center" className='relative mt-0 border-b py-2 ' key={index}>
+  // const users0 = [1, 2, 3, 4, 1, 2];
+  const userWidget = users.map((user, index) => {
+    return <Flex align="center" className='relative mt-0 border-b py-2 ' key={index}
+      onClick={() => {
+        geust = user
+      }}>
       <Avatar
         size="2"
         src="https://images.unsplash.com/photo-1607346256330-dee7af15f7c5?&w=64&h=64&dpr=2&q=70&crop=focalpoint&fp-x=0.67&fp-y=0.5&fp-z=1.4&fit=crop"
@@ -16,7 +23,7 @@ const ListUser = () => {
         fallback="T"
       />
       <Text as="div" size="1" weight="bold" className='pl-1'>
-        Teodros Girmay
+        {user.name}
       </Text>
       <Text as="div" size="1" className='absolute bottom-0 right-0'>
         10.25
@@ -27,7 +34,7 @@ const ListUser = () => {
   return (
     <Box style={{ width: 200, height: 500, padding: 2, borderRadius: 10, background: "white" }}>
 
-      <div className="flex border-b items-center justify-between pl-2 pr-2">
+      <div className="flex border-b items-center justify-between pl-2 pr-2" >
         <Text size='6'>Chat</Text>
         <AiFillPlusSquare style={{ color: 'blue', fontSize: '40px', borderRadius: '20px', }} />
       </div >
