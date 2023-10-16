@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useEffect } from 'react';
 import ListUser from './components/ListUser';
 import BoxChat from './components/BoxChat';
 import { getServerSession } from 'next-auth';
@@ -10,11 +11,13 @@ const PageChat = async () => {
     `Bearer ${session?.backendTokens.accessToken}`,
   );
   console.log(users)
-  let geust: userDto = users[0]
+  let geustt: userDto = users[0]
+
+
   return (
     <div className="flex justify-center items-center">
-      <ListUser users={users} geust={geust} />
-      <BoxChat geust={geust} />
+      <ListUser users={users} />
+      <BoxChat />
     </div>
   );
 };

@@ -2,19 +2,20 @@
 import React from 'react';
 import { ScrollArea, Avatar, Flex, Box, Text, Heading } from '@radix-ui/themes';
 import { AiFillPlusSquare } from "react-icons/ai";
+import { useGlobalContext } from '../Context/store';
 
 interface Props {
   users: userDto[],
-  geust: userDto
 }
 
-const ListUser = ({ users, geust }: Props) => {
 
-  // const users0 = [1, 2, 3, 4, 1, 2];
+const ListUser = ({ users }: Props) => {
+
+  const { geust, setGeust } = useGlobalContext();
   const userWidget = users.map((user, index) => {
     return <Flex align="center" className='relative mt-0 border-b py-2 ' key={index}
       onClick={() => {
-        geust = user
+        setGeust(user);
       }}>
       <Avatar
         size="2"

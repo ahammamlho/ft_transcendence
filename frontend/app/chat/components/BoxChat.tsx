@@ -2,9 +2,11 @@
 import { TextField, Avatar, ScrollArea, Box, Text, } from '@radix-ui/themes';
 import { useEffect, useRef } from 'react';
 import { BsFillSendFill } from "react-icons/bs";
+import { useGlobalContext } from '../Context/store';
 
 
-const BoxChat = ({ geust }: { geust: userDto }) => {
+const BoxChat = () => {
+    const { geust } = useGlobalContext();
     const scrollAreaRef = useRef<HTMLDivElement | null>(null);
     const scrollToBottom = () => {
         if (scrollAreaRef.current) {
@@ -14,6 +16,9 @@ const BoxChat = ({ geust }: { geust: userDto }) => {
     useEffect(() => {
         scrollToBottom();
     }, [geust]);
+
+
+
     return (
         <Box
             style={{
