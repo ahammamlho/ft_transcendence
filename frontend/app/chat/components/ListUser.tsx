@@ -1,30 +1,34 @@
 "use client"
 import React from 'react';
-import { ScrollArea, Avatar, Flex, Box, Text, Heading } from '@radix-ui/themes';
+import { Avatar, Flex, Text, Box, ScrollArea } from '@radix-ui/themes';
 import { AiFillPlusSquare } from "react-icons/ai";
 import { useGlobalContext } from '../Context/store';
 
+
 interface Props {
   users: userDto[],
+  user: userDto,
 }
 
 
-const ListUser = ({ users }: Props) => {
+const ListUser = ({ users, user }: Props) => {
 
-  const { geust, setGeust } = useGlobalContext();
-  const userWidget = users.map((user, index) => {
+  const { setGeust, setUser } = useGlobalContext();
+  setUser(user);
+  setGeust(user);
+  const userWidget = users.map((el, index) => {
     return <Flex align="center" className='relative mt-0 border-b py-2 ' key={index}
       onClick={() => {
-        setGeust(user);
+        setGeust(el);
       }}>
       <Avatar
         size="2"
-        src="https://images.unsplash.com/photo-1607346256330-dee7af15f7c5?&w=64&h=64&dpr=2&q=70&crop=focalpoint&fp-x=0.67&fp-y=0.5&fp-z=1.4&fit=crop"
+        src={el.avatar}
         radius="full"
         fallback="T"
       />
       <Text as="div" size="1" weight="bold" className='pl-1'>
-        {user.name}
+        {el.name}
       </Text>
       <Text as="div" size="1" className='absolute bottom-0 right-0'>
         10.25

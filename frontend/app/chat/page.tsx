@@ -1,22 +1,21 @@
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import ListUser from './components/ListUser';
 import BoxChat from './components/BoxChat';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import getAllUsers from './api/fetchFiends';
+import { useGlobalContext } from './Context/store';
 const PageChat = async () => {
   const session = await getServerSession(authOptions);
   const users = await getAllUsers(
     `Bearer ${session?.backendTokens.accessToken}`,
   );
-  console.log(users)
-  let geustt: userDto = users[0]
-
-
+  if (!session)
+    return <p>temp</p>
   return (
     <div className="flex justify-center items-center">
-      <ListUser users={users} />
+      <ListUser users={users} user={session?.user} />
       <BoxChat />
     </div>
   );

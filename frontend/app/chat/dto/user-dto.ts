@@ -4,3 +4,13 @@ type userDto = {
   name: string;
   avatar: string;
 };
+
+
+
+type msgdto = {
+  id: number;
+  content: string;
+  date: number;
+  senderId: number;
+  receivedId: number;
+};

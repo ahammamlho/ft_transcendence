@@ -5,11 +5,23 @@ import { createContext, useContext, Dispatch, SetStateAction, useState } from "r
 
 
 interface ContextProps {
+    user: userDto,
+    setUser: Dispatch<SetStateAction<userDto>>,
+
+
     geust: userDto,
     setGeust: Dispatch<SetStateAction<userDto>>,
 }
 
 const GlobalContext = createContext<ContextProps>({
+    user: {
+        id: 0,
+        email: '',
+        name: '',
+        avatar: '',
+    },
+    setUser: () => { },
+
     geust: {
         id: 0,
         email: '',
@@ -25,6 +37,13 @@ export const GlobalContextProvider = ({ children }: {
     children: React.ReactNode;
 }) => {
 
+    const [user, setUser] = useState<userDto>({
+        id: 0,
+        email: '',
+        name: '',
+        avatar: '',
+    })
+
     const [geust, setGeust] = useState<userDto>({
         id: 0,
         email: '',
@@ -33,7 +52,7 @@ export const GlobalContextProvider = ({ children }: {
     })
 
     return (
-        <GlobalContext.Provider value={{ geust, setGeust }}>
+        <GlobalContext.Provider value={{ geust, setGeust, user, setUser }}>
             {children}
         </GlobalContext.Provider>
     )
