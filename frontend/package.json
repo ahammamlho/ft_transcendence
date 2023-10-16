@@ -13,6 +13,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.11",
     "@mui/material": "^5.14.11",
+    "@radix-ui/themes": "^2.0.0",
     "@reduxjs/toolkit": "^1.9.7",
     "axios": "^1.5.1",
     "next": "latest",

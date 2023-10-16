@@ -1,13 +1,12 @@
 import React from 'react';
 import { Box, Container, Flex } from '@radix-ui/themes';
-import ListUser from './components/listUser';
+import ListUser from './components/ListUser';
+import BoxChat from './components/BoxChat';
 const PageChat = () => {
   return (
-    <div className="flex justify-center items-center space-x-2">
-      <Box className="h-96 bg-[#50d71e] rounded-xl">
-        <ListUser />
-      </Box>
-      <Box className=" bg-black  h-96">......................</Box>
+    <div className="flex justify-center items-center">
+      <ListUser />
+      <BoxChat />
     </div>
   );
 };

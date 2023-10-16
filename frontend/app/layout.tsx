@@ -13,11 +13,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className=' bg-sky-400'>
       <SessionProviders>
         <body className={inter.className}>
-          <Theme>
-            <Container>{children}</Container>
+          <Theme className=' bg-sky-400'>
+            {children}
           </Theme>
         </body>
       </SessionProviders>
