@@ -7,10 +7,11 @@ type userDto = {
 
 
 
-type msgdto = {
+type msgDto = {
   id: number;
   content: string;
-  date: number;
+  createdAt: number;
   senderId: number;
   receivedId: number;
 };
+

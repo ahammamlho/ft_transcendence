@@ -10,7 +10,7 @@ export class MessagesService {
   constructor(
     private prisma: PrismaService,
     private userService: UserService,
-  ) {}
+  ) { }
 
   async create(server: Server, createMessageDto: CreateMessageDto) {
     const msg = await this.prisma.directMessage.create({
@@ -18,13 +18,9 @@ export class MessagesService {
         ...createMessageDto,
       },
     });
-
-    server.to(msg.receivedId.toString()).emit('findMsg2UsersResponse', {
-      senderId: msg.senderId,
-      receivedId: msg.receivedId,
-      msgUser: msg,
-    });
+    server.to(msg.receivedId.toString()).emit('findMsg2UsersResponse', msg);
   }
+
 
   async getMessage(senderId: number, receivedId: number) {
     const msgUser = await this.prisma.directMessage.findMany({

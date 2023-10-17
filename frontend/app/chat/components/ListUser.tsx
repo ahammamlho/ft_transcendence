@@ -1,8 +1,9 @@
 "use client"
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Avatar, Flex, Text, Box, ScrollArea } from '@radix-ui/themes';
 import { AiFillPlusSquare } from "react-icons/ai";
 import { useGlobalContext } from '../Context/store';
+import { socketInitializer } from '../api/init-socket';
 
 
 interface Props {
@@ -14,8 +15,11 @@ interface Props {
 const ListUser = ({ users, user }: Props) => {
 
   const { setGeust, setUser } = useGlobalContext();
-  setUser(user);
-  setGeust(user);
+
+  useEffect(() => {
+    setUser(user);
+    socketInitializer(user);
+  }, [])
   const userWidget = users.map((el, index) => {
     return <Flex align="center" className='relative mt-0 border-b py-2 ' key={index}
       onClick={() => {

@@ -13,9 +13,8 @@ import { CreateMessageDto } from './dto/create-message.dto';
 import { Server, Socket } from 'socket.io';
 @WebSocketGateway()
 export class MessagesGateway
-  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
-{
-  constructor(private readonly messagesService: MessagesService) {}
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
+  constructor(private readonly messagesService: MessagesService) { }
   @WebSocketServer() wss: Server;
 
   afterInit(server: any) {

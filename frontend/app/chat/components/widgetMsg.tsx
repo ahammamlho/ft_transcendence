@@ -13,7 +13,7 @@ export function MessageRight({ message }: { message: string }) {
         background: "#ddfdfd",
     };
     return (
-        <div style={cardStyles} className='relative mb-2'>
+        <div style={cardStyles} className='relative mb-2 mt-2'>
             <div className='mb-4 text-sm'> {message}</div>
             <Text size="1" className='absolute bottom-1 right-2 mt-2'>
                 10.25
@@ -21,8 +21,6 @@ export function MessageRight({ message }: { message: string }) {
         </div>
     );
 }
-
-
 export function MessageLeft({ message, geust }: { message: string, geust: userDto }) {
     const cardStyles = {
         width: 200,
@@ -33,7 +31,6 @@ export function MessageLeft({ message, geust }: { message: string, geust: userDt
         borderBottomRightRadius: 10,
         boxShadow: 'none',
         background: "#ddfdfd",
-
 
     };
 
@@ -58,4 +55,18 @@ export function MessageLeft({ message, geust }: { message: string, geust: userDt
             </div>
         </div>
     );
+}
+
+export function ShowMessages({ messages, geust }: { messages: msgDto[], geust: userDto }) {
+
+    return messages.map((elm, index) => {
+        const tag =
+            elm.receivedId == geust.id ? (
+                <MessageRight message={elm.content} key={index} />
+            ) : (
+                <MessageLeft message={elm.content} geust={geust} key={index} />
+            );
+        return tag;
+    })
+
 }
