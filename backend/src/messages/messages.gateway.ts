@@ -11,6 +11,8 @@ import {
 import { MessagesService } from './messages.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { Server, Socket } from 'socket.io';
+import { Param } from '@nestjs/common';
+
 @WebSocketGateway()
 export class MessagesGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
@@ -36,5 +38,11 @@ export class MessagesGateway
     @MessageBody() createMessageDto: CreateMessageDto,
   ) {
     await this.messagesService.create(this.wss, createMessageDto);
+  }
+
+  @SubscribeMessage('updateData')
+  async updateData(@MessageBody() ids: CreateMessageDto,) {
+    this.wss.to(ids.senderId.toString()).emit('updateData', {});
+    this.wss.to(ids.receivedId.toString()).emit('updateData', {});
   }
 }

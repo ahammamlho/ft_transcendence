@@ -10,11 +10,28 @@ export async function getAllUsers(author: string) {
 }
 
 
-export async function getRequistFriends(senderId: number) {
+export async function getSendRequistFriends(senderId: number) {
     const response = await axios.get(
-        Backend_URL + `user/getFriendRequest/${senderId}`,
+        Backend_URL + `user/getSendFriendRequest/${senderId}`
     );
 
+    const allReq = await response.data;
+    return allReq;
+}
+
+
+export async function getRecivedRequistFriends(senderId: number) {
+    const response = await axios.get(
+        Backend_URL + `user/getRecivedRequistFriends/${senderId}`,
+    );
+    const allReq = await response.data;
+    return allReq;
+}
+
+export async function getFriends(senderId: number) {
+    const response = await axios.get(
+        Backend_URL + `user/getFriends/${senderId}`,
+    );
     const allReq = await response.data;
     return allReq;
 }

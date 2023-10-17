@@ -3,7 +3,7 @@ import { MessagesService } from './messages.service';
 
 @Controller('messages')
 export class MessageController {
-  constructor(private readonly messagesService: MessagesService) {}
+  constructor(private readonly messagesService: MessagesService) { }
 
   @Get(':send/:rec')
   async getMessages(@Param('send') send: string, @Param('rec') rec: string) {

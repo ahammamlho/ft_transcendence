@@ -11,32 +11,41 @@ datasource db {
 }
 
 model User {
-  id   Int     @default(autoincrement()) @id
-  email String  @unique
-  name  String?
-  password String
-  avatar String
-  start  DateTime  @default(now())
+  id            Int             @id @default(autoincrement())
+  email         String          @unique
+  name          String?
+  password      String
+  avatar        String
+  start         DateTime        @default(now())
   directMessage DirectMessage[]
-  frienRequest FriendRequest[]
+  frienRequest  FriendRequest[]
+  Friend        Friend[]
 }
-
 
 model DirectMessage {
-  id    Int     @default(autoincrement()) @id
-  content String  
-  createdAt  DateTime  @default(now())   
-  user User @relation(fields: [senderId], references: [id])
-  senderId Int
+  id         Int      @id @default(autoincrement())
+  content    String
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [senderId], references: [id])
+  senderId   Int
   receivedId Int
 }
 
-
 model FriendRequest {
-  id    Int     @default(autoincrement()) @id
-  createdAt  DateTime  @default(now())
-  user User @relation(fields: [senderId], references: [id])
-  senderId Int
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [senderId], references: [id])
+  senderId   Int
   receivedId Int
+
+  @@unique([senderId, receivedId], name: "Unique_Sender_Receiver")
+}
+
+model Friend {
+  id         Int  @id @default(autoincrement())
+  user       User @relation(fields: [senderId], references: [id])
+  senderId   Int
+  receivedId Int
+
   @@unique([senderId, receivedId], name: "Unique_Sender_Receiver")
 }

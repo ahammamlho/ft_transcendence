@@ -2,7 +2,7 @@ import { Injectable, ConflictException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/user.dto';
 import { hash } from 'bcrypt';
-
+import { Server } from 'socket.io';
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) { }
@@ -47,7 +47,7 @@ export class UserService {
   }
 
   async sendFriendRequist(sendId: number, recivedId: number) {
-    const req = await this.prisma.friendRequest.findUnique({
+    let req = await this.prisma.friendRequest.findUnique({
       where: {
         Unique_Sender_Receiver: {
           senderId: sendId,
@@ -55,35 +55,93 @@ export class UserService {
         },
       },
     });
-    console.log(req);
     if (!req) {
-      const newReq = await this.prisma.friendRequest.create({
+      req = await this.prisma.friendRequest.create({
         data: {
           senderId: sendId,
           receivedId: recivedId,
         },
       });
-      return newReq;
     }
     return req;
   }
 
-  async getFriendsRequist(senderId: number) {
-    const friendRequests = await this.prisma.friendRequest.findMany({
+  async removeFriendRequist(sendId: number, recivedId: number) {
+    let req = await this.prisma.friendRequest.deleteMany({
+      where: {
+        senderId: sendId,
+        receivedId: recivedId,
+      },
+    });
+    return req;
+  }
+
+  async accepteFriendRequest(sendId: number, recivedId: number) {
+    let req = await this.prisma.friend.findUnique({
+      where: {
+        Unique_Sender_Receiver: {
+          senderId: sendId,
+          receivedId: recivedId,
+        },
+      },
+    });
+    if (!req) {
+      req = await this.prisma.friend.create({
+        data: {
+          senderId: sendId,
+          receivedId: recivedId,
+        },
+      });
+    }
+    return req;
+  }
+  async deleteFriend(sendId: number, recivedId: number) {
+    let req = await this.prisma.friend.deleteMany({
+      where: {
+        senderId: sendId,
+        receivedId: recivedId,
+      },
+    });
+    return req;
+  }
+
+
+  async getSendRequistFriends(senderId: number) {
+    const sendRequests = await this.prisma.friendRequest.findMany({
+      where: {
+        senderId: senderId,
+      },
+    });
+    return sendRequests;
+  }
+
+  async getRecivedRequistFriends(senderId: number) {
+    const sendRequests = await this.prisma.friendRequest.findMany({
       where: {
         receivedId: senderId,
       },
     });
-    const senderIds = friendRequests.map((request) => request.senderId);
-    const users = await Promise.all(
-      senderIds.map(async (senderId) => {
-        return this.prisma.user.findUnique({
-          where: {
-            id: senderId,
-          },
-        });
-      }),
-    );
-    return users;
+    return sendRequests;
   }
+
+  async getFriends(senderId: number) {
+    const sendRequests = await this.prisma.friend.findMany({
+      where: {
+        OR: [
+          {
+            senderId: senderId,
+          },
+          {
+            receivedId: senderId,
+          }
+        ]
+      },
+    });
+    return sendRequests;
+  }
+
+
+
 }
+
+

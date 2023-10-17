@@ -15,3 +15,9 @@ type msgDto = {
   receivedId: number;
 };
 
+type reqFriendsDto = {
+  id: number;
+  createdAt: number;
+  senderId: number;
+  receivedId: number;
+}

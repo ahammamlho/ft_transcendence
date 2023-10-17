@@ -10,8 +10,6 @@ interface Props {
   users: userDto[],
   user: userDto,
 }
-
-
 const ListUser = ({ users, user }: Props) => {
 
   const { setGeust, setUser } = useGlobalContext();

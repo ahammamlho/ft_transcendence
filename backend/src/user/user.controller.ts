@@ -1,6 +1,5 @@
-import { Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
-import { JwtGuard } from 'src/auth/guards/jwt.guard';
 
 @Controller('user')
 export class UserController {
@@ -26,12 +25,56 @@ export class UserController {
   ) {
     const senderId = parseInt(sender);
     const recivedId = parseInt(recived);
+    console.log(senderId, recivedId);
     return await this.userService.sendFriendRequist(senderId, recivedId);
   }
 
-  @Get('/getFriendRequest/:sender')
-  async getRequistFriends(@Param('sender') sender: string) {
+  @Delete('/removeFriendRequest/:sender/:recived')
+  async removeFriendRequest(
+    @Param('sender') sender: string,
+    @Param('recived') recived: string,
+  ) {
     const senderId = parseInt(sender);
-    return await this.userService.getFriendsRequist(senderId);
+    const recivedId = parseInt(recived);
+    return await this.userService.removeFriendRequist(senderId, recivedId);
   }
-}
+
+  @Post('/accepteFriendRequest/:sender/:recived')
+  async accepteFriendRequest(
+    @Param('sender') sender: string,
+    @Param('recived') recived: string,
+  ) {
+    const senderId = parseInt(sender);
+    const recivedId = parseInt(recived);
+    await this.userService.removeFriendRequist(recivedId, senderId);
+    return await this.userService.accepteFriendRequest(senderId, recivedId);
+  }
+
+  @Delete('/deleteFriend/:sender/:recived')
+  async deleteFriend(
+    @Param('sender') sender: string,
+    @Param('recived') recived: string,
+  ) {
+    const senderId = parseInt(sender);
+    const recivedId = parseInt(recived);
+    return await this.userService.deleteFriend(senderId, recivedId);
+  }
+
+  @Get('/getSendFriendRequest/:sender')
+  async getSendRequistFriends(@Param('sender') sender: string) {
+    const senderId = parseInt(sender);
+    return await this.userService.getSendRequistFriends(senderId);
+  }
+
+  @Get('/getRecivedRequistFriends/:sender')
+  async getRecivedRequistFriends(@Param('sender') sender: string) {
+    const senderId = parseInt(sender);
+    return await this.userService.getRecivedRequistFriends(senderId);
+  }
+
+  @Get('/getFriends/:sender')
+  async getFriends(@Param('sender') sender: string) {
+    const senderId = parseInt(sender);
+    return await this.userService.getFriends(senderId);
+  }
+} 

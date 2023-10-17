@@ -3,35 +3,64 @@ import React, { use, useEffect, useState } from 'react';
 import { Avatar, Flex, Text, Box, ScrollArea } from '@radix-ui/themes';
 import { AiFillMessage } from "react-icons/ai";
 import { BsPersonFillAdd } from "react-icons/bs";
+import { BiUserCheck } from "react-icons/bi";
 import { useGlobalContext } from '../../Context/store';
-import sendRequistFriend from '../../api/send-Friend-req';
-import { getAllUsers, getRequistFriends } from '../../api/fetch-users';
+import { getAllUsers, getRecivedRequistFriends, getSendRequistFriends, getFriends } from '../../api/fetch-users';
+import getIcon from './IconAction';
+import { socket } from '../../api/init-socket';
 
 
 
 const ListItem = () => {
     const { user, valueNav } = useGlobalContext();
     const [items, setItems] = useState<userDto[]>([]);
+    const [nbr, setNbr] = useState(1);
+    let users: userDto[] = [];
 
+    const [sendRequist, setSendRequist] = useState<reqFriendsDto[]>([]);
+    const [recivedRequistFre, setRecivedRequiFre] = useState<reqFriendsDto[]>([]);
+    const [friends, setFriends] = useState<reqFriendsDto[]>([]);
 
     useEffect(() => {
         async function getData() {
+            const allusers = await getAllUsers(`fsfsd`);
+            users = allusers.filter((item: userDto) => item.id !== user.id);
+            const sendReq = await getSendRequistFriends(user.id);
+            setSendRequist(sendReq);
+            const recivReq = await getRecivedRequistFriends(user.id);
+            setRecivedRequiFre(recivReq);
+            const frieTable = await getFriends(user.id);
+            setFriends(frieTable);
             if (valueNav === 0) {
-                const users = await getAllUsers(`fsfsd`);
-                console.log("users", users);
                 setItems(users);
             }
             else if (valueNav === 1) {
-                const requistFr = await getRequistFriends(user.id);
-                setItems(requistFr);
-            } else {
+                const reciUser = users.filter((ur) => {
+                    return recivReq.some((re: reqFriendsDto) => re.senderId === ur.id);
+                });
+                setItems(reciUser);
+            } else if (valueNav === 2) {
+                const friends = users.filter((ur) => {
+                    return frieTable.some((re: reqFriendsDto) => (re.receivedId === ur.id || re.senderId === ur.id));
+                });
+                setItems(friends);
+            } else if (valueNav == 3) {
                 setItems([]);
             }
-
         }
         getData();
-        console.log(valueNav);
-        console.log(items);
+    }, [valueNav, nbr]);
+
+    useEffect(() => {
+        const handleReceivedMessage = () => {
+            setNbr((prevNbr) => prevNbr + 1);
+        };
+
+        socket.on("updateData", handleReceivedMessage);
+
+        return () => {
+            socket.off("updateData", handleReceivedMessage);
+        };
     }, [valueNav]);
 
     const itemWidget = items.map((itm, index) => {
@@ -48,10 +77,7 @@ const ListItem = () => {
                         {itm.name}
                     </Text></div>
                 <div className='flex items-center'>
-                    <BsPersonFillAdd size='20' style={{ marginRight: 10 }} onClick={async () => {
-                        await sendRequistFriend(user.id, itm.id);
-                        console.log('clicked');
-                    }} />
+                    {getIcon(itm, sendRequist, friends, recivedRequistFre)}
                     <AiFillMessage size='20' />
                 </div>
             </Flex>
@@ -59,9 +85,6 @@ const ListItem = () => {
     })
     return (
         <Box style={{ width: 250, height: 500, padding: 2, marginTop: 20, borderRadius: 5, background: "white" }}>
-
-
-
             <ScrollArea type="always" scrollbars="vertical" style={{ height: 450 }}>
                 {itemWidget}
             </ScrollArea>

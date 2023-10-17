@@ -13,6 +13,9 @@ interface ContextProps {
 
     valueNav: number,
     setValueNav: Dispatch<SetStateAction<number>>
+
+
+
 }
 
 const GlobalContext = createContext<ContextProps>({
@@ -33,7 +36,9 @@ const GlobalContext = createContext<ContextProps>({
     setGeust: () => { },
 
     valueNav: 0,
-    setValueNav: () => { }
+    setValueNav: () => { },
+
+
 })
 
 
@@ -55,6 +60,8 @@ export const GlobalContextProvider = ({ children }: {
         name: '',
         avatar: '',
     })
+
+
 
     const [valueNav, setValueNav] = useState<number>(0);
 
