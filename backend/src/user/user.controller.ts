@@ -4,16 +4,16 @@ import { JwtGuard } from 'src/auth/guards/jwt.guard';
 
 @Controller('user')
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) { }
 
-  @UseGuards(JwtGuard)
+  // @UseGuards(JwtGuard)
   @Get('/all')
   async getAllUser() {
     console.log('get all user called');
     return await this.userService.findAllUsers();
   }
 
-  @UseGuards(JwtGuard)
+  // @UseGuards(JwtGuard)
   @Get(':id')
   async getUserProfile(@Param('id') id: number) {
     return await this.userService.findById(id);
@@ -26,7 +26,6 @@ export class UserController {
   ) {
     const senderId = parseInt(sender);
     const recivedId = parseInt(recived);
-    console.log(`sender=${senderId}, recived=${recivedId}`);
     return await this.userService.sendFriendRequist(senderId, recivedId);
   }
 

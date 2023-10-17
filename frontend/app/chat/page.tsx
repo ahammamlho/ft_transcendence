@@ -1,11 +1,10 @@
 
-import React from 'react';
-import ListUser from './components/ListUser';
-import BoxChat from './components/BoxChat';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]/route';
-import getAllUsers from './api/fetch-fiends';
-import { useGlobalContext } from './Context/store';
+import { getAllUsers } from './api/fetch-users';
+import BoxChat from './components/BoxChat';
+import ListUser from './components/ListUser';
+
 const PageChat = async () => {
   const session = await getServerSession(authOptions);
   const users = await getAllUsers(

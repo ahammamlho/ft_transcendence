@@ -5,7 +5,7 @@ import { hash } from 'bcrypt';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async create(dto: CreateUserDto) {
     const user = await this.prisma.user.findUnique({
@@ -41,9 +41,11 @@ export class UserService {
       },
     });
   }
+
   async findAllUsers() {
     return await this.prisma.user.findMany();
   }
+
   async sendFriendRequist(sendId: number, recivedId: number) {
     const req = await this.prisma.friendRequest.findUnique({
       where: {

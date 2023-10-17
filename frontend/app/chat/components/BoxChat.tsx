@@ -3,9 +3,9 @@ import { TextField, Avatar, ScrollArea, Box, Text, } from '@radix-ui/themes';
 import { useEffect, useRef, useState } from 'react';
 import { BsFillSendFill } from "react-icons/bs";
 import { useGlobalContext } from '../Context/store';
-import { MessageLeft, MessageRight, ShowMessages } from './widgetMsg';
+import { ShowMessages } from './widgetMsg';
 import getMessageTwoUsers from '../api/fetch-msg';
-import { emitMessage, socket, socketInitializer } from '../api/init-socket';
+import { emitMessage, socket } from '../api/init-socket';
 
 
 const BoxChat = () => {

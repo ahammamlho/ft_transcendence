@@ -8,9 +8,11 @@ interface ContextProps {
     user: userDto,
     setUser: Dispatch<SetStateAction<userDto>>,
 
-
     geust: userDto,
     setGeust: Dispatch<SetStateAction<userDto>>,
+
+    valueNav: number,
+    setValueNav: Dispatch<SetStateAction<number>>
 }
 
 const GlobalContext = createContext<ContextProps>({
@@ -29,6 +31,9 @@ const GlobalContext = createContext<ContextProps>({
         avatar: '',
     },
     setGeust: () => { },
+
+    valueNav: 0,
+    setValueNav: () => { }
 })
 
 
@@ -51,8 +56,10 @@ export const GlobalContextProvider = ({ children }: {
         avatar: '',
     })
 
+    const [valueNav, setValueNav] = useState<number>(0);
+
     return (
-        <GlobalContext.Provider value={{ geust, setGeust, user, setUser }}>
+        <GlobalContext.Provider value={{ geust, setGeust, user, setUser, valueNav, setValueNav }}>
             {children}
         </GlobalContext.Provider>
     )

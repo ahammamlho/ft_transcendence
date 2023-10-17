@@ -16,7 +16,7 @@ const NavBar = ({ user }: Props) => {
     },
     {
       label: 'requist friends',
-      href: '/requist',
+      href: '/chat/settings',
     },
     {
       label: 'Sign out',

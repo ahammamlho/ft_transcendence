@@ -43,7 +43,7 @@ const ListUser = ({ users, user }: Props) => {
   return (
     <Box style={{ width: 200, height: 500, padding: 2, borderRadius: 10, background: "white" }}>
 
-      <div className="flex border-b items-center justify-between pl-2 pr-2" >
+      <div className="flex border-b items-center  pl-2 pr-2" >
         <Text size='6'>Chat</Text>
         <AiFillPlusSquare style={{ color: 'blue', fontSize: '40px', borderRadius: '20px', }} />
       </div >
