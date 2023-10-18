@@ -3,17 +3,17 @@
 import { BsPersonFillAdd } from "react-icons/bs";
 import { BiUserCheck } from "react-icons/bi";
 import { FaUserTimes, FaUserAltSlash } from "react-icons/fa";
-import { useGlobalContext } from '../../Context/store';
 import { sendRequistFriend, removeRequistFriend, accepteRequistFriend, deleteFriend } from '../../api/send-Friend-req';
 import { emitMessage } from "../../api/init-socket";
 
-const getIcon = (item: userDto, sendRequist: reqFriendsDto[],
+const getIcon = (user: userDto, valueNav: number, item: userDto, sendRequist: reqFriendsDto[],
     friends: reqFriendsDto[], recivedRequistFre: reqFriendsDto[]) => {
-    const { user, valueNav } = useGlobalContext();
+
     const userInRecivedReq = recivedRequistFre.some(re => re.senderId === item.id);
     if (valueNav == 0 && !userInRecivedReq) {
-        const userIsFriends = friends.some(re => re.receivedId === item.id);
+        const userIsFriends = friends.some(re => (re.receivedId === item.id || re.senderId === item.id));
         const userInReqFrie = sendRequist.some(re => re.receivedId === item.id);
+
         if (userInReqFrie || userIsFriends) {
             return (
                 <FaUserTimes size='20' style={{ marginRight: 10 }} onClick={async () => {

@@ -30,6 +30,7 @@ const ListItem = () => {
             const recivReq = await getRecivedRequistFriends(user.id);
             setRecivedRequiFre(recivReq);
             const frieTable = await getFriends(user.id);
+
             setFriends(frieTable);
             if (valueNav === 0) {
                 setItems(users);
@@ -40,10 +41,11 @@ const ListItem = () => {
                 });
                 setItems(reciUser);
             } else if (valueNav === 2) {
-                const friends = users.filter((ur) => {
+                const friend = users.filter((ur) => {
                     return frieTable.some((re: reqFriendsDto) => (re.receivedId === ur.id || re.senderId === ur.id));
                 });
-                setItems(friends);
+                setItems(friend);
+
             } else if (valueNav == 3) {
                 setItems([]);
             }
@@ -77,7 +79,7 @@ const ListItem = () => {
                         {itm.name}
                     </Text></div>
                 <div className='flex items-center'>
-                    {getIcon(itm, sendRequist, friends, recivedRequistFre)}
+                    {getIcon(user, valueNav, itm, sendRequist, friends, recivedRequistFre)}
                     <AiFillMessage size='20' />
                 </div>
             </Flex>
