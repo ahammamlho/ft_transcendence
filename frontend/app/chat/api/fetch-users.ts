@@ -36,3 +36,11 @@ export async function getFriends(senderId: number) {
     return allReq;
 }
 
+export async function getBlockedUser(senderId: number) {
+    const response = await axios.get(
+        Backend_URL + `user/getBlockedUser/${senderId}`,
+    );
+    const allReq = await response.data;
+    return allReq;
+}
+

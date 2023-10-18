@@ -2,15 +2,24 @@
 
 import { BsPersonFillAdd } from "react-icons/bs";
 import { BiUserCheck } from "react-icons/bi";
+import { AiOutlineUserSwitch } from "react-icons/ai";
 import { FaUserTimes, FaUserAltSlash } from "react-icons/fa";
-import { sendRequistFriend, removeRequistFriend, accepteRequistFriend, deleteFriend } from '../../api/send-Friend-req';
+import {
+    sendRequistFriend, removeRequistFriend,
+    accepteRequistFriend, deleteFriend, blockedUser, unBlockedUser
+} from '../../api/send-Friend-req';
 import { emitMessage } from "../../api/init-socket";
 
 const getIcon = (user: userDto, valueNav: number, item: userDto, sendRequist: reqFriendsDto[],
-    friends: reqFriendsDto[], recivedRequistFre: reqFriendsDto[]) => {
+    friends: reqFriendsDto[], recivedRequistFre: reqFriendsDto[], blockedUsers: reqFriendsDto[]) => {
 
     const userInRecivedReq = recivedRequistFre.some(re => re.senderId === item.id);
-    if (valueNav == 0 && !userInRecivedReq) {
+    const userInBlockerdUsera = blockedUsers.some(re => re.receivedId === item.id)
+    const userInBlockerd = blockedUsers.some(re => re.senderId === item.id)
+    if (userInBlockerd)
+        return;
+
+    if (valueNav == 0 && !userInRecivedReq && !userInBlockerdUsera) {
         const userIsFriends = friends.some(re => (re.receivedId === item.id || re.senderId === item.id));
         const userInReqFrie = sendRequist.some(re => re.receivedId === item.id);
 
@@ -54,7 +63,18 @@ const getIcon = (user: userDto, valueNav: number, item: userDto, sendRequist: re
     } else if (valueNav == 2) {
         return (
             <FaUserAltSlash size='20' style={{ marginRight: 10 }} onClick={async () => {
-                await accepteRequistFriend(user.id, item.id);
+                await blockedUser(user.id, item.id);
+                emitMessage('updateData', {
+                    content: '',
+                    senderId: user.id,
+                    receivedId: item.id,
+                });
+            }} />
+        );
+    } else if (valueNav == 3 || userInBlockerdUsera) {
+        return (
+            <AiOutlineUserSwitch size='20' style={{ marginRight: 10 }} onClick={async () => {
+                await unBlockedUser(user.id, item.id);
                 emitMessage('updateData', {
                     content: '',
                     senderId: user.id,

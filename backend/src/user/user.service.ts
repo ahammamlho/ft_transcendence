@@ -98,14 +98,48 @@ export class UserService {
   async deleteFriend(sendId: number, recivedId: number) {
     let req = await this.prisma.friend.deleteMany({
       where: {
+        OR: [
+          {
+            senderId: sendId,
+            receivedId: recivedId,
+          },
+          {
+            senderId: recivedId,
+            receivedId: sendId,
+          }
+        ]
+      },
+    });
+    return req;
+  }
+  async blockedUser(sendId: number, recivedId: number) {
+    let req = await this.prisma.blockedUser.findUnique({
+      where: {
+        Unique_Sender_Receiver: {
+          senderId: sendId,
+          receivedId: recivedId,
+        },
+      },
+    });
+    if (!req) {
+      req = await this.prisma.blockedUser.create({
+        data: {
+          senderId: sendId,
+          receivedId: recivedId,
+        },
+      });
+    }
+    return req;
+  }
+  async unBlockedUser(sendId: number, recivedId: number) {
+    let req = await this.prisma.blockedUser.deleteMany({
+      where: {
         senderId: sendId,
         receivedId: recivedId,
       },
     });
     return req;
   }
-
-
   async getSendRequistFriends(senderId: number) {
     const sendRequests = await this.prisma.friendRequest.findMany({
       where: {
@@ -140,8 +174,21 @@ export class UserService {
     return sendRequests;
   }
 
-
-
+  async getBlockedUser(senderId: number) {
+    const sendRequests = await this.prisma.blockedUser.findMany({
+      where: {
+        OR: [
+          {
+            senderId: senderId,
+          },
+          {
+            receivedId: senderId,
+          }
+        ]
+      },
+    });
+    return sendRequests;
+  }
 }
 
 

@@ -5,7 +5,7 @@ import { AiFillMessage } from "react-icons/ai";
 import { BsPersonFillAdd } from "react-icons/bs";
 import { BiUserCheck } from "react-icons/bi";
 import { useGlobalContext } from '../../Context/store';
-import { getAllUsers, getRecivedRequistFriends, getSendRequistFriends, getFriends } from '../../api/fetch-users';
+import { getAllUsers, getRecivedRequistFriends, getSendRequistFriends, getFriends, getBlockedUser } from '../../api/fetch-users';
 import getIcon from './IconAction';
 import { socket } from '../../api/init-socket';
 
@@ -20,6 +20,7 @@ const ListItem = () => {
     const [sendRequist, setSendRequist] = useState<reqFriendsDto[]>([]);
     const [recivedRequistFre, setRecivedRequiFre] = useState<reqFriendsDto[]>([]);
     const [friends, setFriends] = useState<reqFriendsDto[]>([]);
+    const [blockedUser, setBlockedUser] = useState<reqFriendsDto[]>([]);
 
     useEffect(() => {
         async function getData() {
@@ -30,8 +31,9 @@ const ListItem = () => {
             const recivReq = await getRecivedRequistFriends(user.id);
             setRecivedRequiFre(recivReq);
             const frieTable = await getFriends(user.id);
-
             setFriends(frieTable);
+            const blockUser = await getBlockedUser(user.id)
+            setBlockedUser(blockUser);
             if (valueNav === 0) {
                 setItems(users);
             }
@@ -47,7 +49,10 @@ const ListItem = () => {
                 setItems(friend);
 
             } else if (valueNav == 3) {
-                setItems([]);
+                const blk = users.filter((ur) => {
+                    return blockUser.some((re: reqFriendsDto) => (re.receivedId === ur.id));
+                });
+                setItems(blk);
             }
         }
         getData();
@@ -79,7 +84,7 @@ const ListItem = () => {
                         {itm.name}
                     </Text></div>
                 <div className='flex items-center'>
-                    {getIcon(user, valueNav, itm, sendRequist, friends, recivedRequistFre)}
+                    {getIcon(user, valueNav, itm, sendRequist, friends, recivedRequistFre, blockedUser)}
                     <AiFillMessage size='20' />
                 </div>
             </Flex>

@@ -26,3 +26,16 @@ export async function deleteFriend(senderId: number, recivedId: number) {
         Backend_URL + `user/deleteFriend/${senderId}/${recivedId}`,
     );
 }
+
+export async function blockedUser(senderId: number, recivedId: number) {
+    await axios.post(
+        Backend_URL + `user/blockedUser/${senderId}/${recivedId}`,
+    );
+}
+
+
+export async function unBlockedUser(senderId: number, recivedId: number) {
+    await axios.delete(
+        Backend_URL + `user/unBlockedUser/${senderId}/${recivedId}`,
+    );
+}

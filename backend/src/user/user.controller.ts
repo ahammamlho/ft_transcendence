@@ -60,6 +60,27 @@ export class UserController {
     return await this.userService.deleteFriend(senderId, recivedId);
   }
 
+  @Post('/blockedUser/:sender/:recived')
+  async blockedUser(
+    @Param('sender') sender: string,
+    @Param('recived') recived: string,
+  ) {
+    const senderId = parseInt(sender);
+    const recivedId = parseInt(recived);
+    console.log("blockedUser Called");
+    await this.userService.removeFriendRequist(recivedId, senderId);
+    await this.userService.deleteFriend(recivedId, senderId);
+    return await this.userService.blockedUser(senderId, recivedId);
+  }
+  @Delete('/unBlockedUser/:sender/:recived')
+  async unBlockedUser(
+    @Param('sender') sender: string,
+    @Param('recived') recived: string,
+  ) {
+    const senderId = parseInt(sender);
+    const recivedId = parseInt(recived);
+    return await this.userService.unBlockedUser(senderId, recivedId);
+  }
   @Get('/getSendFriendRequest/:sender')
   async getSendRequistFriends(@Param('sender') sender: string) {
     const senderId = parseInt(sender);
@@ -76,5 +97,11 @@ export class UserController {
   async getFriends(@Param('sender') sender: string) {
     const senderId = parseInt(sender);
     return await this.userService.getFriends(senderId);
+  }
+
+  @Get('/getBlockedUser/:sender')
+  async getBlockedUser(@Param('sender') sender: string) {
+    const senderId = parseInt(sender);
+    return await this.userService.getBlockedUser(senderId);
   }
 } 
