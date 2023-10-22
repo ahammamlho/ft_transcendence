@@ -12,7 +12,7 @@ import { MessagesService } from './messages.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { Server, Socket } from 'socket.io';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Status } from '@prisma/client';
+import { MessageStatus, Status } from '@prisma/client';
 import { UserService } from 'src/user/user.service';
 
 @WebSocketGateway()
@@ -29,7 +29,7 @@ export class MessagesGateway
   }
 
   async handleConnection(client: Socket, ...args: any[]) {
-    console.log(`Client connected: ${client.id} -->`, client.handshake.query.senderId);
+    console.log(`Client connected: ---> ${client.id}`);
     if (typeof client.handshake.query.senderId === 'string') {
       client.join(client.handshake.query.senderId);
       await this.prisma.user.update({
@@ -38,6 +38,15 @@ export class MessagesGateway
         },
         data: {
           status: Status.ACTIF
+        }
+      });
+      await this.prisma.directMessage.updateMany({
+        where: {
+          receivedId: parseInt(client.handshake.query.senderId),
+          messageStatus: MessageStatus.NotReceived,
+        },
+        data: {
+          messageStatus: MessageStatus.Received,
         }
       })
       const users = await this.prisma.user.findMany();
@@ -51,7 +60,7 @@ export class MessagesGateway
   }
 
   async handleDisconnect(client: any) {
-    console.log(`Client disconnected: ${client.id}`);
+    console.log(`Client disconnected: ---> ${client.id}`);
     if (typeof client.handshake.query.senderId === 'string') {
       await this.prisma.user.update({
         where: {
@@ -84,6 +93,6 @@ export class MessagesGateway
 
   @SubscribeMessage('isTyping')
   async isTyping(@MessageBody() ids: CreateMessageDto,) {
-    this.wss.to(ids.receivedId.toString()).emit('isTyping', {});
+    this.wss.to(ids.receivedId.toString()).emit('isTyping', ids);
   }
 }

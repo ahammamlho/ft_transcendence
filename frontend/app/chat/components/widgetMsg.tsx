@@ -30,7 +30,7 @@ export function IsTypingMsg({ geust }: { geust: userDto }) {
     );
 }
 
-export function MessageRight({ message }: { message: msgDto }) {
+export function MessageRight({ message, geust }: { message: msgDto, geust: userDto }) {
     const cardStyles = {
         width: 200,
         borderTopRightRadius: 0,
@@ -42,6 +42,7 @@ export function MessageRight({ message }: { message: msgDto }) {
         boxShadow: 'none',
         background: "#ddfdfd",
     };
+    console.log("-------------> geust.messageStatus = ", message.messageStatus);
     return (
         <div style={cardStyles} className='relative mb-2 mt-2'>
             <div className='mb-4 text-sm'> {message.content}</div>
@@ -49,7 +50,9 @@ export function MessageRight({ message }: { message: msgDto }) {
                 <Text size="1" className='pr-1'>
                     {extractHoursAndM(message.createdAt)}
                 </Text>
-                <BsCheck2All />
+                {message.messageStatus === 'NotReceived' ?
+                    <BsCheck2 /> :
+                    <BsCheck2All />}
             </Flex>
         </div>
     );
@@ -150,7 +153,7 @@ export function ShowMessages({ messages, geust }: { messages: msgDto[], geust: u
                 }
 
                 {elm.receivedId == geust.id ? (
-                    <MessageRight message={elm} />
+                    <MessageRight message={elm} geust={geust} />
                 ) : (
                     <MessageLeft message={elm} geust={geust} />
                 )}

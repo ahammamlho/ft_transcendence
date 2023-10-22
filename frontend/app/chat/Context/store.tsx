@@ -2,7 +2,16 @@
 
 import { createContext, useContext, Dispatch, SetStateAction, useState } from "react";
 
+enum Status {
+    ACTIF = "ACTIF",
+    INACTIF = "INACTIF",
+}
 
+enum MessageStatus {
+    NotReceived = "NotReceived",
+    Received = "Received",
+    Seen = "Seen"
+}
 
 interface ContextProps {
     user: userDto,
@@ -20,21 +29,22 @@ interface ContextProps {
 
 const GlobalContext = createContext<ContextProps>({
     user: {
-        id: 0,
+        id: -1,
         email: '',
         name: '',
         avatar: '',
-        status: 0,
+        status: Status.INACTIF,
         lastSee: 0,
+
     },
     setUser: () => { },
 
     geust: {
-        id: 0,
+        id: -1,
         email: '',
         name: '',
         avatar: '',
-        status: 0,
+        status: Status.INACTIF,
         lastSee: 0,
     },
     setGeust: () => { },
@@ -56,7 +66,7 @@ export const GlobalContextProvider = ({ children }: {
         email: '',
         name: '',
         avatar: '',
-        status: 0,
+        status: Status.INACTIF,
         lastSee: 0,
 
     })
@@ -66,8 +76,9 @@ export const GlobalContextProvider = ({ children }: {
         email: '',
         name: '',
         avatar: '',
-        status: 0,
+        status: Status.INACTIF,
         lastSee: 0,
+
     })
 
 

@@ -30,14 +30,21 @@ model User {
   BlockedUser   BlockedUser[]
 }
 
+enum MessageStatus {
+  NotReceived
+  Received
+  Seen
+}
+
 model DirectMessage {
-  id         Int      @id @default(autoincrement())
-  content    String
-  createdAt  DateTime @default(now())
-  user       User     @relation(fields: [senderId], references: [id])
-  showed     Boolean  @default(true)
-  senderId   Int
-  receivedId Int
+  id            Int           @id @default(autoincrement())
+  content       String
+  createdAt     DateTime      @default(now())
+  user          User          @relation(fields: [senderId], references: [id])
+  showed        Boolean       @default(true)
+  senderId      Int
+  receivedId    Int
+  messageStatus MessageStatus @default(NotReceived)
 }
 
 model FriendRequest {

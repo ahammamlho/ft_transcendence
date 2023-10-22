@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UserService } from 'src/user/user.service';
 import { Server } from 'socket.io';
+import { MessageStatus } from '@prisma/client';
 
 @Injectable()
 export class MessagesService {
@@ -12,6 +12,8 @@ export class MessagesService {
 
   async create(server: Server, createMessageDto: CreateMessageDto) {
     let showed: boolean = true;
+    let messageStatus: MessageStatus = "NotReceived"
+
     const blockerUser = await this.prisma.blockedUser.findMany({
       where: {
         OR: [
@@ -30,10 +32,18 @@ export class MessagesService {
     if (blockerUser.length) {
       showed = false;
     }
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: createMessageDto.receivedId,
+      }
+    })
+    if (user.status === "ACTIF")
+      messageStatus = "Received"
     const msg = await this.prisma.directMessage.create({
       data: {
         ...createMessageDto,
-        showed
+        showed,
+        messageStatus
       },
     });
     if (showed)

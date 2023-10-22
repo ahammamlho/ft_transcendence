@@ -11,6 +11,12 @@ import { getColorStatus } from './ListUser';
 import { getUser } from '../api/fetch-users';
 import { formatDistance } from 'date-fns'
 
+enum MessageStatus {
+    NotReceived = "NotReceived",
+    Received = "Received",
+    Seen = "Seen"
+}
+
 const BoxChat = () => {
     const [msg, setMsg] = useState('');
     const [Allmsg, setAllMessage] = useState<msgDto[]>([]);
@@ -31,7 +37,7 @@ const BoxChat = () => {
     useEffect(() => {
 
         const handleReceivedMessage = (data: msgDto) => {
-            if (geust.id === data.senderId) {
+            if (data.senderId === geust.id || data.senderId === user.id) {
                 setIsTyping(false);
                 setAllMessage((prevMessages) => [...prevMessages, data]);
             }
@@ -79,17 +85,19 @@ const BoxChat = () => {
     }, [msg])
 
     useEffect(() => {
-        const updateIsTyping = () => {
-            setIsTyping(true);
-            setTimeout(() => {
-                setIsTyping(false);
-            }, 2000);
+        const updateIsTyping = (data: msgDto) => {
+            if (data.senderId === geust.id) {
+                setIsTyping(true);
+                setTimeout(() => {
+                    setIsTyping(false);
+                }, 2000);
+            }
         }
         socket.on("isTyping", updateIsTyping);
         return () => {
             socket.off("isTyping", updateIsTyping);
         };
-    }, []);
+    }, [geust.id]);
 
     const handleSendMessage = () => {
         if (msg.trim() != '') {
@@ -98,14 +106,6 @@ const BoxChat = () => {
                 senderId: user.id,
                 receivedId: geust.id,
             });
-            let newMsg = {
-                id: 20,
-                content: msg.trim(),
-                createdAt: (new Date()).getTime(),
-                senderId: user.id,
-                receivedId: geust.id,
-            };
-            setAllMessage((prevMessages) => [...prevMessages, newMsg]);
         }
         setMsg('');
     }

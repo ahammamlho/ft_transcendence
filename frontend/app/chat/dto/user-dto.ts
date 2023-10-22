@@ -15,6 +15,7 @@ type msgDto = {
   createdAt: number;
   senderId: number;
   receivedId: number;
+  messageStatus: MessageStatus;
 };
 
 type reqFriendsDto = {
@@ -29,4 +30,10 @@ type reqFriendsDto = {
 enum Status {
   ACTIF = "ACTIF",
   INACTIF = "INACTIF",
+}
+
+enum MessageStatus {
+  NotReceived = "NotReceived",
+  Received = "Received",
+  Seen = "Seen"
 }

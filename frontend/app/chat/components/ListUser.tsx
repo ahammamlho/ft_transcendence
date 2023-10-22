@@ -67,7 +67,7 @@ const ListUser = ({ user }: { user: userDto }) => {
         <Text size="2" weight="bold" className=''>
           {el.name}
         </Text>
-        <Text className='text-neutral-500 text-sm' >
+        <Text className='text-neutral-500 text-sm w-24 line-clamp-1 overflow-hidden' >
           {lastMsgs[index].content}
         </Text>
       </Flex>
