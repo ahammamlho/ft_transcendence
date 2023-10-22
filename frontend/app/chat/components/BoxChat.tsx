@@ -9,7 +9,6 @@ import { emitMessage, socket } from '../api/init-socket';
 import { GoDotFill } from "react-icons/go";
 import { getColorStatus } from './ListUser';
 import { getUser } from '../api/fetch-users';
-import { Status } from './ListUser';
 import { formatDistance } from 'date-fns'
 
 const BoxChat = () => {
@@ -134,7 +133,7 @@ const BoxChat = () => {
                         {geust.name}
                     </Text>
                     {
-                        (geust.status !== Status.ACTIF) ?
+                        (geust.status === 'INACTIF') ?
                             <Text size="1" weight="light" className='pl-2'>
                                 {formatDistance(new Date(geust.lastSee), new Date(), { addSuffix: true })}
                             </Text> :

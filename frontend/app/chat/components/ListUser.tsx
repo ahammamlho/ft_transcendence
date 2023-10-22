@@ -9,30 +9,16 @@ import { getUserForMsg } from '../api/fetch-users';
 import { socket, socketInitializer } from '../api/init-socket';
 import { extractHoursAndM } from './widgetMsg';
 
-export enum Status {
-  ACTIF = "ACTIF",
-  INACTIF = "INACTIF",
-  WRITE = "INACTIF",
-}
-
-
-
-export function getColorStatus(status: Status): string {
-  if (status === Status.ACTIF) {
+export function getColorStatus(status: any): string {
+  if (status === "ACTIF") {
     return 'green';
-  } else if (status === Status.INACTIF) {
+  } else if (status === "INACTIF") {
     return 'red';
   }
   return 'blue';
 }
 
-
-
-
-interface Props {
-  user: userDto,
-}
-const ListUser = ({ user }: Props) => {
+const ListUser = ({ user }: { user: userDto }) => {
 
   const { setGeust, setUser, geust } = useGlobalContext();
 
@@ -48,15 +34,17 @@ const ListUser = ({ user }: Props) => {
       const usersList = await getUserForMsg(user.id);
       setUsers(usersList.usersMsgList);
       setLastMsgs(usersList.lastMsgs);
-      console.log(usersList.usersMsgList);
-
     };
     getListUsers();
     socket.on("findMsg2UsersResponse", getListUsers);
     socket.on("updateData", getListUsers);
   }, [])
 
-
+  useEffect(() => {
+    if (geust.id === -1 && users.length !== 0) {
+      setGeust(users[0]);
+    }
+  }, [users])
 
   const userWidget = (users.length != 0) ? users.map((el, index) => {
     return <Flex align="center" className='relative mt-0 border-b py-2' key={index}
@@ -100,6 +88,7 @@ const ListUser = ({ user }: Props) => {
     </Flex>
 
   }) : <Text className="flex border-b justify-center">pas user</Text>
+
   return (
     <Box style={{ width: 200, height: 500, padding: 2, borderRadius: 10, background: "white" }}>
 

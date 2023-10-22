@@ -1,6 +1,6 @@
-import { Text, Avatar } from '@radix-ui/themes';
+import { Text, Avatar, Flex } from '@radix-ui/themes';
 import { ThreeDots } from 'react-loader-spinner'
-
+import { BsCheck2, BsCheck2All } from "react-icons/bs";
 
 export function extractHoursAndM(time: number): string {
 
@@ -17,7 +17,6 @@ export function IsTypingMsg({ geust }: { geust: userDto }) {
         boxShadow: 'none',
         background: "#ddfdfd",
     };
-
     return (
         <div style={cardStyles} className='flex  items-center justify-center mt-2 ml-8'>
             <ThreeDots
@@ -25,7 +24,6 @@ export function IsTypingMsg({ geust }: { geust: userDto }) {
                 width="30"
                 color="#4fa94d"
                 ariaLabel="three-dots-loading"
-                wrapperStyle={{}}
                 visible={true}
             />
         </div>
@@ -47,9 +45,12 @@ export function MessageRight({ message }: { message: msgDto }) {
     return (
         <div style={cardStyles} className='relative mb-2 mt-2'>
             <div className='mb-4 text-sm'> {message.content}</div>
-            <Text size="1" className='absolute bottom-1 right-2 mt-2'>
-                {extractHoursAndM(message.createdAt)}
-            </Text>
+            <Flex className='absolute bottom-1 right-2 mt-2 items-end'>
+                <Text size="1" className='pr-1'>
+                    {extractHoursAndM(message.createdAt)}
+                </Text>
+                <BsCheck2All />
+            </Flex>
         </div>
     );
 }

@@ -27,7 +27,6 @@ type reqFriendsDto = {
 
 
 enum Status {
-  ACTIF,
-  INACTIF,
-  WRITE,
+  ACTIF = "ACTIF",
+  INACTIF = "INACTIF",
 }

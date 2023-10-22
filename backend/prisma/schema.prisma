@@ -13,7 +13,6 @@ datasource db {
 enum Status {
   ACTIF
   INACTIF
-  WRITE
 }
 
 model User {
