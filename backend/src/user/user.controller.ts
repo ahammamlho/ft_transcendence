@@ -8,8 +8,13 @@ export class UserController {
   // @UseGuards(JwtGuard)
   @Get('/all')
   async getAllUser() {
-    console.log('get all user called');
     return await this.userService.findAllUsers();
+  }
+
+
+  @Get('/getUserForMsg/:id')
+  async getUserForMsg(@Param('id') senderId: number) {
+    return await this.userService.getUserForMsg(senderId);
   }
 
   // @UseGuards(JwtGuard)

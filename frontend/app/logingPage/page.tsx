@@ -10,7 +10,7 @@ import { useSession } from 'next-auth/react';
 export default function LoginPage() {
   const router = useRouter();
 
-  const handleUserName = (e: any) => {};
+  const handleUserName = (e: any) => { };
   const handleSubmit = async (e: any) => {
     e.preventDefault();
   };

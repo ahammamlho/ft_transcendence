@@ -2,17 +2,16 @@
 import React, { use, useEffect, useState } from 'react';
 import { Avatar, Flex, Text, Box, ScrollArea } from '@radix-ui/themes';
 import { AiFillMessage } from "react-icons/ai";
-import { BsPersonFillAdd } from "react-icons/bs";
-import { BiUserCheck } from "react-icons/bi";
 import { useGlobalContext } from '../../Context/store';
 import { getAllUsers, getRecivedRequistFriends, getSendRequistFriends, getFriends, getBlockedUser } from '../../api/fetch-users';
 import getIcon from './IconAction';
-import { socket } from '../../api/init-socket';
-
+import { socket, socketInitializer } from '../../api/init-socket';
+import { useRouter } from 'next/navigation';
 
 
 const ListItem = () => {
-    const { user, valueNav } = useGlobalContext();
+    const router = useRouter();
+    const { user, valueNav, setGeust } = useGlobalContext();
     const [items, setItems] = useState<userDto[]>([]);
     const [nbr, setNbr] = useState(1);
     let users: userDto[] = [];
@@ -62,7 +61,7 @@ const ListItem = () => {
         const handleReceivedMessage = () => {
             setNbr((prevNbr) => prevNbr + 1);
         };
-
+        if (!socket) socketInitializer(user);
         socket.on("updateData", handleReceivedMessage);
 
         return () => {
@@ -85,7 +84,11 @@ const ListItem = () => {
                     </Text></div>
                 <div className='flex items-center'>
                     {getIcon(user, valueNav, itm, sendRequist, friends, recivedRequistFre, blockedUser)}
-                    <AiFillMessage size='20' />
+                    <AiFillMessage size='20' onClick={() => {
+                        console.log('icon msg clicked');
+                        setGeust(itm);
+                        router.push(`/chat`);
+                    }} />
                 </div>
             </Flex>
         </Box>

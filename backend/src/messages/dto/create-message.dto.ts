@@ -3,3 +3,11 @@ export class CreateMessageDto {
   senderId: number;
   receivedId: number;
 }
+
+
+
+export enum Status {
+  ACTIF,
+  INACTIF,
+  WRITE,
+}

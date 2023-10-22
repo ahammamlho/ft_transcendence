@@ -1,8 +1,8 @@
 # compiled output
 */dist
 */node_modules
-
-# Logs
+*.next
+Logs
 logs
 *.log
 npm-debug.log*

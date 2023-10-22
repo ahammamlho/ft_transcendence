@@ -25,7 +25,7 @@ const getIcon = (user: userDto, valueNav: number, item: userDto, sendRequist: re
 
         if (userInReqFrie || userIsFriends) {
             return (
-                <FaUserTimes size='20' style={{ marginRight: 10 }} onClick={async () => {
+                <FaUserTimes size='20' style={{ marginRight: 10, color: 'red' }} onClick={async () => {
                     if (userInReqFrie)
                         await removeRequistFriend(user.id, item.id);
                     if (userIsFriends)
@@ -39,7 +39,7 @@ const getIcon = (user: userDto, valueNav: number, item: userDto, sendRequist: re
             );
         } else {
             return (
-                <BsPersonFillAdd size='20' style={{ marginRight: 10 }} onClick={async () => {
+                <BsPersonFillAdd size='20' style={{ marginRight: 10, color: 'green' }} onClick={async () => {
                     await sendRequistFriend(user.id, item.id);
                     emitMessage('updateData', {
                         content: '',
@@ -51,7 +51,7 @@ const getIcon = (user: userDto, valueNav: number, item: userDto, sendRequist: re
         }
     } else if (valueNav == 1 || userInRecivedReq) {
         return (
-            <BiUserCheck size='20' style={{ marginRight: 10 }} onClick={async () => {
+            <BiUserCheck size='20' style={{ marginRight: 10, color: 'green' }} onClick={async () => {
                 await accepteRequistFriend(user.id, item.id);
                 emitMessage('updateData', {
                     content: '',
@@ -62,7 +62,7 @@ const getIcon = (user: userDto, valueNav: number, item: userDto, sendRequist: re
         );
     } else if (valueNav == 2) {
         return (
-            <FaUserAltSlash size='20' style={{ marginRight: 10 }} onClick={async () => {
+            <FaUserAltSlash size='20' style={{ marginRight: 10, color: 'red' }} onClick={async () => {
                 await blockedUser(user.id, item.id);
                 emitMessage('updateData', {
                     content: '',
@@ -73,7 +73,7 @@ const getIcon = (user: userDto, valueNav: number, item: userDto, sendRequist: re
         );
     } else if (valueNav == 3 || userInBlockerdUsera) {
         return (
-            <AiOutlineUserSwitch size='20' style={{ marginRight: 10 }} onClick={async () => {
+            <AiOutlineUserSwitch size='20' style={{ marginRight: 10, color: 'blue' }} onClick={async () => {
                 await unBlockedUser(user.id, item.id);
                 emitMessage('updateData', {
                     content: '',

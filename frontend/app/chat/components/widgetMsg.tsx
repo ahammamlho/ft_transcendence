@@ -1,6 +1,38 @@
 import { Text, Avatar } from '@radix-ui/themes';
+import { ThreeDots } from 'react-loader-spinner'
 
-export function MessageRight({ message }: { message: string }) {
+
+export function extractHoursAndM(time: number): string {
+
+    const dt = new Date(time);
+    const hours = dt.getHours().toString().padStart(2, '0');
+    const minutes = dt.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+}
+
+export function IsTypingMsg({ geust }: { geust: userDto }) {
+    const cardStyles = {
+        width: 50,
+        borderRadius: 20,
+        boxShadow: 'none',
+        background: "#ddfdfd",
+    };
+
+    return (
+        <div style={cardStyles} className='flex  items-center justify-center mt-2 ml-8'>
+            <ThreeDots
+                height="30"
+                width="30"
+                color="#4fa94d"
+                ariaLabel="three-dots-loading"
+                wrapperStyle={{}}
+                visible={true}
+            />
+        </div>
+    );
+}
+
+export function MessageRight({ message }: { message: msgDto }) {
     const cardStyles = {
         width: 200,
         borderTopRightRadius: 0,
@@ -14,14 +46,14 @@ export function MessageRight({ message }: { message: string }) {
     };
     return (
         <div style={cardStyles} className='relative mb-2 mt-2'>
-            <div className='mb-4 text-sm'> {message}</div>
+            <div className='mb-4 text-sm'> {message.content}</div>
             <Text size="1" className='absolute bottom-1 right-2 mt-2'>
-                10.25
+                {extractHoursAndM(message.createdAt)}
             </Text>
         </div>
     );
 }
-export function MessageLeft({ message, geust }: { message: string, geust: userDto }) {
+export function MessageLeft({ message, geust }: { message: msgDto, geust: userDto }) {
     const cardStyles = {
         width: 200,
         borderTopRightRadius: 10,
@@ -47,9 +79,9 @@ export function MessageLeft({ message, geust }: { message: string, geust: userDt
                     {geust.name}
                 </Text>
                 <div style={cardStyles} className='relative'>
-                    <div className='mb-4  text-sm'> {message}</div>
+                    <div className='mb-4  text-sm'> {message.content}</div>
                     <Text size="1" className='absolute bottom-1 right-2 mt-2'>
-                        10.25
+                        {extractHoursAndM(message.createdAt)}
                     </Text>
                 </div>
             </div>
@@ -57,15 +89,71 @@ export function MessageLeft({ message, geust }: { message: string, geust: userDt
     );
 }
 
-export function ShowMessages({ messages, geust }: { messages: msgDto[], geust: userDto }) {
+let lastPrint: number = 0;
+function isSameDay(date1: Date, date2: Date): boolean {
+    return (
+        date1.getFullYear() === date2.getFullYear() &&
+        date1.getMonth() === date2.getMonth() &&
+        date1.getDate() === date2.getDate()
+    );
+}
+function formatDateOnly(currentDate: number, inputDateString: number): string {
+    const inputDate = new Date(inputDateString);
+    const year = inputDate.getFullYear();
+    const month = String(inputDate.getMonth() + 1).padStart(2, '0');
+    const day = String(inputDate.getDate()).padStart(2, '0');
+    if (isSameDay(new Date(currentDate), new Date(inputDateString)))
+        return 'today';
 
+    return `${year}-${month}-${day}`;
+}
+
+function showDays(currentDate: number, timeMsg: number) {
+
+    const dt = new Date(timeMsg);
+    const dt_zero = new Date(formatDateOnly(0, timeMsg));
+    const dt_fixTime = new Date(lastPrint);
+
+
+    const difference = dt_fixTime.getTime() - dt_zero.getTime();
+    if (lastPrint === 0) {
+        lastPrint = dt_zero.getTime() + 86400000;
+        return { show: true, data: formatDateOnly(currentDate, timeMsg) };
+    }
+
+    if (difference <= 0) {
+        lastPrint = dt_zero.getTime() + 86400000;
+        return { show: true, data: `${formatDateOnly(currentDate, timeMsg)}` };
+    }
+    return { show: false, data: '' };
+}
+
+export function ShowMessages({ messages, geust }: { messages: msgDto[], geust: userDto }) {
+    const currentDate = Date.now();
+    lastPrint = 0;
     return messages.map((elm, index) => {
+        const temp = showDays(currentDate, elm.createdAt);
         const tag =
-            elm.receivedId == geust.id ? (
-                <MessageRight message={elm.content} key={index} />
-            ) : (
-                <MessageLeft message={elm.content} geust={geust} key={index} />
-            );
+            <div key={index}>
+
+                {
+                    temp.show ?
+                        (
+                            <div className="flex items-center pt-2 pb-2">
+                                <div className="flex-grow h-px bg-gray-400 mx-4"></div>
+                                <h2 className="text-sm">{temp.data}</h2>
+                                <div className="flex-grow h-px bg-gray-400 mx-4"></div>
+                            </div>
+                        )
+                        : (<></>)
+                }
+
+                {elm.receivedId == geust.id ? (
+                    <MessageRight message={elm} />
+                ) : (
+                    <MessageLeft message={elm} geust={geust} />
+                )}
+            </div>
         return tag;
     })
 

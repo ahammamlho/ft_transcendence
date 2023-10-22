@@ -6,35 +6,71 @@ import {
   OnGatewayInit,
   OnGatewayDisconnect,
   WebSocketServer,
-  ConnectedSocket,
 } from '@nestjs/websockets';
+
 import { MessagesService } from './messages.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { Server, Socket } from 'socket.io';
-import { Param } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { Status } from '@prisma/client';
+import { UserService } from 'src/user/user.service';
 
 @WebSocketGateway()
 export class MessagesGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
-  constructor(private readonly messagesService: MessagesService) { }
+  constructor(
+    private messagesService: MessagesService,
+    private prisma: PrismaService,
+    private userService: UserService) { }
   @WebSocketServer() wss: Server;
 
   afterInit(server: any) {
     console.log('Gateway Initialized');
   }
 
-  handleConnection(client: Socket, ...args: any[]) {
-    console.log(`Client connected: ${client.id}`);
-    client.join(client.handshake.query.senderId);
+  async handleConnection(client: Socket, ...args: any[]) {
+    console.log(`Client connected: ${client.id} -->`, client.handshake.query.senderId);
+    if (typeof client.handshake.query.senderId === 'string') {
+      client.join(client.handshake.query.senderId);
+      await this.prisma.user.update({
+        where: {
+          id: parseInt(client.handshake.query.senderId)
+        },
+        data: {
+          status: Status.ACTIF
+        }
+      })
+      const users = await this.prisma.user.findMany();
+      for (let i = 0; i < users.length; i++) {
+        if (users[i].status == Status.ACTIF) {
+          console.log(`user  active ${users[i].name}  ${users[i].toString()}`)
+          this.wss.to(users[i].id.toString()).emit('updateData', {});
+        }
+      }
+    }
   }
 
-  handleDisconnect(client: any) {
+  async handleDisconnect(client: any) {
     console.log(`Client disconnected: ${client.id}`);
+    if (typeof client.handshake.query.senderId === 'string') {
+      await this.prisma.user.update({
+        where: {
+          id: parseInt(client.handshake.query.senderId)
+        },
+        data: {
+          status: Status.INACTIF,
+          lastSee: new Date()
+        }
+      })
+      const users = await this.prisma.user.findMany();
+      for (let i = 0; i < users.length; i++) {
+        this.wss.to(users[i].id.toString()).emit('updateData', {});
+      }
+    }
   }
 
   @SubscribeMessage('createMessage')
   async create(
-    @ConnectedSocket() client: Socket,
     @MessageBody() createMessageDto: CreateMessageDto,
   ) {
     await this.messagesService.create(this.wss, createMessageDto);
@@ -44,5 +80,10 @@ export class MessagesGateway
   async updateData(@MessageBody() ids: CreateMessageDto,) {
     this.wss.to(ids.senderId.toString()).emit('updateData', {});
     this.wss.to(ids.receivedId.toString()).emit('updateData', {});
+  }
+
+  @SubscribeMessage('isTyping')
+  async isTyping(@MessageBody() ids: CreateMessageDto,) {
+    this.wss.to(ids.receivedId.toString()).emit('isTyping', {});
   }
 }

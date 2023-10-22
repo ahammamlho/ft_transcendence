@@ -24,6 +24,8 @@ const GlobalContext = createContext<ContextProps>({
         email: '',
         name: '',
         avatar: '',
+        status: 0,
+        lastSee: 0,
     },
     setUser: () => { },
 
@@ -32,6 +34,8 @@ const GlobalContext = createContext<ContextProps>({
         email: '',
         name: '',
         avatar: '',
+        status: 0,
+        lastSee: 0,
     },
     setGeust: () => { },
 
@@ -52,13 +56,18 @@ export const GlobalContextProvider = ({ children }: {
         email: '',
         name: '',
         avatar: '',
+        status: 0,
+        lastSee: 0,
+
     })
 
     const [geust, setGeust] = useState<userDto>({
-        id: 0,
+        id: -1,
         email: '',
         name: '',
         avatar: '',
+        status: 0,
+        lastSee: 0,
     })
 
 

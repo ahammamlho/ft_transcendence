@@ -3,6 +3,8 @@ type userDto = {
   email: string;
   name: string;
   avatar: string;
+  status: Status;
+  lastSee: number;
 };
 
 
@@ -20,4 +22,12 @@ type reqFriendsDto = {
   createdAt: number;
   senderId: number;
   receivedId: number;
+}
+
+
+
+enum Status {
+  ACTIF,
+  INACTIF,
+  WRITE,
 }

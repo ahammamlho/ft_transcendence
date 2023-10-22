@@ -3,7 +3,7 @@ import { PrismaService } from './prisma/prisma.service';
 
 @Injectable()
 export class AppService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async checkUser(query) {
     const { username, password } = query;

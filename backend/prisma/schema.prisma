@@ -10,13 +10,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Status {
+  ACTIF
+  INACTIF
+  WRITE
+}
+
 model User {
-  id            Int             @id @default(autoincrement())
-  email         String          @unique
-  name          String?
-  password      String
-  avatar        String
-  start         DateTime        @default(now())
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  name     String?
+  password String
+  avatar   String
+  status   Status   @default(INACTIF)
+  lastSee  DateTime @default(now())
+
   directMessage DirectMessage[]
   frienRequest  FriendRequest[]
   Friend        Friend[]
@@ -28,6 +36,7 @@ model DirectMessage {
   content    String
   createdAt  DateTime @default(now())
   user       User     @relation(fields: [senderId], references: [id])
+  showed     Boolean  @default(true)
   senderId   Int
   receivedId Int
 }

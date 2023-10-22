@@ -3,9 +3,13 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/user.dto';
 import { hash } from 'bcrypt';
 import { Server } from 'socket.io';
+import { MessagesService } from 'src/messages/messages.service';
+
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService,
+    private messagesService: MessagesService
+  ) { }
 
   async create(dto: CreateUserDto) {
     const user = await this.prisma.user.findUnique({
@@ -13,9 +17,7 @@ export class UserService {
         email: dto.email,
       },
     });
-
     if (user) throw new ConflictException('Email duplicated');
-
     const newUser = await this.prisma.user.create({
       data: {
         ...dto,
@@ -44,6 +46,40 @@ export class UserService {
 
   async findAllUsers() {
     return await this.prisma.user.findMany();
+  }
+
+  async getUserForMsg(senderId: number) {
+    const users = await this.prisma.user.findMany();
+
+    const usersMsg = await this.prisma.directMessage.findMany({
+      where: {
+        OR: [
+          { senderId: senderId },
+          { receivedId: senderId }
+        ]
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    })
+
+    const distinctUserIds = new Set<number>();
+    for (const msg of usersMsg) {
+      if (msg.senderId === senderId) {
+        distinctUserIds.add(msg.receivedId);
+      } else {
+        distinctUserIds.add(msg.senderId);
+      }
+    }
+    const idUsersArray = Array.from(distinctUserIds);
+    const usersMsgList = idUsersArray.map((id) => users.find((user) => user.id === id));
+    let lastMsgs = [];
+    for (let i = 0; i < usersMsgList.length; i++) {
+      const temp = await this.messagesService.getLastMessages(senderId, usersMsgList[i].id);
+      lastMsgs.push(temp);
+    }
+
+    return { usersMsgList, lastMsgs };
   }
 
   async sendFriendRequist(sendId: number, recivedId: number) {

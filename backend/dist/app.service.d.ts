@@ -9,6 +9,7 @@ export declare class AppService {
         name: string;
         password: string;
         avatar: string;
-        start: Date;
+        status: import(".prisma/client").$Enums.Status;
+        lastSee: Date;
     }[]>;
 }

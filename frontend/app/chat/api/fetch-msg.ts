@@ -1,14 +1,25 @@
 import axios from 'axios';
 
-async function getMessageTwoUsers(
+export async function getMessageTwoUsers(
     sender: number,
     recived: number,
-): Promise<msgDto[]> {
+) {
     const response = await axios.get(
-        `http://localhost:3333/messages/${recived}/${sender}`,
+        `http://localhost:3333/messages/${sender}/${recived}`,
     );
     const allMessage = await response.data;
     return allMessage;
 }
 
-export default getMessageTwoUsers;
+
+export async function getLastMessageTwoUsers(
+    sender: number,
+    recived: number,
+) {
+    const response = await axios.get(
+        `http://localhost:3333/messages/lastMsg/${sender}/${recived}`,
+    );
+    const lastMessage = await response.data;
+    return lastMessage;
+}
+

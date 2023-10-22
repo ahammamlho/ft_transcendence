@@ -1,29 +1,49 @@
 import { Injectable } from '@nestjs/common';
 import { CreateMessageDto } from './dto/create-message.dto';
-import { Message } from './entities/message.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserService } from 'src/user/user.service';
-import { Socket, Server } from 'socket.io';
+import { Server } from 'socket.io';
 
 @Injectable()
 export class MessagesService {
   constructor(
-    private prisma: PrismaService,
-    private userService: UserService,
+    private prisma: PrismaService
   ) { }
 
   async create(server: Server, createMessageDto: CreateMessageDto) {
+    let showed: boolean = true;
+    const blockerUser = await this.prisma.blockedUser.findMany({
+      where: {
+        OR: [
+          {
+            senderId: createMessageDto.senderId,
+            receivedId: createMessageDto.receivedId
+          },
+          {
+            senderId: createMessageDto.receivedId,
+            receivedId: createMessageDto.senderId
+          }
+        ]
+      }
+    })
+
+    if (blockerUser.length) {
+      showed = false;
+    }
     const msg = await this.prisma.directMessage.create({
       data: {
         ...createMessageDto,
+        showed
       },
     });
-    server.to(msg.receivedId.toString()).emit('findMsg2UsersResponse', msg);
+    if (showed)
+      server.to(msg.receivedId.toString()).emit('findMsg2UsersResponse', msg);
+    server.to(msg.senderId.toString()).emit('findMsg2UsersResponse', msg);
   }
 
 
   async getMessage(senderId: number, receivedId: number) {
-    const msgUser = await this.prisma.directMessage.findMany({
+    const msgUserTemp = await this.prisma.directMessage.findMany({
       where: {
         OR: [
           {
@@ -36,7 +56,40 @@ export class MessagesService {
           },
         ],
       },
+      orderBy: {
+        createdAt: 'asc',
+      },
     });
+    const msgUser = msgUserTemp.filter((msg) => (msg.showed === true || senderId === msg.senderId));
     return msgUser;
+  }
+
+  async getLastMessages(senderId: number, receivedId: number) {
+    const lastMessage = await this.prisma.directMessage.findFirst({
+      where: {
+        OR: [
+          {
+            senderId,
+            receivedId,
+            showed: true,
+          },
+          {
+            senderId: receivedId,
+            receivedId: senderId,
+            showed: true
+          },
+        ],
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+    if (!lastMessage) {
+      return {
+        content: "",
+        createdAt: 5
+      }
+    }
+    return lastMessage;
   }
 }
