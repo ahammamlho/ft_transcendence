@@ -35,20 +35,22 @@ const BoxChat = () => {
     }, [Allmsg, isTyping])
 
     useEffect(() => {
+        console.log("----> from boxcaht", user);
+        if (user.id !== 0) {
+            const handleReceivedMessage = (data: msgDto) => {
+                if (data.senderId === geust.id || data.senderId === user.id) {
+                    setIsTyping(false);
+                    setAllMessage((prevMessages) => [...prevMessages, data]);
+                }
+            };
 
-        const handleReceivedMessage = (data: msgDto) => {
-            if (data.senderId === geust.id || data.senderId === user.id) {
-                setIsTyping(false);
-                setAllMessage((prevMessages) => [...prevMessages, data]);
-            }
-        };
+            socket.on("findMsg2UsersResponse", handleReceivedMessage);
 
-        socket.on("findMsg2UsersResponse", handleReceivedMessage);
-
-        return () => {
-            socket.off("findMsg2UsersResponse", handleReceivedMessage);
-        };
-    }, [geust.id]);
+            return () => {
+                socket.off("findMsg2UsersResponse", handleReceivedMessage);
+            };
+        }
+    }, [geust.id, user.id]);
 
     useEffect(() => {
         async function getData() {
@@ -61,18 +63,20 @@ const BoxChat = () => {
     }, [geust.id]);
 
     useEffect(() => {
-        const upDateGeust = async () => {
-            if (geust.id !== -1) {
-                const temp = await getUser(geust.id);
-                setGeust(temp);
-                setIsTyping(false);
+        if (user.id !== 0) {
+            const upDateGeust = async () => {
+                if (geust.id !== -1) {
+                    const temp = await getUser(geust.id);
+                    setGeust(temp);
+                    setIsTyping(false);
+                }
             }
+            socket.on("updateData", upDateGeust);
+            return () => {
+                socket.off("updateData", upDateGeust);
+            };
         }
-        socket.on("updateData", upDateGeust);
-        return () => {
-            socket.off("updateData", upDateGeust);
-        };
-    }, [geust.id]);
+    }, [geust.id, user.id]);
 
     useEffect(() => {
         if (msg != "") {
@@ -85,19 +89,21 @@ const BoxChat = () => {
     }, [msg])
 
     useEffect(() => {
-        const updateIsTyping = (data: msgDto) => {
-            if (data.senderId === geust.id) {
-                setIsTyping(true);
-                setTimeout(() => {
-                    setIsTyping(false);
-                }, 2000);
+        if (user.id !== 0) {
+            const updateIsTyping = (data: msgDto) => {
+                if (data.senderId === geust.id) {
+                    setIsTyping(true);
+                    setTimeout(() => {
+                        setIsTyping(false);
+                    }, 2000);
+                }
             }
+            socket.on("isTyping", updateIsTyping);
+            return () => {
+                socket.off("isTyping", updateIsTyping);
+            };
         }
-        socket.on("isTyping", updateIsTyping);
-        return () => {
-            socket.off("isTyping", updateIsTyping);
-        };
-    }, [geust.id]);
+    }, [geust.id, user.id]);
 
     const handleSendMessage = () => {
         if (msg.trim() != '') {

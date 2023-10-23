@@ -1,7 +1,7 @@
 'use client';
 import './globals.css';
 import { Inter } from 'next/font/google';
-import { SessionProviders } from './components/Providers';
+import { Providers } from './components/Providers';
 import '@radix-ui/themes/styles.css';
 import { Container, Theme } from '@radix-ui/themes';
 
@@ -14,13 +14,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className=' bg-sky-400'>
-      <SessionProviders>
+      <Providers>
         <body className={inter.className}>
           <Theme className=' bg-sky-400'>
             {children}
           </Theme>
         </body>
-      </SessionProviders>
+      </Providers>
     </html>
   );
 }

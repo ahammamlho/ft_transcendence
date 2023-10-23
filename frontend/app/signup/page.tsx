@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import styles from './styles.module.css';
 import { Backend_URL } from '../lib/constants';
 import Link from 'next/link';
-// import router from 'next/router';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 

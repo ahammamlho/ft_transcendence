@@ -7,6 +7,8 @@ declare module 'next-auth' {
       email: string;
       name: string;
       avatar: string;
+      status: Status;
+      lastSee: number;
     };
     backendTokens: {
       accessToken: string;
@@ -23,6 +25,8 @@ declare module 'next-auth/jwt' {
       email: string;
       name: string;
       avatar: string;
+      status: Status;
+      lastSee: number;
     };
 
     backendTokens: {

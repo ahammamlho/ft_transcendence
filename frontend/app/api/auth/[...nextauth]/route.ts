@@ -20,6 +20,7 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials, req) {
+
         if (!credentials?.username || !credentials?.password) return null;
 
         const { username, password } = credentials;
@@ -35,7 +36,7 @@ export const authOptions: NextAuthOptions = {
           },
         });
         const user = await res.json();
-
+        console.log("user --> ", user);
         if (res.ok && user) {
           return user;
         }
@@ -45,9 +46,10 @@ export const authOptions: NextAuthOptions = {
   ],
 
   callbacks: {
+
     async jwt({ token, user }) {
       if (user) return { ...token, ...user };
-      return token;
+      return { ...token };
     },
 
     async session({ token, session }) {

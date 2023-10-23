@@ -6,14 +6,4 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
   async onModuleInit() {
     await this.$connect();
   }
-
-  // constructor(config: ConfigService) {
-  //   super({
-  //     datasources: {
-  //       db: {
-  //         url: config.get('DATABASE_URL'),
-  //       },
-  //     },
-  //   });
-  // }
 }

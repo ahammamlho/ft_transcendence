@@ -1,5 +1,4 @@
 'use client';
-
 import { createContext, useContext, Dispatch, SetStateAction, useState } from "react";
 
 enum Status {
@@ -22,8 +21,6 @@ interface ContextProps {
 
     valueNav: number,
     setValueNav: Dispatch<SetStateAction<number>>
-
-
 
 }
 
@@ -60,7 +57,6 @@ const GlobalContext = createContext<ContextProps>({
 export const GlobalContextProvider = ({ children }: {
     children: React.ReactNode;
 }) => {
-
     const [user, setUser] = useState<userDto>({
         id: 0,
         email: '',

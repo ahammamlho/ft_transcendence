@@ -8,6 +8,7 @@ import { useGlobalContext } from '../Context/store';
 import { getUserForMsg } from '../api/fetch-users';
 import { socket, socketInitializer } from '../api/init-socket';
 import { extractHoursAndM } from './widgetMsg';
+import { useSession } from 'next-auth/react';
 
 export function getColorStatus(status: any): string {
   if (status === "ACTIF") {
@@ -18,8 +19,8 @@ export function getColorStatus(status: any): string {
   return 'blue';
 }
 
-const ListUser = ({ user }: { user: userDto }) => {
-
+const ListUser = () => {
+  const { data: session } = useSession();
   const { setGeust, setUser, geust } = useGlobalContext();
 
   const [users, setUsers] = useState<userDto[]>([])
@@ -28,17 +29,23 @@ const ListUser = ({ user }: { user: userDto }) => {
 
 
   useEffect(() => {
-    setUser(user);
-    socketInitializer(user);
-    const getListUsers = async () => {
-      const usersList = await getUserForMsg(user.id);
-      setUsers(usersList.usersMsgList);
-      setLastMsgs(usersList.lastMsgs);
-    };
-    getListUsers();
-    socket.on("findMsg2UsersResponse", getListUsers);
-    socket.on("updateData", getListUsers);
-  }, [])
+
+    if (session) {
+      console.log("session ----> ", session);
+      const user: userDto = session.user;
+      setUser(user);
+      socketInitializer(user);
+      const getListUsers = async () => {
+        const usersList = await getUserForMsg(user.id);
+        setUsers(usersList.usersMsgList);
+        setLastMsgs(usersList.lastMsgs);
+      };
+      getListUsers();
+      socket.on("findMsg2UsersResponse", getListUsers);
+      socket.on("updateData", getListUsers);
+    }
+
+  }, [session])
 
   useEffect(() => {
     if (geust.id === -1 && users.length !== 0) {

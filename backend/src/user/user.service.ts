@@ -2,7 +2,6 @@ import { Injectable, ConflictException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/user.dto';
 import { hash } from 'bcrypt';
-import { Server } from 'socket.io';
 import { MessagesService } from 'src/messages/messages.service';
 
 @Injectable()
@@ -18,6 +17,7 @@ export class UserService {
       },
     });
     if (user) throw new ConflictException('Email duplicated');
+
     const newUser = await this.prisma.user.create({
       data: {
         ...dto,

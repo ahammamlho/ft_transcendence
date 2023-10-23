@@ -12,7 +12,7 @@ export default function LoginForm() {
     email: '',
     password: '',
   });
-  const [error, setError] = useState('');
+
 
   const searchParams = useSearchParams();
   // const callbackUrl = searchParams.get('callbackUrl') || ;
@@ -27,6 +27,7 @@ export default function LoginForm() {
         redirect: true,
         callbackUrl: '/chat',
       });
+
       if (res?.error === null) {
         console.log('callback calld');
       } else {
@@ -40,7 +41,6 @@ export default function LoginForm() {
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    console.log(`${name} <----> ${value}`)
     setFormValues({ ...formValues, [name]: value });
   };
   return (

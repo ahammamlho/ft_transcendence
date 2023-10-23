@@ -1,3 +1,4 @@
+import { Status } from '@prisma/client';
 import { IsEmail, IsString } from 'class-validator';
 
 export class CreateUserDto {
@@ -12,4 +13,8 @@ export class CreateUserDto {
 
   @IsString()
   avatar: string;
+
+  status: Status;
+
+  lastSee: Date;
 }

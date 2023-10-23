@@ -9,7 +9,7 @@ export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async login(dto: LoginDto) {
     const user = await this.validateUser(dto);
@@ -32,6 +32,7 @@ export class AuthService {
         }),
       },
     };
+
   }
 
   async validateUser(dto: LoginDto) {
