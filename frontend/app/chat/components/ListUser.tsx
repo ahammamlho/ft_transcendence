@@ -9,6 +9,7 @@ import { getUserForMsg } from '../api/fetch-users';
 import { socket, socketInitializer } from '../api/init-socket';
 import { extractHoursAndM } from './widgetMsg';
 import { useSession } from 'next-auth/react';
+import AlertDialogSlide from './dialogAdd';
 
 export function getColorStatus(status: any): string {
   if (status === "ACTIF") {
@@ -100,6 +101,7 @@ const ListUser = () => {
         <TbSquareRoundedPlusFilled style={{ color: 'blue', fontSize: '40px' }} />
       </div >
 
+      <AlertDialogSlide />
 
       <div className="flex items-center justify-around bg-[#f6f7fa] m-5 p-1 rounded-lg border-b" >
         <div className='px-2 py-1 my-2 rounded-[12px] text-[#3055d8] bg-white shadow-md'>

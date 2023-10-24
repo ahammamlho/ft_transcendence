@@ -11,12 +11,6 @@ import { getColorStatus } from './ListUser';
 import { getUser } from '../api/fetch-users';
 import { formatDistance } from 'date-fns'
 
-enum MessageStatus {
-    NotReceived = "NotReceived",
-    Received = "Received",
-    Seen = "Seen"
-}
-
 const BoxChat = () => {
     const [msg, setMsg] = useState('');
     const [Allmsg, setAllMessage] = useState<msgDto[]>([]);
@@ -32,7 +26,7 @@ const BoxChat = () => {
 
     useEffect(() => {
         scrollToBottom();
-    }, [Allmsg, isTyping])
+    }, [Allmsg, isTyping, user.id, geust.id])
 
     useEffect(() => {
         if (user.id !== -1) {
@@ -42,9 +36,7 @@ const BoxChat = () => {
                     setAllMessage((prevMessages) => [...prevMessages, data]);
                 }
             };
-
             socket.on("findMsg2UsersResponse", handleReceivedMessage);
-
             return () => {
                 socket.off("findMsg2UsersResponse", handleReceivedMessage);
             };

@@ -4,7 +4,7 @@ import ListUser from './components/ListUser';
 const PageChat = async () => {
 
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center h-screen">
       <ListUser />
       <BoxChat />
     </div>
