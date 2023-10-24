@@ -35,8 +35,7 @@ const BoxChat = () => {
     }, [Allmsg, isTyping])
 
     useEffect(() => {
-        console.log("----> from boxcaht", user);
-        if (user.id !== 0) {
+        if (user.id !== -1) {
             const handleReceivedMessage = (data: msgDto) => {
                 if (data.senderId === geust.id || data.senderId === user.id) {
                     setIsTyping(false);
@@ -57,13 +56,13 @@ const BoxChat = () => {
             const msgs = await getMessageTwoUsers(user.id, geust.id);
             setAllMessage(msgs);
         }
-        if (geust.id) {
+        if (geust.id !== -1 && user.id !== -1) {
             getData();
         }
     }, [geust.id]);
 
     useEffect(() => {
-        if (user.id !== 0) {
+        if (user.id !== -1) {
             const upDateGeust = async () => {
                 if (geust.id !== -1) {
                     const temp = await getUser(geust.id);
@@ -89,7 +88,7 @@ const BoxChat = () => {
     }, [msg])
 
     useEffect(() => {
-        if (user.id !== 0) {
+        if (user.id !== -1) {
             const updateIsTyping = (data: msgDto) => {
                 if (data.senderId === geust.id) {
                     setIsTyping(true);
@@ -120,11 +119,11 @@ const BoxChat = () => {
     return (geust.id != -1) ? (
         <Box
             style={{
-                width: 400, height: 500, padding: 2,
-                borderRadius: 10, background: "white", marginLeft: 3
+                width: 500, height: 600,
+                borderRadius: 10, background: "#f1f3f9", marginLeft: 3
             }}>
 
-            <div className="flex border-b items-center justify-start pl-2 mt-2 mb-2 pb-1">
+            <div className="flex border-b items-center justify-start  bg-white pl-2 pt-2 pb-2 rounded-t-lg">
                 <Avatar
                     size="3"
                     src={geust.avatar}
@@ -146,12 +145,10 @@ const BoxChat = () => {
                             <></>
                     }
                 </Flex>
-
             </div >
 
-            <div  >
-
-                <ScrollArea type="always" scrollbars="vertical" style={{ height: 400 }} ref={scrollAreaRef}>
+            <div   >
+                <ScrollArea scrollbars="vertical" style={{ height: 500 }} ref={scrollAreaRef}>
                     <Box p="1" pr="3">
                         <ShowMessages messages={Allmsg} geust={geust} />
                         {isTyping ? <IsTypingMsg geust={geust} /> : <></>}
@@ -162,8 +159,8 @@ const BoxChat = () => {
                     e.preventDefault();
                     handleSendMessage();
                 }}>
-                    <TextField.Root className="ml-2 mr-2" style={{ width: 380 }} >
-                        <TextField.Input radius="full" placeholder="  Search the docs…" size="2"
+                    <TextField.Root className="ml-2 mr-2" style={{ width: 480 }} >
+                        <TextField.Input radius="full" placeholder="  Type your message" size="2"
                             value={msg}
 
                             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {

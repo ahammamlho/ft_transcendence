@@ -1,50 +1,42 @@
 'use client';
+import { Avatar, Text } from '@radix-ui/themes';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import React from 'react';
-import classnames from 'classnames';
-import { Avatar } from '@radix-ui/themes';
-interface Props {
-  user?: userDto;
-}
-const NavBar = ({ user }: Props) => {
-  const currentPath = usePathname();
-  const links = [
-    {
-      label: 'chat',
-      href: '/chat',
-    },
-    {
-      label: 'requist friends',
-      href: '/chat/settings',
-    },
-    {
-      label: 'Sign out',
-      href: '/api/auth/signout',
-    },
-  ];
+import { AiFillMessage, AiFillSetting } from "react-icons/ai";
+import { FaSignOutAlt } from "react-icons/fa";
+import { GoDotFill } from "react-icons/go";
+import { getColorStatus } from './components/ListUser';
+import { useGlobalContext } from './Context/store';
+import { useEffect } from 'react';
+
+
+const NavBar = () => {
+
+  const { user } = useGlobalContext();
 
   return (
-    <nav className="flex space-x-5 border-b mb-5 px-5 h-16 items-center justify-end">
+    <nav className="flex  border-b mb-5 px-5 h-16 items-center justify-between">
       <div className="flex items-center space-x-2">
-        <Avatar size="2" src={user?.avatar} fallback="A" />
-        <h1>{user?.name}</h1>
+        <Avatar size="3"
+          src={user?.avatar}
+          radius="full"
+          fallback="A" onClick={() => { console.log(user) }} />
+        <div className='absolute pt-6 pl-5'>
+          <GoDotFill size={20} color={getColorStatus('ACTIF')} />
+        </div>
+        <Text size="3" weight="bold" className='text-white pl-2'>
+          {user?.name}
+        </Text>
       </div>
-      <ul className="flex space-x-6">
-        {links.map((link) => (
-          <Link
-            key={link.href}
-            className={classnames({
-              ' text-zinc-500': link.href !== currentPath,
-              ' hover:text-zinc-900': link.href === currentPath,
-              'hover:text-zinc-800 transition-colors': true,
-            })}
-            href={link.href}
-          >
-            {link.label}
-          </Link>
-        ))}
-      </ul>
+
+      <div className='flex  space-x-5'>
+        <AiFillMessage style={{ color: 'white', fontSize: '20px' }} />
+        <Link href="/chat/settings">
+          <AiFillSetting style={{ color: 'white', fontSize: '20px' }} />
+        </Link>
+        <Link href="/api/auth/signout">
+          <FaSignOutAlt style={{ color: 'white', fontSize: '20px' }} />
+        </Link>
+      </div>
     </nav>
   );
 };

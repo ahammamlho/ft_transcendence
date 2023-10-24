@@ -39,10 +39,8 @@ export function MessageRight({ message, geust }: { message: msgDto, geust: userD
         borderBottomLeftRadius: 10,
         borderBottomRightRadius: 10,
         marginLeft: 'auto',
-        boxShadow: 'none',
         background: "#ddfdfd",
     };
-    console.log("-------------> geust.messageStatus = ", message.messageStatus);
     return (
         <div style={cardStyles} className='relative mb-2 mt-2'>
             <div className='mb-4 text-sm'> {message.content}</div>
@@ -65,8 +63,7 @@ export function MessageLeft({ message, geust }: { message: msgDto, geust: userDt
         borderTopLeftRadius: 0,
         borderBottomLeftRadius: 10,
         borderBottomRightRadius: 10,
-        boxShadow: 'none',
-        background: "#ddfdfd",
+        background: "#ffffff",
 
     };
 

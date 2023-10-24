@@ -4,11 +4,12 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import { GlobalContextProvider } from './Context/store';
 const LayoutChat = async ({ children }: { children: React.ReactNode }) => {
-  const session = await getServerSession(authOptions);
   return (
     <div>
-      <NavBarChat user={session?.user} />
-      <GlobalContextProvider> {children}</GlobalContextProvider>
+      <GlobalContextProvider>
+        <NavBarChat />
+        {children}
+      </GlobalContextProvider>
     </div>
   );
 };

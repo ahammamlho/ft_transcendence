@@ -78,7 +78,6 @@ export class UserService {
       const temp = await this.messagesService.getLastMessages(senderId, usersMsgList[i].id);
       lastMsgs.push(temp);
     }
-
     return { usersMsgList, lastMsgs };
   }
 

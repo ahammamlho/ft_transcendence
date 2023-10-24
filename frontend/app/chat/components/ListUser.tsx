@@ -2,7 +2,7 @@
 import Box from '@mui/material/Box';
 import { Avatar, Flex, ScrollArea, Text } from '@radix-ui/themes';
 import { useEffect, useState } from 'react';
-import { AiFillPlusSquare } from "react-icons/ai";
+import { TbSquareRoundedPlusFilled } from "react-icons/tb";
 import { GoDotFill } from "react-icons/go";
 import { useGlobalContext } from '../Context/store';
 import { getUserForMsg } from '../api/fetch-users';
@@ -12,7 +12,7 @@ import { useSession } from 'next-auth/react';
 
 export function getColorStatus(status: any): string {
   if (status === "ACTIF") {
-    return 'green';
+    return '#30f32d';
   } else if (status === "INACTIF") {
     return 'red';
   }
@@ -22,18 +22,15 @@ export function getColorStatus(status: any): string {
 const ListUser = () => {
   const { data: session } = useSession();
   const { setGeust, setUser, geust } = useGlobalContext();
-
   const [users, setUsers] = useState<userDto[]>([])
   const [lastMsgs, setLastMsgs] = useState<msgDto[]>([])
 
 
 
   useEffect(() => {
-
     if (session) {
-      console.log("session ----> ", session);
       const user: userDto = session.user;
-      setUser(user);
+      setUser(session.user);
       socketInitializer(user);
       const getListUsers = async () => {
         const usersList = await getUserForMsg(user.id);
@@ -44,7 +41,6 @@ const ListUser = () => {
       socket.on("findMsg2UsersResponse", getListUsers);
       socket.on("updateData", getListUsers);
     }
-
   }, [session])
 
   useEffect(() => {
@@ -54,9 +50,9 @@ const ListUser = () => {
   }, [users])
 
   const userWidget = (users.length != 0) ? users.map((el, index) => {
-    return <Flex align="center" className='relative mt-0 border-b py-2' key={index}
+    return <Flex align="center" className='relative border-b py-2 pl-1' key={index}
       style={{
-        background: (el.id === geust.id) ? "#e9ecef" : 'white'
+        background: (el.id === geust.id) ? "#f1f3f9" : 'white'
       }}
       onClick={() => {
         setGeust(el);
@@ -74,7 +70,7 @@ const ListUser = () => {
         <Text size="2" weight="bold" className=''>
           {el.name}
         </Text>
-        <Text className='text-neutral-500 text-sm w-24 line-clamp-1 overflow-hidden' >
+        <Text className='text-neutral-500 text-sm w-32 line-clamp-1 overflow-hidden' >
           {lastMsgs[index].content}
         </Text>
       </Flex>
@@ -83,13 +79,13 @@ const ListUser = () => {
       </Text>
       {
         (el.id === geust.id) ? <Box sx={{
-          width: 5,
-          height: 30,
+          width: 6,
+          height: 40,
           backgroundColor: 'blue',
           borderTopLeftRadius: 10,
           borderBottomLeftRadius: 10
         }}
-          className='absolute right-2'>
+          className='absolute right-0'>
         </Box> : <div></div>
       }
     </Flex>
@@ -97,15 +93,23 @@ const ListUser = () => {
   }) : <Text className="flex border-b justify-center">pas user</Text>
 
   return (
-    <Box style={{ width: 200, height: 500, padding: 2, borderRadius: 10, background: "white" }}>
+    <Box style={{ width: 250, height: 600, borderRadius: 10, background: "white" }}>
 
-      <div className="flex border-b items-center justify-between pl-2 pr-2" >
-        <Text size='6'>Chat</Text>
-        <AiFillPlusSquare style={{ color: 'blue', fontSize: '40px', borderRadius: '20px', }} />
+      <div className="flex border-b items-center justify-between pl-2 pr-2 py-3" >
+        <Text size='6' weight="bold">CHAT</Text>
+        <TbSquareRoundedPlusFilled style={{ color: 'blue', fontSize: '40px' }} />
       </div >
 
-      <ScrollArea type="always" scrollbars="vertical" style={{ height: 450 }}>
-        <Box p="1" pr="3">
+
+      <div className="flex items-center justify-around bg-[#f6f7fa] m-5 p-1 rounded-lg border-b" >
+        <div className='px-2 py-1 my-2 rounded-[12px] text-[#3055d8] bg-white shadow-md'>
+          <Text size='2' weight="bold">DIRECT</Text>
+        </div>
+        <Text size='2' weight="bold">CHANNLES</Text>
+      </div >
+
+      <ScrollArea scrollbars="vertical" style={{ height: 430 }}>
+        <Box>
           <Flex direction="column" >
             {userWidget}
           </Flex>

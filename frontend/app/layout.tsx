@@ -13,10 +13,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className=' bg-sky-400'>
+    <html lang="en" className=' bg-[#151b2d]'>
       <Providers>
         <body className={inter.className}>
-          <Theme className=' bg-sky-400'>
+          <Theme className=' bg-[#151b2d]'>
             {children}
           </Theme>
         </body>
