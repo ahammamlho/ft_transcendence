@@ -25,7 +25,7 @@ const NavBar = () => {
       </div>
 
       <div className='flex  space-x-5'>
-        <Link href="/chat/settings">
+        <Link href="/chat">
           <AiFillSetting style={{ color: 'white', fontSize: '20px' }} />
         </Link>
         <Link href="/api/auth/signout">

@@ -5,7 +5,7 @@ type userDto = {
   avatar: string;
   status: Status;
   lastSee: number;
-  isFriends: Boolean
+  friendship: number
 };
 
 

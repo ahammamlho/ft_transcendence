@@ -160,9 +160,11 @@ const BoxChat = () => {
                             }} />
 
                         <TextField.Slot>
-                            <BsFillSendFill height="16" width="16" color='blue'
+
+                            <BsFillSendFill color='blue'
                                 onClick={() =>
                                     handleSendMessage()} />
+
                         </TextField.Slot>
                     </TextField.Root>
                 </form>

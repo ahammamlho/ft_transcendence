@@ -72,7 +72,7 @@ export class UserService {
       return true;
     })
     const result = await Promise.all(temp.map(async (user) => {
-      let req = await this.prisma.friendRequest.findFirst({
+      let friends = await this.prisma.friend.findFirst({
         where: {
           OR: [
             {
@@ -86,14 +86,29 @@ export class UserService {
           ],
         },
       });
-
-      if (req)
-        return { ...user, isFriends: true };
-      return { ...user, isFriends: false };
+      if (friends)
+        return { ...user, friendship: 1 };
+      let freiReq = await this.prisma.friendRequest.findFirst({
+        where: {
+          senderId: user.id,
+          receivedId: senderId,
+        },
+      });
+      if (freiReq)
+        return { ...user, friendship: 2 };
+      let sendReq = await this.prisma.friendRequest.findFirst({
+        where: {
+          senderId: senderId,
+          receivedId: user.id,
+        },
+      });
+      if (sendReq)
+        return { ...user, friendship: 3 };
+      return { ...user, friendship: 0 };
     }));
     return result;
   }
-
+  s; lk;
   async getUserForMsg(senderId: number) {
     const users = await this.prisma.user.findMany();
     const usersMsg = await this.prisma.directMessage.findMany({

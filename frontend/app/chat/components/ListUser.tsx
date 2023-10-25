@@ -2,7 +2,7 @@
 import Box from '@mui/material/Box';
 import { Avatar, Flex, ScrollArea, Text } from '@radix-ui/themes';
 import { useEffect, useState } from 'react';
-import { TbSquareRoundedPlusFilled } from "react-icons/tb";
+
 import { GoDotFill } from "react-icons/go";
 import { useGlobalContext } from '../Context/store';
 import { getUserForMsg } from '../api/fetch-users';
@@ -27,6 +27,7 @@ const ListUser = () => {
   const [lastMsgs, setLastMsgs] = useState<msgDto[]>([])
 
 
+  const [direct, setDirect] = useState<boolean>(true);
 
   useEffect(() => {
     if (session) {
@@ -92,22 +93,25 @@ const ListUser = () => {
     </Flex>
 
   }) : <Text className="flex border-b justify-center">pas user</Text>
-
+  let styles: string = 'px-2 py-1 my-2 rounded-[20px] text-[#3055d8] bg-white shadow-md';
   return (
     <Box style={{ width: 250, height: 600, borderRadius: 10, background: "white" }}>
 
       <div className="flex border-b items-center justify-between pl-2 pr-2 py-3" >
         <Text size='6' weight="bold">CHAT</Text>
-        <TbSquareRoundedPlusFilled style={{ color: 'blue', fontSize: '40px' }} />
+        <AlertDialogSlide />
       </div >
 
-      <AlertDialogSlide />
+
 
       <div className="flex items-center justify-around bg-[#f6f7fa] m-5 p-1 rounded-lg border-b" >
-        <div className='px-2 py-1 my-2 rounded-[12px] text-[#3055d8] bg-white shadow-md'>
+        <div className={direct ? styles : ""} onClick={() => { setDirect((pre) => !pre) }}>
           <Text size='2' weight="bold">DIRECT</Text>
         </div>
-        <Text size='2' weight="bold">CHANNLES</Text>
+        <div className={!direct ? styles : ""} onClick={() => { setDirect((pre) => !pre) }}>
+          <Text size='2' weight="bold">CHANNLES</Text>
+        </div>
+
       </div >
 
       <ScrollArea scrollbars="vertical" style={{ height: 430 }}>

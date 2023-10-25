@@ -20,3 +20,4 @@ export const socketInitializer = async (user: userDto) => {
 export const emitMessage = (event: string, message: any) => {
     socket.emit(event, message);
 };
+

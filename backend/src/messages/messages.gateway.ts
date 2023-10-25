@@ -32,32 +32,49 @@ export class MessagesGateway
     console.log(`Client connected: ---> ${client.id}`);
     if (typeof client.handshake.query.senderId === 'string') {
       client.join(client.handshake.query.senderId);
-      await this.prisma.user.update({
+      const senderId = parseInt(client.handshake.query.senderId);
+      const userExists = await this.prisma.user.findUnique({
         where: {
-          id: parseInt(client.handshake.query.senderId)
+          id: senderId,
         },
-        data: {
-          status: Status.ACTIF
-        }
       });
-      await this.prisma.directMessage.updateMany({
-        where: {
-          receivedId: parseInt(client.handshake.query.senderId),
-          messageStatus: MessageStatus.NotReceived,
-        },
-        data: {
-          messageStatus: MessageStatus.Received,
-        }
-      })
-      const users = await this.prisma.user.findMany();
-      for (let i = 0; i < users.length; i++) {
-        if (users[i].status == Status.ACTIF) {
-          console.log(`user  active ${users[i].name}  ${users[i].toString()}`)
-          this.wss.to(users[i].id.toString()).emit('updateData', {});
+
+      if (userExists) {
+        try {
+          await this.prisma.user.update({
+            where: {
+              id: senderId,
+            },
+            data: {
+              status: Status.ACTIF,
+            },
+          });
+
+          await this.prisma.directMessage.updateMany({
+            where: {
+              receivedId: senderId,
+              messageStatus: MessageStatus.NotReceived,
+            },
+            data: {
+              messageStatus: MessageStatus.Received,
+            },
+          });
+
+          const activeUsers = await this.prisma.user.findMany({
+            where: {
+              status: Status.ACTIF,
+            },
+          });
+          for (const user of activeUsers) {
+            this.wss.to(user.id.toString()).emit('updateData', {});
+          }
+        } catch (error) {
+          console.error('Error while handling connection:', error);
         }
       }
     }
   }
+
 
   async handleDisconnect(client: any) {
     console.log(`Client disconnected: ---> ${client.id}`);
@@ -87,6 +104,8 @@ export class MessagesGateway
 
   @SubscribeMessage('updateData')
   async updateData(@MessageBody() ids: CreateMessageDto,) {
+    console.log("---------------------------- try to update");
+    console.log(ids.senderId.toString(), ids.receivedId.toString());
     this.wss.to(ids.senderId.toString()).emit('updateData', {});
     this.wss.to(ids.receivedId.toString()).emit('updateData', {});
   }
