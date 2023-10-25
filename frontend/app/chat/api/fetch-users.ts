@@ -9,6 +9,14 @@ export async function getAllUsers(author: string) {
     return users;
 }
 
+export async function getValideUsers(id: number) {
+    const res = await axios.get(
+        Backend_URL + `user/getValideUsers/${id}`,
+    );
+    const users = await res.data;
+    return users;
+}
+
 export async function getUser(id: number) {
     const res = await axios.get(
         Backend_URL + `user/${id}`,

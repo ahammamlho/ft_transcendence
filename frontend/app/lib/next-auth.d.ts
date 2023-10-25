@@ -9,6 +9,7 @@ declare module 'next-auth' {
       avatar: string;
       status: Status;
       lastSee: number;
+      isFriends: boolean;
     };
     backendTokens: {
       accessToken: string;

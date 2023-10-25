@@ -1,10 +1,9 @@
 'use client';
-import { signIn, useSession } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import Link from 'next/link';
-import styles from '../signup/styles.module.css';
-import { Backend_URL } from '../lib/constants';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import styles from '../signup/styles.module.css';
 
 export default function LoginForm() {
   const router = useRouter();
@@ -43,6 +42,7 @@ export default function LoginForm() {
     const { name, value } = event.target;
     setFormValues({ ...formValues, [name]: value });
   };
+
   return (
     <main className="main-start">
       <div>

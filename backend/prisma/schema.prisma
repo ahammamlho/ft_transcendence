@@ -16,13 +16,14 @@ enum Status {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  email    String   @unique
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
   name     String?
   password String
   avatar   String
-  status   Status   @default(INACTIF)
-  lastSee  DateTime @default(now())
+
+  status  Status   @default(INACTIF)
+  lastSee DateTime @default(now())
 
   directMessage DirectMessage[]
   frienRequest  FriendRequest[]

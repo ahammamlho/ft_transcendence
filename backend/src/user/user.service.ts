@@ -48,9 +48,54 @@ export class UserService {
     return await this.prisma.user.findMany();
   }
 
+  async getValideUsers(senderId: number) {
+    const users = await this.prisma.user.findMany();
+    const blockerUsers = await this.prisma.blockedUser.findMany(
+      {
+        where: {
+          OR: [
+            { senderId: senderId },
+            { receivedId: senderId }
+          ]
+        },
+      }
+    );
+    const temp = users.filter((user) => {
+      if (user.id === senderId)
+        return false
+      const found = blockerUsers.find((elm) => {
+        return (senderId === elm.senderId && user.id === elm.receivedId) ||
+          (senderId === elm.receivedId && user.id === elm.senderId)
+      })
+      if (found)
+        return false;
+      return true;
+    })
+    const result = await Promise.all(temp.map(async (user) => {
+      let req = await this.prisma.friendRequest.findFirst({
+        where: {
+          OR: [
+            {
+              senderId: senderId,
+              receivedId: user.id,
+            },
+            {
+              senderId: user.id,
+              receivedId: senderId,
+            },
+          ],
+        },
+      });
+
+      if (req)
+        return { ...user, isFriends: true };
+      return { ...user, isFriends: false };
+    }));
+    return result;
+  }
+
   async getUserForMsg(senderId: number) {
     const users = await this.prisma.user.findMany();
-
     const usersMsg = await this.prisma.directMessage.findMany({
       where: {
         OR: [
@@ -62,7 +107,6 @@ export class UserService {
         createdAt: 'desc',
       },
     })
-
     const distinctUserIds = new Set<number>();
     for (const msg of usersMsg) {
       if (msg.senderId === senderId) {
@@ -166,6 +210,7 @@ export class UserService {
     }
     return req;
   }
+
   async unBlockedUser(sendId: number, recivedId: number) {
     let req = await this.prisma.blockedUser.deleteMany({
       where: {

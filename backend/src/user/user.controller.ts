@@ -12,6 +12,12 @@ export class UserController {
   }
 
 
+  @Get('/getValideUsers/:id')
+  async getValideUsers(@Param('id') senderId: number) {
+    return await this.userService.getValideUsers(senderId);
+  }
+
+
   @Get('/getUserForMsg/:id')
   async getUserForMsg(@Param('id') senderId: number) {
     return await this.userService.getUserForMsg(senderId);
