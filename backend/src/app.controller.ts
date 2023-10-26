@@ -4,15 +4,6 @@ import { query } from 'express';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor() { }
 
-  @Get('/check')
-  checkIfUserExist(@Query() query) {
-    return this.appService.checkUser(query);
-  }
-
-  @Get('allUsers')
-  getAllUsers() {
-    return this.appService.getAllUser();
-  }
 }

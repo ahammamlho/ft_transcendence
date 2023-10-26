@@ -16,20 +16,6 @@ let AppService = class AppService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async checkUser(query) {
-        const { username, password } = query;
-        const user = await this.prisma.user.findFirst({
-            where: { name: username },
-        });
-        if (user && user.password === password) {
-            return true;
-        }
-        return false;
-    }
-    async getAllUser() {
-        const users = await this.prisma.user.findMany();
-        return users;
-    }
 };
 exports.AppService = AppService;
 exports.AppService = AppService = __decorate([

@@ -6,7 +6,7 @@ const common_1 = require("@nestjs/common");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule, {});
     app.enableCors({
-        origin: 'http://10.12.3.13:3000',
+        origin: 'http://10.12.3.14:3000',
         methods: ['GET', 'POST', 'DELETE'],
         credentials: true,
     });
@@ -15,7 +15,7 @@ async function bootstrap() {
         forbidNonWhitelisted: true,
         transform: true,
     }));
-    await app.listen(3333, "10.12.3.13");
+    await app.listen(3333, "10.12.3.14");
 }
 bootstrap();
 //# sourceMappingURL=main.js.map
