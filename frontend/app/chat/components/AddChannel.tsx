@@ -3,22 +3,25 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import TextField from '@mui/material/TextField';
 import DialogTitle from '@mui/material/DialogTitle';
-import { ScrollArea } from '@radix-ui/themes';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { TbSquareRoundedPlusFilled } from "react-icons/tb";
+import { IoPersonAdd, IoPersonRemove } from "react-icons/io5";
 import { useGlobalContext } from '../Context/store';
 import { getValideUsers } from '../api/fetch-users';
-import { socket } from '../api/init-socket';
-
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import Checkbox from '@mui/material/Checkbox';
 import { Button, DialogActions } from '@mui/material';
+import { MdDeleteForever } from "react-icons/md";
+import { GoDotFill } from 'react-icons/go';
+import { getColorStatus } from './ListUser';
+import { Avatar, Flex, Text, Box, ScrollArea } from '@radix-ui/themes';
 
 export default function AlertAddChannel() {
+    const [open, setOpen] = React.useState(false);
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -32,6 +35,11 @@ export default function AlertAddChannel() {
     const [member, setMember] = useState('');
     const [protect, setProtected] = useState<boolean>(false);
 
+    const { user } = useGlobalContext();
+    const [valideUsers, setValideUsers] = useState<userDto[]>([]);
+    const [usersFilter, setUsersFilter] = useState<userDto[]>([]);
+    const [membersChannel, setMembersChannel] = useState<userDto[]>([]);
+
     const handleChannelType = (event: React.ChangeEvent<HTMLInputElement>) => {
         setChannelType(event.target.value);
         console.log(event.target.value);
@@ -41,44 +49,68 @@ export default function AlertAddChannel() {
         setProtected(event.target.checked);
 
     };
-
-    const [open, setOpen] = React.useState(false);
-    const [valideUsers, setValideUsers] = useState<userDto[]>([]);
-    const { user } = useGlobalContext();
-    const [clicked, setClicked] = useState<number>(0)
-    const [update, setUpdate] = useState<number>(0)
-
-
-
     useEffect(() => {
         async function getData() {
             const temp = await getValideUsers(user.id);
             setValideUsers(temp);
         }
         getData();
-        setClicked((pre) => pre++);
-    }, [open, update]);
-
-
+    }, [open]);
 
     useEffect(() => {
-        const updateIcons = () => {
-            setUpdate((pre) => { return pre + 1 });
-        };
-        if (socket) {
-            socket.on("updateData", updateIcons);
-        }
-        return () => {
-            socket.off("updateData", updateIcons);
-        };
-    }, [socket]);
+        const tmp: userDto[] = valideUsers.filter((elm) => {
+            const username = elm.name;
+            return ((username.includes(member) && member != '') || member === "*");
+        })
+        setUsersFilter(tmp);
+    }, [member, valideUsers])
+
+    const checkIsExist = (elm: userDto, list: userDto[]): boolean => {
+        const fonud = list.find((tmp) => elm.id === tmp.id);
+        if (fonud) return true;
+        return false;
+    }
+    const widgetSearsh = usersFilter.map((elm) => {
+        return <Box p="1" pr="3" className='mx-2' >
+            <Flex align="center" justify="between" className='border-b py-2'>
+                <div className='flex items-center relative'>
+                    <Avatar
+                        src={elm.avatar}
+                        fallback="T"
+                        style={{ height: '30px', borderRadius: '30px' }}
+                    />
+                    <div className='absolute pt-5 pl-5'>
+                        <GoDotFill size={15} color={getColorStatus(elm.status)} />
+                    </div>
+                    <Text size="3" weight="bold" className='pl-2'>
+                        {elm.name}
+                    </Text>
+                </div>
+                {checkIsExist(elm, membersChannel) ?
+                    <IoPersonRemove color="red" onClick={() => {
+                        setMembersChannel((prevMembers) =>
+                            prevMembers.filter((member) => member.id !== elm.id));
+                    }} /> :
+                    <IoPersonAdd color="green" onClick={() => {
+                        setMembersChannel((pre) => [...pre, elm]);
+                    }} />
+                }
 
 
-
+            </Flex>
+        </Box>
+    });
+    const widgetMembers = membersChannel.map((elm) => {
+        return <Box style={{ display: "inline-block", border: 2 }}>
+            <div className='flex  items-center p-1 m-1' style={{ background: "yellow", borderRadius: 5 }}>
+                <p>{elm.name}</p>
+            </div>
+        </Box>
+    })
     return (
         <div>
 
-            <TbSquareRoundedPlusFilled style={{ color: 'blue', fontSize: '40px' }}
+            <TbSquareRoundedPlusFilled style={{ color: 'blue', fontSize: '40px', cursor: 'pointer' }}
                 onClick={handleClickOpen} />
 
             <Dialog
@@ -135,17 +167,21 @@ export default function AlertAddChannel() {
 
                             <TextField
                                 disabled={!protect}
-                                fullWidth size="small" className='mt-3'
+                                fullWidth size="small" className='mt-1 mb-3'
                                 style={{ width: '200px', background: "#edf6f9", borderRadius: 5 }}
                                 label="Channel Key" variant="outlined"
                                 value={key}
                                 onChange={(e) => { setKey(e.target.value) }} />
 
-                            <TextField fullWidth size="small" className='mt-3'
+
+                            {widgetMembers}
+                            <TextField fullWidth size="small" className='mt-2'
                                 style={{ width: '200px', background: "#edf6f9", borderRadius: 5 }}
                                 label="Add membres" variant="outlined"
                                 value={member}
                                 onChange={(e) => { setMember(e.target.value) }} />
+                            {widgetSearsh}
+
 
                         </ScrollArea>
 
@@ -162,4 +198,8 @@ export default function AlertAddChannel() {
         </div >
     );
 }
+
+
+
+
 

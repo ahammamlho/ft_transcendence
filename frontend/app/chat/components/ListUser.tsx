@@ -108,13 +108,12 @@ const ListUser = () => {
 
 
       <div className="flex items-center justify-around bg-[#f6f7fa] m-5 p-1 rounded-lg border-b" >
-        <div className={direct ? styles : ""} onClick={() => { setDirect((pre) => !pre) }}>
+        <div style={{ cursor: 'pointer' }} className={direct ? styles : ""} onClick={() => { setDirect((pre) => !pre) }}>
           <Text size='2' weight="bold">DIRECT</Text>
         </div>
-        <div className={!direct ? styles : ""} onClick={() => { setDirect((pre) => !pre) }}>
+        <div style={{ cursor: 'pointer' }} className={!direct ? styles : ""} onClick={() => { setDirect((pre) => !pre) }}>
           <Text size='2' weight="bold">CHANNLES</Text>
         </div>
-
       </div >
 
       <ScrollArea scrollbars="vertical" style={{ height: 430 }}>

@@ -73,7 +73,7 @@ export default function AlertDialogFind() {
                     <Avatar
                         src={elm.avatar}
                         fallback="T"
-                        style={{ height: '40px', borderRadius: '40px' }}
+                        style={{ height: '40px', borderRadius: '40px', cursor: 'pointer' }}
                     />
                     <div className='absolute pt-7 pl-7'>
                         <GoDotFill size={15} color={getColorStatus(elm.status)} />
@@ -84,46 +84,49 @@ export default function AlertDialogFind() {
                 </div>
                 <div className='flex items-center'>
                     {/* send friends requist */}
-                    {(elm.friendship === 0) ? <BsPersonFillAdd color="blue" size='20' className="mr-4" onClick={async () => {
-                        await sendRequistFriend(user.id, elm.id);
-                        elm.friendship = 3;
-                        socket.emit('updateData', {
-                            content: '',
-                            senderId: user.id,
-                            receivedId: elm.id,
-                        });
-                        setClicked((pre) => { return pre + 1 });
-                    }} /> : <></>}
+                    {(elm.friendship === 0) ? <BsPersonFillAdd color="blue" size='20' className="mr-4" style={{ cursor: 'pointer' }}
+                        onClick={async () => {
+                            await sendRequistFriend(user.id, elm.id);
+                            elm.friendship = 3;
+                            socket.emit('updateData', {
+                                content: '',
+                                senderId: user.id,
+                                receivedId: elm.id,
+                            });
+                            setClicked((pre) => { return pre + 1 });
+                        }} /> : <></>}
 
                     {/* accept friends requist */}
-                    {(elm.friendship === 2) ? <BiUserCheck color="green" size='20' className="mr-4" onClick={async () => {
-                        await accepteRequistFriend(user.id, elm.id);
-                        elm.friendship = 1;
-                        socket.emit('updateData', {
-                            content: '',
-                            senderId: user.id,
-                            receivedId: elm.id,
-                        });
-                        setClicked((pre) => { return pre + 1 });
-                    }} /> : <></>}
+                    {(elm.friendship === 2) ? <BiUserCheck color="green" size='20' className="mr-4" style={{ cursor: 'pointer' }}
+                        onClick={async () => {
+                            await accepteRequistFriend(user.id, elm.id);
+                            elm.friendship = 1;
+                            socket.emit('updateData', {
+                                content: '',
+                                senderId: user.id,
+                                receivedId: elm.id,
+                            });
+                            setClicked((pre) => { return pre + 1 });
+                        }} /> : <></>}
 
                     {/* remove friends requist */}
-                    {(elm.friendship === 3) ? <FaUserTimes color="red" size='20' className="mr-4" onClick={async () => {
-                        await removeRequistFriend(user.id, elm.id);
-                        elm.friendship = 0;
-                        socket.emit('updateData', {
-                            content: '',
-                            senderId: user.id,
-                            receivedId: elm.id,
-                        });
-                        setClicked((pre) => { return pre + 1 });
-                    }} /> : <></>}
+                    {(elm.friendship === 3) ? <FaUserTimes color="red" size='20' className="mr-4" style={{ cursor: 'pointer' }}
+                        onClick={async () => {
+                            await removeRequistFriend(user.id, elm.id);
+                            elm.friendship = 0;
+                            socket.emit('updateData', {
+                                content: '',
+                                senderId: user.id,
+                                receivedId: elm.id,
+                            });
+                            setClicked((pre) => { return pre + 1 });
+                        }} /> : <></>}
 
-                    <AiFillMessage size='20' onClick={() => {
-                        handleClose();
-                        setGeust(elm);
-                    }} />
-
+                    <AiFillMessage size='20' style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                            handleClose();
+                            setGeust(elm);
+                        }} />
                 </div>
             </Flex>
         </Box>
@@ -132,7 +135,7 @@ export default function AlertDialogFind() {
     return (
         <div>
 
-            <TbSquareRoundedPlusFilled style={{ color: 'blue', fontSize: '40px' }}
+            <TbSquareRoundedPlusFilled style={{ color: 'blue', fontSize: '40px', cursor: 'pointer' }}
                 onClick={handleClickOpen} />
 
             <Dialog
