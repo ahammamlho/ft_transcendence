@@ -20,7 +20,7 @@ import { getColorStatus } from './ListUser';
 
 
 
-export default function AlertDialogSlide() {
+export default function AlertDialogFind() {
     const [open, setOpen] = React.useState(false);
     const [searsh, setSearsh] = useState('');
     const [valideUsers, setValideUsers] = useState<userDto[]>([]);

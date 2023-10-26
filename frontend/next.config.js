@@ -6,7 +6,7 @@ module.exports = nextConfig;
 module.exports = {
   env: {
     SECRET: 'LlKq6ZtYbr+hTC073mAmAh9/h2HwMfsFo4hrfCx6gtsg',
-    NEXTAUTH_URL_INTERNAL: 'http://10.12.3.14:3000',
+    NEXTAUTH_URL_INTERNAL: 'http://10.12.4.13:3000',
   },
 };
 

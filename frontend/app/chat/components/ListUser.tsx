@@ -9,7 +9,8 @@ import { getUserForMsg } from '../api/fetch-users';
 import { socket, socketInitializer } from '../api/init-socket';
 import { extractHoursAndM } from './widgetMsg';
 import { useSession } from 'next-auth/react';
-import AlertDialogSlide from './dialogAdd';
+import AlertDialogFind from './FindAlert';
+import AlertAddChannel from './AddChannel';
 
 export function getColorStatus(status: any): string {
   if (status === "ACTIF") {
@@ -93,15 +94,17 @@ const ListUser = () => {
     </Flex>
 
   }) : <Text className="flex border-b justify-center">pas user</Text>
+
+
   let styles: string = 'px-2 py-1 my-2 rounded-[20px] text-[#3055d8] bg-white shadow-md';
   return (
     <Box style={{ width: 250, height: 600, borderRadius: 10, background: "white" }}>
 
       <div className="flex border-b items-center justify-between pl-2 pr-2 py-3" >
         <Text size='6' weight="bold">CHAT</Text>
-        <AlertDialogSlide />
-      </div >
+        {direct ? <AlertDialogFind /> : <AlertAddChannel />}
 
+      </div >
 
 
       <div className="flex items-center justify-around bg-[#f6f7fa] m-5 p-1 rounded-lg border-b" >
@@ -121,8 +124,6 @@ const ListUser = () => {
           </Flex>
         </Box>
       </ScrollArea>
-
-
     </Box>
   );
 };
