@@ -2,10 +2,10 @@
 import { Avatar, Text } from '@radix-ui/themes';
 import Link from 'next/link';
 import { AiFillSetting } from "react-icons/ai";
-import { FaSignOutAlt } from "react-icons/fa";
 import { GoDotFill } from "react-icons/go";
 import { getColorStatus } from './components/ListUser';
 import { useGlobalContext } from './Context/store';
+import SignOutAlertDialog from './components/SignoutAlert';
 
 const NavBar = () => {
   const { user } = useGlobalContext();
@@ -28,9 +28,7 @@ const NavBar = () => {
         <Link href="/chat">
           <AiFillSetting style={{ color: 'white', fontSize: '20px' }} />
         </Link>
-        <Link href="/api/auth/signout">
-          <FaSignOutAlt style={{ color: 'white', fontSize: '20px' }} />
-        </Link>
+        <SignOutAlertDialog />
       </div>
     </nav>
   );

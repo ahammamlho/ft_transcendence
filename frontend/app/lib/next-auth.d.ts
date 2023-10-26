@@ -28,6 +28,7 @@ declare module 'next-auth/jwt' {
       avatar: string;
       status: Status;
       lastSee: number;
+      friendship: number;
     };
 
     backendTokens: {
