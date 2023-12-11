@@ -1,17 +1,29 @@
-import "../styles/globals.css";
-import "@radix-ui/themes/styles.css";
+"use client";
 import { Theme } from "@radix-ui/themes";
+import "@radix-ui/themes/styles.css";
+import "../styles/globals.css";
+import { GlobalContextProvider } from "./context/store";
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+
   return (
     <html lang="en">
-      <body className={` text-white`}>
-        <Theme>{children}</Theme>
-      </body>
-    </html>
+      <body className={` text-white `}>
+        <Theme >
+          <GlobalContextProvider>
+            {children}
+          </GlobalContextProvider>
+        </Theme>
+      </body >
+    </html >
   );
 }
+
+
+
+
+

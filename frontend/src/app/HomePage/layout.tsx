@@ -1,4 +1,3 @@
-
 import NavBarPublic from "../components/navBar/NavbarPublic";
 
 

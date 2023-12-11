@@ -35,7 +35,7 @@ export default function login() {
               const data = await auth_2fa(intra_id, keyQrCode);
               if (data.isCodeValid) {
                 Cookies.set("access_token", data.access_token, { sameSite: 'none', secure: true });
-                router.push("/protected/DashboardPage");
+                router.push("/DashboardPage");
               } else toast.error("Wrong authentication code");
             } else toast.error("Wrong authentication code");
           }}

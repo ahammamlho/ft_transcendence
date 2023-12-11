@@ -1,7 +1,8 @@
-import HomePage from "./public/HomePage/page";
+import HomePage from "./HomePage/page";
 
 export default function App() {
-  return (<div>
-    <HomePage />
-  </div>)
+  return (
+    <div>
+      <HomePage />
+    </div>)
 }
