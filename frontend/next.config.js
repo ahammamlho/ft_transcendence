@@ -1,25 +1,21 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+
+require("dotenv").config();
+
+const nextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/public/HomePage",
+        permanent: true,
+      },
+    ];
+  },
+
+  images: {
+    domains: ["cdn.intra.42.fr", "localhost"],
+  },
+};
 
 module.exports = nextConfig;
-
-module.exports = {
-  env: {
-    SECRET: 'LlKq6ZtYbr+hTC073mAmAh9/h2HwMfsFo4hrfCx6gtsg',
-    NEXTAUTH_URL_INTERNAL: 'http://10.12.4.13:3000',
-  },
-};
-
-module.exports = {
-  reactStrictMode: false,
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'randomuser.me',
-        port: '',
-        pathname: '/api/**',
-      },
-    ],
-  },
-};

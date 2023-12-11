@@ -1,5 +1,7 @@
-import { Status } from '@prisma/client';
-import { IsEmail, IsString } from 'class-validator';
+import { Status } from "@prisma/client";
+import { IsEmail, IsString } from "class-validator";
+
+
 
 export class CreateUserDto {
   @IsString()
@@ -9,7 +11,7 @@ export class CreateUserDto {
   email: string;
 
   @IsString()
-  password: string;
+  hash: string;
 
   @IsString()
   avatar: string;
@@ -18,3 +20,22 @@ export class CreateUserDto {
 
   lastSee: Date;
 }
+
+
+
+
+
+export class MessageItemList {
+  isDirectMessage: Boolean;
+
+  name: string;
+  avatar: string;
+  lastMsg: string;
+  createdAt: Date;
+
+  status: Status;
+
+  id: string; // id user geust or id channel 
+  nameSenderChannel: string;
+}
+

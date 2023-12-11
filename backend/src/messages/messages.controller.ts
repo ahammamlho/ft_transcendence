@@ -1,17 +1,29 @@
-import { Controller, Get, Param, Post, Req } from '@nestjs/common';
+import { Controller, Get, Param, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { MessagesService } from './messages.service';
+import { JwtGuard } from 'src/auth/guard/jwt.guard';
 
 @Controller('messages')
 export class MessageController {
   constructor(private readonly messagesService: MessagesService) { }
 
-  @Get(':send/:rec')
-  async getMessages(@Param('send') send: string, @Param('rec') rec: string) {
-    const r = parseInt(rec);
-    const s = parseInt(send);
-
-    if (isNaN(r) || isNaN(s)) return '';
-
-    return this.messagesService.getMessage(s, r);
+  @Get('getDirectMessage/:send/:rec')
+  @UseGuards(JwtGuard)
+  async getDirectMessage(@Param('send') send: string, @Param('rec') rec: string) {
+    return this.messagesService.getDirectMessage(send, rec);
   }
+
+
+  @Get('getChannelMessage/:send/:channelId')
+  @UseGuards(JwtGuard)
+  async getChannelMessage(@Param('send') send: string, @Param('channelId') channelId: string) {
+    return this.messagesService.getChannelMessage(send, channelId);
+  }
+
+
+  @Get('/getUserForMsg/:id')
+  @UseGuards(JwtGuard)
+  async getUserForMsg(@Param('id') senderId: string) {
+    return await this.messagesService.getMessageForList(senderId);
+  }
+
 }
