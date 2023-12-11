@@ -1,33 +1,25 @@
 "use client";
-import { GoHomeFill } from "react-icons/go";
+import { useGlobalContext } from "@/app/context/store";
+import Cookies from "js-cookie";
+import { usePathname } from 'next/navigation';
+import { BiSolidLogOut } from "react-icons/bi";
 import { BsFillChatDotsFill } from "react-icons/bs";
 import { FaUserFriends } from "react-icons/fa";
-import { MdLeaderboard } from "react-icons/md";
+import { GoHomeFill } from "react-icons/go";
 import { IoMdNotifications } from "react-icons/io";
-import { IoGameController } from "react-icons/io5";
-import { IoSettingsSharp } from "react-icons/io5";
-import { BiSolidLogOut } from "react-icons/bi";
-import SBSection from "./SBSection";
+import { IoGameController, IoSettingsSharp } from "react-icons/io5";
+import { MdLeaderboard } from "react-icons/md";
 import SBItems from "./SBItems";
-import { useState } from "react";
-import Cookies from "js-cookie";
-import { useGlobalContext } from "@/app/context/store";
+import SBSection from "./SBSection";
 
 
 export default function SideBar() {
-  const [isSelectedList, setIsSelectedList] = useState([
-    true,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-  ]);
+  const currentPath = usePathname();
+  const { user, socket } = useGlobalContext();
 
-  function getIconStyle(index: number) {
-    const iconStyle = ` mx-auto transition ease-in-out delay-100 ${isSelectedList[index] ? "text-white scale-110" : "text-gray-400"
-      }
+  function getIconStyle(pathname: string) {
+    const iconStyle = ` mx-auto transition ease-in-out delay-100
+        ${(pathname === currentPath) ? "text-white scale-110" : "text-gray-400"}
     // small screen
     w-4 h-4 
     min-[320px]:w-5 min-[320px]:h-5
@@ -41,52 +33,47 @@ export default function SideBar() {
   let sBItemsList = [
     {
       pageName: "DashboardPage",
-      icon: <GoHomeFill className={`${getIconStyle(0)}`} />,
+      icon: <GoHomeFill className={`${getIconStyle('/DashboardPage')}`} />,
       index: 0,
     },
     {
       pageName: "ChatPage",
-      icon: <BsFillChatDotsFill className={`${getIconStyle(1)}`} />,
+      icon: <BsFillChatDotsFill className={`${getIconStyle('/ChatPage')}`} />,
       index: 1,
     },
     {
       pageName: "FriendsPage",
-      icon: <FaUserFriends className={`${getIconStyle(2)}`} />,
+      icon: <FaUserFriends className={`${getIconStyle('/FriendsPage')}`} />,
       index: 2,
     },
     {
       pageName: "LeaderboardPage",
-      icon: <MdLeaderboard className={`${getIconStyle(3)}`} />,
+      icon: <MdLeaderboard className={`${getIconStyle('/LeaderboardPage')}`} />,
       index: 3,
     },
     {
       pageName: "GamePage",
-      icon: <IoGameController className={`${getIconStyle(4)}`} />,
+      icon: <IoGameController className={`${getIconStyle("/GamePage")}`} />,
       index: 4,
     },
     {
       pageName: "NotificationPage",
-      icon: <IoMdNotifications className={`${getIconStyle(5)}`} />,
+      icon: <IoMdNotifications className={`${getIconStyle("/NotificationPage")}`} />,
       index: 5,
     },
     {
       pageName: "SettingsPage",
-      icon: <IoSettingsSharp className={`${getIconStyle(6)}`} />,
+      icon: <IoSettingsSharp className={`${getIconStyle("/SettingsPage")}`} />,
       index: 6,
     },
     {
       pageName: "HomePage",
-      icon: <BiSolidLogOut className={`${getIconStyle(7)}`} />,
+      icon: <BiSolidLogOut className={`${getIconStyle("/HomePage")}`} />,
       index: 7,
     },
   ];
-  const { user, socket } = useGlobalContext();
+
   const handleItemClick = (index: number) => {
-    const updatedIsSelectedList = [];
-    for (let i = 0; i < isSelectedList.length; i++) {
-      updatedIsSelectedList[i] = false;
-    }
-    updatedIsSelectedList[index] = true;
     if (index === 7) {
       Cookies.remove("access_token", { sameSite: 'none', secure: true });
       Cookies.remove("intra_id", { sameSite: 'none', secure: true });
@@ -94,7 +81,6 @@ export default function SideBar() {
         socket.emit('updateStatusGeust', user.id);
       }
     }
-    setIsSelectedList(updatedIsSelectedList);
   };
 
   return (

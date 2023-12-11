@@ -5,10 +5,23 @@ export async function middleware(request: NextRequest) {
   const hasToken = request.cookies.has("access_token");
   const hasIntra_id = request.cookies.has("intra_id");
 
-  // if (!hasToken && !hasIntra_id) {
-  //   return NextResponse.redirect(new URL(`HomePage`, request.nextUrl));
-  // }
+  if (!hasToken && !hasIntra_id) {
+    return NextResponse.redirect(new URL(`HomePage`, request.nextUrl));
+  }
 }
 export const config = {
-  // matcher: "/:path*",
+  matcher: [
+    "/AchievementsPage",
+    "/ChannelSettings",
+    "/ChatPage",
+    "/Checker2faAuth",
+    "/FriendsPage",
+    "/DashboardPage",
+    "/GamePage",
+    "/HistoryPage",
+    "/LeaderboardPage",
+    "/NotificationPage",
+    "/SettingsPage",
+  ]
+  ,
 };

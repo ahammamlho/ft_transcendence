@@ -18,6 +18,7 @@ import {
 import { ImCross } from "react-icons/im";
 import { Socket, io } from "socket.io-client";
 import loadingc from "../assets/loading.json";
+import { usePathname } from 'next/navigation';
 
 enum Status {
   ACTIF = "ACTIF",
@@ -96,13 +97,14 @@ const GlobalContext = createContext<ContextProps>({
   socket: null,
 });
 
+
 export const GlobalContextProvider = ({
-  children,
+  children, 
 }: {
   children: React.ReactNode;
 }) => {
   const router = useRouter();
-
+  const currentPath = usePathname();
   const [displayChat, setDisplayChat] = useState<boolean>(false);
   const [updateInfo, setUpdateInfo] = useState<number>(1);
 
@@ -158,10 +160,11 @@ export const GlobalContextProvider = ({
   }, [user.id]);
 
   useEffect(() => {
+    console.log("currentPath=", currentPath);
     const getDataUser = async () => {
       try {
         const token = Cookies.get("access_token");
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACK}/user/intra/`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACK}/user/intra`, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,
@@ -178,7 +181,6 @@ export const GlobalContextProvider = ({
         }
       } catch (error) {
         router.push("/HomePage");
-        //console.log(error);
       }
     };
     if (user.id === "-1") getDataUser();

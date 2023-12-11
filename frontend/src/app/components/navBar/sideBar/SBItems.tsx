@@ -13,7 +13,6 @@ export default function SBItems(prompt: {
       href={`/${prompt.pageName}`}
       className="flex flex-row border-4 border-transparent   
       hover:border-l-white hover:shadow-md 
-
       px-3 mb-2
       sm:px-5 sm:mb-6
       "
