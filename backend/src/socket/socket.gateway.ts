@@ -18,7 +18,13 @@ import { GameService } from "src/game/game.service";
 import { BallDto, PaddleDto } from "src/game/dto";
 // import { PongServise } from "src/game/game.service";
 
-@WebSocketGateway()
+@WebSocketGateway(
+  {
+    cors: {
+      origin: ['http://localhost:3000'],
+    },
+    transports: ['websocket'],
+  })
 export class SocketGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   constructor(
