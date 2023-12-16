@@ -303,16 +303,18 @@ const ListUser = () => {
   let styles: string =
     "px-4 py-2 my-2 rounded-[36px] text-[#254BD6] bg-white shadow-md";
   return (
-    <Box
+    <div
       className={
-        // h900px
-        `bg-white h-[800px] w-[90%] rounded-[15px]
+        `bg-white h-[600px]  rounded-[15px] 
         ${!displayChat ? "" : "hidden"}
+
         md:block
-        md:w-[300px]`
+        md:w-[300px]
+        w-[90%]
+        `
       }
     >
-      <div className="flex border-b items-center justify-between p-4">
+      <div className="flex border-b items-center justify-between p-3">
         <Text size="5" weight="bold">
           CHAT
         </Text>
@@ -360,8 +362,7 @@ const ListUser = () => {
           }}
         ></input>
       </div>
-
-      <ScrollArea scrollbars="vertical" style={{ height: 600 }}>
+      <ScrollArea scrollbars="vertical" style={{ height: 400 }} >
         <Box>
           <Flex direction="column">
             {direct ? userWidgetDirect : userWidgetChannel}
@@ -443,7 +444,7 @@ const ListUser = () => {
           </DialogActions>
         </Dialog>
       </div>
-    </Box>
+    </div>
   );
 };
 

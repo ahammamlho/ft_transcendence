@@ -8,9 +8,10 @@ export default function NavBarProtected(prompt: { children: ReactNode }) {
 
   return (
     <div className="flex flex-col  h-screen text-white bg-color-main ">
-      <div className={` md:h-20 h-16  bg-color-main-dark z-1 w-screen `}>
+
+      <div className={` md:h-20 bg-color-main-dark z-1 w-screen `}>
         <div
-          className={` flex flex-row justify-items-start  my-auto  md:h-20 h-16  w-full
+          className={` flex flex-row justify-items-start  my-auto  md:h-20  w-full
            bg-color-main-dark z-10  ${show ? "pl-20 sm:pl-24 md:pl-28 " : ""
             }
           transition-all duration-300 ease-in-out 
@@ -26,6 +27,8 @@ export default function NavBarProtected(prompt: { children: ReactNode }) {
           <SerachNav />
         </div>
       </div>
+
+
       <div className="flex flex-row w-screen bg-color-main relative z-10">
         <div
           className={`absolute  top-0 z-20 transition-all duration-300 ease-in-out overflow-hidden
@@ -42,9 +45,8 @@ export default function NavBarProtected(prompt: { children: ReactNode }) {
         `}>
 
         </div>
-
-
       </div>
+
       <div className="h-[100%]">
         {prompt.children}
       </div>

@@ -234,7 +234,7 @@ const BoxChat = () => {
   return geust.id != "-1" ? (
     <Box
       className={`
-        bg-[#F1F3F9] h-[800px] rounded-[15px] 
+        bg-[#F1F3F9]  rounded-[15px]  h-[600px] 
         ${displayChat ? "" : "hidden"}
         md:ml-[15px]
         md:block
@@ -357,7 +357,7 @@ const BoxChat = () => {
       <div>
         <ScrollArea
           scrollbars="vertical"
-          style={{ height: 675 }}
+          style={{ height: 475 }}
           ref={scrollAreaRef}
         >
           <Box p="1" pr="3">

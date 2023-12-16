@@ -6,8 +6,8 @@ import MyComponent from "./components/playBord";
 export default function Home() {
   return (
     <div
-      className="mt-12 mb-8 mx-12  md:ml-24">
-      <h1 className="text-white text-2xl/[29px]  font-700 mb-40">
+      className="mt-2 mb-8 mx-12  md:ml-24">
+      <h1 className="text-white text-2xl/[29px]  font-700 mb-4">
         Games
       </h1>
       <div
