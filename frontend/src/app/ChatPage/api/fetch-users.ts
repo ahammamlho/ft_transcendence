@@ -34,13 +34,13 @@ export async function getUserGeust(id: string) {
     const geust = await res.data;
     if (geust.error) throw Error;
     return geust;
-  } catch (error) {}
+  } catch (error) { }
 }
 
 export async function getUser(id: string) {
   try {
     const token = Cookies.get("access_token");
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_BACK}/user/${id}`, {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_BACK}/user/geust/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -48,7 +48,7 @@ export async function getUser(id: string) {
     const user = await res.data;
     if (user.error) throw Error;
     return user;
-  } catch (error) {}
+  } catch (error) { }
 }
 
 export async function getAllUsers(author: string) {
@@ -62,7 +62,7 @@ export async function getAllUsers(author: string) {
     const users = await res.data;
     if (users.error) throw Error;
     return users;
-  } catch (error) {}
+  } catch (error) { }
 }
 
 export async function getValideUsers(id: string) {
@@ -79,7 +79,7 @@ export async function getValideUsers(id: string) {
     const users = await res.data;
     if (users.error) throw Error;
     return users;
-  } catch (error) {}
+  } catch (error) { }
 }
 
 export async function getValideChannels(id: string) {
@@ -96,7 +96,7 @@ export async function getValideChannels(id: string) {
     const users = await res.data;
     if (users.error) throw Error;
     return users;
-  } catch (error) {}
+  } catch (error) { }
 }
 
 export async function getUserForMsg(senderId: string) {
@@ -113,7 +113,7 @@ export async function getUserForMsg(senderId: string) {
     const users = await res.data;
     if (users.error) throw Error;
     return users;
-  } catch (error) {}
+  } catch (error) { }
 }
 
 export async function checkIsBlocked(senderId: string, receivedId: string) {
@@ -130,7 +130,7 @@ export async function checkIsBlocked(senderId: string, receivedId: string) {
     const data = await res.data;
     if (data.error) throw Error;
     return data;
-  } catch (error) {}
+  } catch (error) { }
 }
 
 export async function getChannelGeust(id: string) {
@@ -147,7 +147,7 @@ export async function getChannelGeust(id: string) {
     const geust = await res.data;
     if (geust.error) throw Error;
     return geust;
-  } catch (error) {}
+  } catch (error) { }
 }
 
 export async function getMembersChannel(id: string) {
@@ -164,7 +164,7 @@ export async function getMembersChannel(id: string) {
     const members = await res.data;
     if (members.error) throw Error;
     return members;
-  } catch (error) {}
+  } catch (error) { }
 }
 
 export async function usersCanJoinChannel(senderId: string, channelId: string) {
@@ -181,7 +181,7 @@ export async function usersCanJoinChannel(senderId: string, channelId: string) {
     const data = await res.data;
     if (data.error) throw Error;
     return data;
-  } catch (error) {}
+  } catch (error) { }
 }
 
 export async function startGameing(senderId: string) {
@@ -198,7 +198,7 @@ export async function startGameing(senderId: string) {
     const data = await res.data;
     if (data.error) throw Error;
     return data;
-  } catch (error) {}
+  } catch (error) { }
 }
 
 export async function finishGaming(senderId: string) {
@@ -215,5 +215,5 @@ export async function finishGaming(senderId: string) {
     const data = await res.data;
     if (data.error) throw Error;
     return data;
-  } catch (error) {}
+  } catch (error) { }
 }

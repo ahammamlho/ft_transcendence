@@ -23,11 +23,11 @@ export class UserController {
 
   }
 
-  // @Get(":id")
-  // @UseGuards(JwtGuard)
-  // async getUserProfile(@Param("id") id: string) {
-  //   return await this.userService.findById(id);
-  // }
+  @Get("geust/:id")
+  @UseGuards(JwtGuard)
+  async getUserProfile(@Param("id") id: string) {
+    return await this.userService.findById(id);
+  }
 
   @Get("/intra")
   @UseGuards(JwtGuard)

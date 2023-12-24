@@ -31,7 +31,7 @@ export default function AlertOpenAccount({
           <div className="flex">
             <Button
               onClick={() => {
-                // window.location.href = process.env.NEXT_PUBLIC_BACK + "/auth/google"
+                window.location.href = process.env.NEXT_PUBLIC_BACK + "/auth/google"
               }}
             >
               <div

@@ -202,10 +202,7 @@ const Pong = ({ room, isLeft, difficulty }: PongProps) => {
       window.removeEventListener("resize", handleWindowResize);
       window.removeEventListener("keydown", handleKey);
       // window.removeEventListener('popstate', () => {
-
       // });
-
-
       socket.off("gameOver");
       // socket.off("clientDisconnected");
       socket.off("updateScore");

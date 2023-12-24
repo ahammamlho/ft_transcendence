@@ -314,6 +314,7 @@ export class SocketGateway
       this.stopEmittingBallPosition(roomName);
     }
   }
+
   async stopEmittingBallPosition(roomName: string) {
     if (this.rooms.get(roomName) && this.rooms.get(roomName).length > 1) {
       const id = this.rooms.get(roomName)[0];
@@ -349,7 +350,6 @@ export class SocketGateway
     } else {
       this.clients.set(id, client);
       this.joindClients.set(id, 0);
-
       client.join(id);
     }
   }
@@ -357,6 +357,7 @@ export class SocketGateway
   @SubscribeMessage("joinRoom")
   handleJoinRoom(client: Socket, @MessageBody() id: string) {
     this.joindRoom++;
+    let player1: string = ""
     if (this.clients.size === 2 && this.joindRoom > 1) {
       this.joindRoom = 0;
       const roomName = `room-${Date.now()}`;
@@ -369,6 +370,7 @@ export class SocketGateway
         if (id === client) {
           this.server.to(client).emit("whichSide", true);
         } else {
+          player1 = client;
           this.server.to(client).emit("whichSide", false);
         }
       });
@@ -376,7 +378,7 @@ export class SocketGateway
         client.join(roomName);
       });
       // setTimeout(() => {
-      this.server.to(roomName).emit("startGame", roomName);
+      this.server.to(roomName).emit("startGame", { player1: player1, player2: id, roomName: roomName });
       // this.gameService.startGame();
       this.GameInit(roomName);
       this.gameService.resetBall(this.roomState.get(roomName).ball);

@@ -63,8 +63,7 @@ const MyComponent = ({
           } else {
             router.push(link);
           }
-        }}
-      >
+        }} >
         Play
       </button>
     </div>
