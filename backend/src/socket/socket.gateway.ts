@@ -16,15 +16,12 @@ import { SocketGatewayService } from "./socket.service";
 import { PrismaService } from "src/prisma/prisma.service";
 import { GameService } from "src/game/game.service";
 import { BallDto, PaddleDto } from "src/game/dto";
+import { UseGuards } from "@nestjs/common";
+import { JwtGuardSocket } from 'src/auth/guard/jwt.guard-socket';
 // import { PongServise } from "src/game/game.service";
 
-@WebSocketGateway(
-  {
-    cors: {
-      origin: ['http://196.64.133.124:3000'],
-    },
-    transports: ['websocket'],
-  })
+
+@WebSocketGateway()
 export class SocketGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   constructor(
@@ -41,11 +38,15 @@ export class SocketGateway
     // //console.log("Gateway Initialized");
   }
 
+
   async handleConnection(client: Socket) {
+    // client.disconnect()
+    console.log("handleConnection------------");
     this.socketGatewayService.handleConnection(client, this.server);
   }
 
   async handleDisconnect(client: Socket) {
+    console.log("clientDisconnected------------");
     this.socketGatewayService.handleDisconnect(client, this.server);
     if (this.clients.has(client.id)) {
       this.clients.delete(client.id);
@@ -59,6 +60,7 @@ export class SocketGateway
     }
   }
 
+  @UseGuards(JwtGuardSocket)
   @SubscribeMessage("createMessage")
   async createMessage(@MessageBody() createMessageDto: CreateMessageDto) {
     await this.messagesService.createMessage(this.server, createMessageDto);

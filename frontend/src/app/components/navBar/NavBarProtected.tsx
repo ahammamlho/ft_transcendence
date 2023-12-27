@@ -7,7 +7,7 @@ export default function NavBarProtected(prompt: { children: ReactNode }) {
   const [show, setShow] = useState(false);
 
   return (
-    <div className="flex flex-col  h-screen text-white bg-color-main ">
+    <div className="flex flex-col  h-screen text-white bg-color-main l-5">
 
       <div className={` md:h-20 bg-color-main-dark z-1 w-screen `}>
         <div
@@ -47,7 +47,7 @@ export default function NavBarProtected(prompt: { children: ReactNode }) {
         </div>
       </div>
 
-      <div className="h-[100%]">
+      <div className="h-[100%] ml-7">
         {prompt.children}
       </div>
 

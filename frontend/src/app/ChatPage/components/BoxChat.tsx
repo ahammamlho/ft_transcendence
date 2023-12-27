@@ -22,6 +22,7 @@ import { FaRegStopCircle } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { FaGamepad } from "react-icons/fa";
 import PlayInvite from "../../GamePage/components/Invite";
+import WelcomeMessage from "./welcome";
 
 const BoxChat = () => {
   const router = useRouter();
@@ -234,14 +235,14 @@ const BoxChat = () => {
   return geust.id != "-1" ? (
     <Box
       className={`
-        bg-[#F1F3F9]  rounded-[15px]  h-[600px] 
-        ${displayChat ? "" : "hidden"}
-        md:ml-[15px]
-        md:block
-        md:w-[50%]
-        w-[90%]
-        max-w-4xl
-        `}
+    bg-[#F1F3F9]  rounded-[15px]  h-[600px] 
+    ${displayChat ? "" : "hidden"}
+    md:ml-[15px]
+    md:block
+    md:w-[50%]
+    w-[90%]
+    max-w-4xl
+    `}
     >
       <div className="flex border-b items-center justify-between bg-white p-4 rounded-t-[15px]">
         <div className="flex items-center ">
@@ -452,9 +453,7 @@ const BoxChat = () => {
         </Dialog>
       </div>
     </Box>
-  ) : (
-    <div></div>
-  );
+  ) : (<WelcomeMessage />);
 };
 
 export default BoxChat;

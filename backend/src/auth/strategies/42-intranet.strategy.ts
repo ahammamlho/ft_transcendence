@@ -9,7 +9,9 @@ export class FortyTwoIntranetStrategy extends PassportStrategy(
   Strategy,
   "42-intranet"
 ) {
+
   constructor(private userService: UserService) {
+
     super({
       clientID: process.env.CLIENT_ID_42,
       clientSecret: process.env.CLIENT_SECRET_42,
@@ -38,6 +40,7 @@ export class FortyTwoIntranetStrategy extends PassportStrategy(
     done: VerifyCallback
   ) {
     try {
+      console.log("object")
       const user = await this.validateUser(profile);
       let checkuser = await this.userService.findByIntraId(user.intra_id);
       if (checkuser) {

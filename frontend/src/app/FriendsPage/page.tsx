@@ -109,13 +109,11 @@ export default function FriendsPage() {
 
           <button
             className="mr-4 w-fit font-meduim  py-1 rounded-md   bg-green-700 hover:bg-green-600
-          
-         
-          // small screen
-          text-xs px-2
-          // big screen 
-          md:text-sm lg:text-md lg:px-4 
-          "
+            // small screen
+            text-xs px-2
+            // big screen 
+            md:text-sm lg:text-md lg:px-4 
+            "
             onClick={handleClickOpen}
           >
             Add Friend

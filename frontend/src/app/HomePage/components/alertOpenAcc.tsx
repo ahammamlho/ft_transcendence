@@ -46,10 +46,7 @@ export default function AlertOpenAccount({
               onClick={() => {
                 window.location.href = `${process.env.NEXT_PUBLIC_BACK}/auth/login42`;
 
-                // //console.log(
-                //   "process.env.NEXT_PUBLIC_BACK=",
-                //   process.env.NEXT_PUBLIC_BACK
-                // );
+
               }}
             >
               <div

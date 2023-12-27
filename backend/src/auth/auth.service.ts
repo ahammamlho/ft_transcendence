@@ -16,7 +16,9 @@ export class AuthService {
   ) { }
 
   async callbackStratiegs(req: any, res: Response) {
+
     const ret = await this.valiadteUserAndCreateJWT(req.user.intra_id);
+
     if (ret) {
       res.cookie("intra_id", req.user.intra_id);
       const diff =
@@ -28,6 +30,7 @@ export class AuthService {
       }
       if (req.user.isTwoFactorAuthEnabled)
         return res.redirect(process.env.FRONT_HOST + "Checker2faAuth");
+      
       res.cookie("access_token", ret.access_token);
       res.redirect(process.env.FRONT_HOST + "DashboardPage");
     }

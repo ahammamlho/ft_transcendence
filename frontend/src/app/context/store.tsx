@@ -146,11 +146,14 @@ export const GlobalContextProvider = ({
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
+
     if (user.id && user.id != "-1") {
-      const socket = io(`${process.env.NEXT_PUBLIC_BACK}` || "196.64.133.124", {
+      const token = Cookies.get("access_token");
+      const socket = io(`${process.env.NEXT_PUBLIC_BACK}` || "localhost", {
         transports: ["websocket"],
         query: {
           senderId: user.id,
+          token: `Bearer ${token}`,
         },
       });
       setSocket(socket);
@@ -159,8 +162,8 @@ export const GlobalContextProvider = ({
     }
   }, [user.id]);
 
+
   useEffect(() => {
-    console.log("currentPath=", currentPath);
     const getDataUser = async () => {
       try {
         const token = Cookies.get("access_token");
