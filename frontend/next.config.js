@@ -14,10 +14,10 @@ const nextConfig = {
   },
 
   images: {
-    domains: ["cdn.intra.42.fr", "localhost", "lh3.googleusercontent.com"],
+    domains: ["cdn.intra.42.fr", "196.64.133.124", "lh3.googleusercontent.com"],
   },
 };
 
 module.exports = nextConfig;
 
-// http://localhost:3000/(https:///a/ACg8ocK7dGmj28CzKrwS13hFPtiiZKIe3fKJGAo9F7iwArOijas=s96-c)
+// http://196.64.133.124:3000/(https:///a/ACg8ocK7dGmj28CzKrwS13hFPtiiZKIe3fKJGAo9F7iwArOijas=s96-c)

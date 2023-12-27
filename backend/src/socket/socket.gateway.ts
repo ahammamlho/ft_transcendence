@@ -21,7 +21,7 @@ import { BallDto, PaddleDto } from "src/game/dto";
 @WebSocketGateway(
   {
     cors: {
-      origin: ['http://localhost:3000'],
+      origin: ['http://196.64.133.124:3000'],
     },
     transports: ['websocket'],
   })

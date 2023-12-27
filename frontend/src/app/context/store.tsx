@@ -99,7 +99,7 @@ const GlobalContext = createContext<ContextProps>({
 
 
 export const GlobalContextProvider = ({
-  children, 
+  children,
 }: {
   children: React.ReactNode;
 }) => {
@@ -147,7 +147,7 @@ export const GlobalContextProvider = ({
 
   useEffect(() => {
     if (user.id && user.id != "-1") {
-      const socket = io(`${process.env.NEXT_PUBLIC_BACK}` || "localhost", {
+      const socket = io(`${process.env.NEXT_PUBLIC_BACK}` || "196.64.133.124", {
         transports: ["websocket"],
         query: {
           senderId: user.id,
