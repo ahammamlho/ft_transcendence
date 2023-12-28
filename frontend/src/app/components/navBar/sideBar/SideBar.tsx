@@ -18,13 +18,14 @@ export default function SideBar() {
   const { user, socket } = useGlobalContext();
 
   function getIconStyle(pathname: string) {
-    const iconStyle = ` mx-auto transition ease-in-out delay-100
+    const iconStyle = `mx-auto transition ease-in-out delay-100
         ${(pathname === currentPath) ? "text-white scale-110" : "text-gray-400"}
     // small screen
     w-4 h-4 
     min-[320px]:w-5 min-[320px]:h-5
     // Big screen
     md:w-6 md:h-6
+    hover:text-white
     `;
     return iconStyle;
   }
@@ -77,9 +78,6 @@ export default function SideBar() {
     if (index === 7) {
       Cookies.remove("access_token", { sameSite: 'none', secure: true });
       Cookies.remove("intra_id", { sameSite: 'none', secure: true });
-      if (socket) {
-        socket.emit('updateStatusGeust', user.id);
-      }
     }
   };
 

@@ -15,7 +15,6 @@ export class JwtGuardSocket implements CanActivate {
         const request = context.switchToHttp().getRequest();
 
         const token = this.extractTokenFromHeader(request);
-        console.log("request=", request.handshake.query.token)
         if (!token) {
             throw new UnauthorizedException();
         }
@@ -30,10 +29,8 @@ export class JwtGuardSocket implements CanActivate {
     }
 
     private extractTokenFromHeader(request: any) {
-        console.log("request=", request.handshake.query.token)
         if (request.handshake.query.token) {
             const [type, token] = request.handshake.query.token.split(" ") ?? [];
-            console.log("token --> ", token)
             return token
         }
         return undefined;

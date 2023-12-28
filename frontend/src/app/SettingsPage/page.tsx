@@ -62,7 +62,7 @@ export default function SettingsPage() {
 
   return (
     <div className="">
-      <div className="pt-5 pl-20  text-white text-2xl/[29px] mb-5 mt-5">
+      <div className="pt-5 pl-28  text-white text-2xl/[29px] mb-5 mt-5">
         <Text weight="bold">Edit Profile</Text>
       </div>
 

@@ -10,6 +10,7 @@ enum ChannelType {
     Private = 'Private'
 }
 
+
 export class CreateChannelDto {
     channelName: string;
     channelType: ChannelType;

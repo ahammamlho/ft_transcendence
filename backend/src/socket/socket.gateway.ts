@@ -21,6 +21,7 @@ import { JwtGuardSocket } from 'src/auth/guard/jwt.guard-socket';
 // import { PongServise } from "src/game/game.service";
 
 
+@UseGuards(JwtGuardSocket)
 @WebSocketGateway()
 export class SocketGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
@@ -38,9 +39,8 @@ export class SocketGateway
     // //console.log("Gateway Initialized");
   }
 
-
+ 
   async handleConnection(client: Socket) {
-    // client.disconnect()
     console.log("handleConnection------------");
     this.socketGatewayService.handleConnection(client, this.server);
   }

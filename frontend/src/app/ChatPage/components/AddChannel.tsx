@@ -43,6 +43,9 @@ export default function AlertAddChannel() {
   const [lenNameError, setLenNameError] = useState(0);
   const [errorKey, setErrorKey] = useState("");
 
+
+
+
   const [channelData, setChannelData] = useState<channelDto>({
     channelName: "",
     channelType: ChannelType.Public,
@@ -86,7 +89,9 @@ export default function AlertAddChannel() {
   };
 
   async function createChannelServer() {
+    console.log("object")
     const res = await createChannel(channelData, user.id);
+    console.log("res=", res)
     if (res !== undefined) {
       if (res.status === 200) {
         getDataGeust(res.id, false);

@@ -19,7 +19,7 @@ export class ChannelService {
   constructor(
     private prisma: PrismaService,
     private readonly notificationService: NotificationService
-  ) {}
+  ) { }
 
   async createMessageInfoChannel(
     senderId: string,
@@ -48,11 +48,12 @@ export class ChannelService {
       const bytes = AES.decrypt(cipherText, process.env.CRYPTO_JS_KEY);
       const decrypted = bytes.toString(enc.Utf8);
       return decrypted;
-    } catch (err) {}
+    } catch (err) { }
   };
 
   async createChannel(createChannelDto: CreateChannelDto, senderId: string) {
     let cipherText = "";
+    console.log(createChannelDto)
     if (createChannelDto.channelPassword !== "")
       cipherText = AES.encrypt(
         createChannelDto.channelPassword,
@@ -109,6 +110,7 @@ export class ChannelService {
 
       return { ...newChannel, status: 200 };
     } catch (error) {
+      console.log("error->", error)
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === "P2002") {
           return { status: 202, error: "Name is already used" };
@@ -195,7 +197,7 @@ export class ChannelService {
           },
         });
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   async checkOwnerIsAdmin(senderId: string, channelId: string) {
@@ -327,8 +329,8 @@ export class ChannelService {
           member.userId === channel.channelOwnerId
             ? "Owner"
             : member.isAdmin
-            ? "Admin"
-            : "User",
+              ? "Admin"
+              : "User",
         unmuted_at,
       };
       result.push(temp);

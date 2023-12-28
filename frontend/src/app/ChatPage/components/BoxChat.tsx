@@ -333,7 +333,7 @@ const BoxChat = () => {
 
         <div className="pr-3">
           {!geust.isUser ? (
-            <Link href="channelSettings">
+            <Link href="ChannelSettings">
               <IoSettingsSharp size={16} />
             </Link>
           ) : geust.inGaming || isBlocked ? (
