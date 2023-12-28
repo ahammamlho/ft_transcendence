@@ -32,19 +32,8 @@ export class UserController {
   @Get("/intra")
   async getUserByIdintr(@Req() req: any) {
     try {
-      const user: User = await this.userService.findByIntraId(req.user.sub);
-      const temp = {
-        id: user.id,
-        intra_id: user.intra_id,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        nickname: user.nickname,
-        profilePic: user.profilePic,
-        isTwoFactorAuthEnabled: user.isTwoFactorAuthEnabled,
-        level: user.level,
-        inGaming: user.inGaming
-      };
-      return temp;
+      const user = await this.userService.findByOwnerById(req.user.sub);
+      return user;
     } catch (error) { }
   }
 

@@ -1,7 +1,5 @@
 
 
-
-
 type CreateNotificationDTO = {
     senderId: string;
     recieverId: string;

@@ -10,9 +10,6 @@ export default function SBItems(prompt: {
 
   const currentPath = usePathname();
 
-  useEffect(() => {
-    console.log(currentPath, prompt.pageName)
-  }, [currentPath])
   return (
     <Link
       onClick={prompt.onClick}

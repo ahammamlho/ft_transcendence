@@ -10,7 +10,7 @@ import { BlockedUser, Prisma, Status, User } from "@prisma/client";
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async findById(id: string) {
     try {
@@ -230,7 +230,7 @@ export class UserService {
         },
       });
       return user;
-    } catch (error) {}
+    } catch (error) { }
   }
 
   async setTwoFactorAuthSecret(secret: string, intra_id: string) {
@@ -305,7 +305,7 @@ export class UserService {
           profilePic: process.env.BACK_HOST + `/${path}`,
         },
       });
-    } catch (error) {}
+    } catch (error) { }
   }
 
   async findByIntraId(intra_id: string) {
@@ -313,6 +313,27 @@ export class UserService {
       where: { intra_id: intra_id },
     });
     return user;
+  }
+
+
+  async findByOwnerById(intra_id: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { intra_id: intra_id },
+    });
+    const noti = await this.prisma.notificationTable.findMany({ where: { recieverId: user.id } })
+    const temp = {
+      id: user.id,
+      intra_id: user.intra_id,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      nickname: user.nickname,
+      profilePic: user.profilePic,
+      isTwoFactorAuthEnabled: user.isTwoFactorAuthEnabled,
+      level: user.level,
+      inGaming: user.inGaming,
+      nbrNotifications: noti.length
+    };
+    return temp;
   }
 
   async findByIds(id: string) {

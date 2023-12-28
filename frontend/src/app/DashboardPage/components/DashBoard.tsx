@@ -20,6 +20,7 @@ import AchievementItem from "../../AchievementsPage/components/AchievementItem";
 import { useGlobalContext } from "../../context/store";
 import PopoverMenuDash from "./PopoverMenuDash";
 import Badge from "@mui/material/Badge";
+
 export default function DashBoard(prompt: { friend: ownerDto }) {
   const router = useRouter();
   const { user, updateInfo } = useGlobalContext();
@@ -54,7 +55,9 @@ export default function DashBoard(prompt: { friend: ownerDto }) {
         setLevel([parseInt(levelTmp[0]), parseInt(levelTmp[1])]);
 
         // for fetch the gameHistory
+        console.log("prompt.friend.id=", prompt.friend.id)
         const gameHistoryTmp = await getGameHistory(prompt.friend.id);
+        console.log("gameHistoryTmp=", gameHistoryTmp)
         if (gameHistoryTmp.length !== 0) {
           setGameHistory(gameHistoryTmp);
         }
@@ -88,7 +91,7 @@ export default function DashBoard(prompt: { friend: ownerDto }) {
     achievementsList = getAchievmentsData(globalInfo).filter(
       (acheiv) => acheiv.isUnlocked
     );
-  }, [updateInfo]);
+  }, [updateInfo, prompt.friend.id]);
 
   return (
     <div className="flex flex-col  max-w-[120rem] mx-auto bg-color-main  justify-start pt-8">

@@ -53,6 +53,7 @@ model User {
   Channel           Channel[]
   GameHistory       GameHistory[]
   NotificationTable NotificationTable[]
+  nbrNotifications  Int                 @default(0)
 }
 
 model Channel {

@@ -29,6 +29,7 @@ type ownerDto = {
   profilePic: string;
   isTwoFactorAuthEnabled: boolean;
   level: string;
+  nbrNotifications: Number
 
 
   inGaming: boolean,

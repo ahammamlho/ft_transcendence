@@ -78,6 +78,7 @@ const GlobalContext = createContext<ContextProps>({
     status: Status.INACTIF,
     inGaming: false,
     level: "0.0",
+    nbrNotifications: 0
   },
   setUser: () => { },
 
@@ -121,6 +122,7 @@ export const GlobalContextProvider = ({
     level: "0.0",
     status: Status.INACTIF,
     inGaming: false,
+    nbrNotifications: 0,
   });
 
   const [inviteData, setInviteData] = useState<any>({

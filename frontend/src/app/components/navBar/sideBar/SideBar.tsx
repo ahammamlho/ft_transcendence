@@ -11,7 +11,8 @@ import { IoGameController, IoSettingsSharp } from "react-icons/io5";
 import { MdLeaderboard } from "react-icons/md";
 import SBItems from "./SBItems";
 import SBSection from "./SBSection";
-
+import Badge from '@mui/material/Badge';
+import { useEffect } from "react";
 
 export default function SideBar() {
   const currentPath = usePathname();
@@ -30,6 +31,7 @@ export default function SideBar() {
     return iconStyle;
   }
 
+  useEffect(() => { console.log(user) }, [user.id])
 
   let sBItemsList = [
     {
@@ -59,7 +61,11 @@ export default function SideBar() {
     },
     {
       pageName: "NotificationPage",
-      icon: <IoMdNotifications className={`${getIconStyle("/NotificationPage")}`} />,
+      icon: (user.nbrNotifications === 0 ?
+        <IoMdNotifications className={`${getIconStyle("/NotificationPage")}`} /> :
+        <Badge badgeContent={<div>{String(user.nbrNotifications)}</div>} color="primary"  >
+          <IoMdNotifications className={`${getIconStyle("/NotificationPage")}`} />
+        </Badge>),
       index: 5,
     },
     {
@@ -85,8 +91,9 @@ export default function SideBar() {
     <div
       className=" flex flex-col   bg-color-main-dark   rounded-br-full fixed top-0 
       transition-all duration-400 ease-in-out
-      h-fit w-20 
-      sm:w-24 md:w-28 "
+      h-fit 
+      "
+    //w-20  sm:w-24 md:w-28 
     >
       <div
         className=" mx-auto  flex flex-col justify-center
@@ -112,15 +119,17 @@ export default function SideBar() {
         </SBSection>
 
         <SBSection sectionName="Profile">
-          {sBItemsList.slice(5, 8).map((item) => (
-            <SBItems
-              key={item.pageName}
-              pageName={item.pageName}
-              onClick={() => handleItemClick(item.index)}
-            >
-              {item.icon}
-            </SBItems>
-          ))}
+          <div className="flex flex-col items-center">
+            {sBItemsList.slice(5, 8).map((item) => (
+              <SBItems
+                key={item.pageName}
+                pageName={item.pageName}
+                onClick={() => handleItemClick(item.index)}
+              >
+                {item.icon}
+              </SBItems>
+            ))}
+          </div>
         </SBSection>
       </div>
     </div>

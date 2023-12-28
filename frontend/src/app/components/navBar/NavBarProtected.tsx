@@ -26,7 +26,7 @@ export default function NavBarProtected(prompt: { children: ReactNode }) {
           />
           <SerachNav />
         </div>
-      </div> 
+      </div>
 
 
       <div className="flex flex-row w-screen bg-color-main relative z-10">
