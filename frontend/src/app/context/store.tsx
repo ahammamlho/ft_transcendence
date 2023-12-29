@@ -189,7 +189,14 @@ export const GlobalContextProvider = ({
       }
     };
     if (user.id === "-1") getDataUser();
-  }, []);
+
+    if (socket) {
+      socket.on("sendNotification", getDataUser);
+      return () => {
+        socket.off("sendNotification", getDataUser);
+      };
+    }
+  }, [socket]);
 
   useEffect(() => {
     const update = async () => {

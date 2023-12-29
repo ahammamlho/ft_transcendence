@@ -66,7 +66,7 @@ export default function NotificationPage() {
     }
   });
 
-  const { user, setGeust } = useGlobalContext();
+  const { user, setGeust, socket } = useGlobalContext();
 
   const [items, setItems] = useState([]);
   const [Delete, setDelete] = useState<boolean>(false);
@@ -86,7 +86,14 @@ export default function NotificationPage() {
       setItems(data);
     };
     if (user.id !== "-1") getData();
-  }, [user.id, Delete]);
+    if (socket) {
+      socket.on("sendNotification", getData);
+      return () => {
+        socket.off("sendNotification", getData);
+      };
+    }
+
+  }, [user.id, socket, Delete]);
 
   const DeleteFn = async (id: string) => {
     const token = Cookies.get("access_token");
@@ -97,52 +104,62 @@ export default function NotificationPage() {
           Authorization: `Bearer ${token}`,
         },
       }
-    ); // ${user.id}
+    );
     const data = await response.data;
     setDelete((prevDelete) => !prevDelete);
   };
 
-  function handleDecline(): void {
-    throw new Error("Function not implemented.");
-  }
 
-  const [isOpen, setIsOpen] = useState(false);
-  function handleAccept() {
-    return (
-      <div>
-        <button onClick={() => setIsOpen(true)}>Show Popup</button>
+  const widgetItem = (item: any, index: number) => {
+    return <div
+      key={index}
+      className="text-black flex  justify-between bg-white border-4 border-white p-4 my-2 rounded-3xl "
+    >
+      <div className="flex">
+        <div className="flex-shrink-0 w-20 h-20 mr-4">
+          {(() => {
+            switch (item.subjet) {
+              default:
+                return (
+                  <img
+                    className="text-[60px] rounded-full  cursor-pointer"
+                    src={item.user.profilePic}
+                    alt=""
+                    onClick={async () => {
+                      //console.log(item.subjet);
+                      if (item.subjet.includes("send")) {
+                        const geustTemp: geustDto = await getUserGeust(
+                          item.receivedId
+                        );
+                        setGeust(geustTemp);
+                        DeleteFn(item.id);
+                        router.push("/ChatPage");
+                      }
+                    }}
+                  />
+                );
+            }
+          })()}
 
-        <Modal
-          className="text-[60px] bg-blue-300 m-60 border-spacing-1 p-4 my-2 rounded-3xl"
-          isOpen={isOpen}
-          onRequestClose={() => setIsOpen(false)}
-        >
-          <div className="flex flex-col items-center">
-            <img className="" src="path/to/image.png" alt="Image" />
-            <p className="text-black">Text goes here...</p>
-          </div>
-          <div className="flex justify-center items-center mt-4">
-            <button
-              className="bg-blue-500 text-white px-1 rounded-3xl"
-              onClick={handleAccept}
-            >
-              Accept
-            </button>
-            <span style={{ marginRight: "8px" }} />
-            <button
-              className="bg-blue-900 text-white px-1 rounded-3xl"
-              onClick={handleDecline}
-            >
-              Decline
-            </button>
-          </div>
-        </Modal>
+          <div id="lottie-container"></div>
+        </div>
+        <div>
+          <p className="text-md lg:text-lg xl:text-2xl ">
+            <strong>{item.user.nickname}</strong> {item.subjet}
+          </p>
+
+          <p>{formatDateAndTime(item.createdAt)}</p>
+        </div>
       </div>
-    );
-  }
 
-  function showDialog() {
-    setIsOpen(true);
+      <FaTrashCan
+        size="40"
+        className="cursor-pointer text-[60px] bg-blue-900 rounded-full hover:bg-red-500 pt-3 pb-2 text-white"
+        onClick={() => {
+          DeleteFn(item.id);
+        }}
+      />
+    </div>
   }
 
   return (
@@ -161,86 +178,17 @@ export default function NotificationPage() {
                   Authorization: `Bearer ${token}`,
                 },
               }
-            ); // ${user.id}
+            );
             setDelete((prevDelete) => !prevDelete);
-          }}
-        >
-          clear all
-        </p>
+          }} > clear all </p>
       </div>
+
       <div className="w-[80%] h-64 ">
         {items.map((item: any, index) => (
-          <div
-            key={index}
-            className="text-black flex  justify-between bg-white border-4 border-white p-4 my-2 rounded-3xl "
-          >
-            <div className="flex">
-              <div className="flex-shrink-0 w-20 h-20 mr-4">
-                {(() => {
-                  switch (item.subjet) {
-                    default:
-                      return (
-                        <img
-                          className="text-[60px] rounded-full  cursor-pointer"
-                          src={item.user.profilePic}
-                          alt=""
-                          onClick={async () => {
-                            //console.log(item.subjet);
-                            if (item.subjet.includes("send")) {
-                              const geustTemp: geustDto = await getUserGeust(
-                                item.receivedId
-                              );
-                              setGeust(geustTemp);
-                              DeleteFn(item.id);
-                              router.push("/ChatPage");
-                            }
-                          }}
-                        />
-                      );
-                  }
-                })()}
-
-                <div id="lottie-container"></div>
-              </div>
-              <div>
-                <p className="text-md lg:text-lg xl:text-2xl ">
-                  <strong>{item.user.nickname}</strong> {item.subjet}
-                </p>
-
-                <p>{formatDateAndTime(item.createdAt)}</p>
-                {item.subjet === subjects[1] ? (
-                  <React.Fragment>
-                    <button
-                      className="bg-blue-500 text-white font-bold py-2 px-4 rounded"
-                      onClick={() => handleDecline()}
-                    >
-                      Decline
-                    </button>
-                    <span style={{ marginRight: "8px" }} />{" "}
-                    {/* Add a space of 8px */}
-                    <button
-                      className="bg-blue-900 text-white font-bold py-2 px-4 rounded"
-                      onClick={() => showDialog()}
-                    >
-                      Accept
-                    </button>
-                  </React.Fragment>
-                ) : null}
-              </div>
-            </div>
-
-            <FaTrashCan
-              size="40"
-              className="cursor-pointer text-[60px] bg-blue-900 rounded-full hover:bg-red-500 pt-3 pb-2 text-white"
-              onClick={() => {
-                DeleteFn(item.id);
-              }}
-            />
-          </div>
+          widgetItem(item, index)
         ))}
       </div>
       <div className="flex justify-center items-center h-screen mt-30vh ">
-        <div className="text-center">{isOpen && handleAccept()}</div>
       </div>
     </div>
   );

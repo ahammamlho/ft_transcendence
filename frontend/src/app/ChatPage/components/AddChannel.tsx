@@ -89,9 +89,7 @@ export default function AlertAddChannel() {
   };
 
   async function createChannelServer() {
-    console.log("object")
     const res = await createChannel(channelData, user.id);
-    console.log("res=", res)
     if (res !== undefined) {
       if (res.status === 200) {
         getDataGeust(res.id, false);
@@ -100,6 +98,9 @@ export default function AlertAddChannel() {
           receivedId: res.id,
           isDirectMessage: false,
         });
+        for (const userId of channelData.channelMember) {
+          socket?.emit("sendNotification", userId);
+        }
         setOpen(false);
       } else if (res.status === 202) {
         setErrorName(res.error);

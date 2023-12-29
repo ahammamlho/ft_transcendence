@@ -97,12 +97,15 @@ export class MessagesService {
 
       }
       if (notSendTo === "") {
-        server.to(msg.receivedId).emit('emitNewMessage', temp);
         this.notificationService.createNotification({
           senderId: msg.senderId,
           recieverId: msg.receivedId,
           subject: "send message",
+          channelId: "",
+          type: 'SendMessage'
         })
+        server.to(msg.receivedId).emit('emitNewMessage', temp);
+        server.to(msg.receivedId).emit('sendNotification', temp);
       }
       server.to(msg.senderId).emit('emitNewMessage', temp);
     } catch (error) {

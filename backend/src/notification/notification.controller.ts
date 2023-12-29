@@ -28,7 +28,6 @@ export class NotificationController {
     }
   }
 
-
   @Get('/getNotifications/:senderId')
   async fetchNotifications(@Param('senderId') senderId: string) {
     const notifications = await this.notificationService.fetchNotifications(senderId);

@@ -168,4 +168,6 @@ export class SocketGatewayService {
     });
     wss.to(ids.receivedId).emit("messagsSeenEmit");
   }
+
+
 }

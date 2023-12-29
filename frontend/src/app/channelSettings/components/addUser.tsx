@@ -100,6 +100,7 @@ export default function AlertsAddUserChannel() {
                       isDirectMessage: false
                     });
                     socket?.emit('changeStatusMember', geust.id);
+                    socket?.emit("sendNotification", elm.id);
                     handleClose();
                   }}>
                 <Text size="2" weight="medium">

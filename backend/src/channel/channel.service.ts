@@ -90,11 +90,11 @@ export class ChannelService {
       // add members
       const promises = createChannelDto.channelMember.map(
         async (item: string) => {
-          this.notificationService.createNotification({
-            senderId: senderId,
-            recieverId: item,
-            subject: "you've been invited to group",
-          });
+          // this.notificationService.createNotification({
+          //   senderId: senderId,
+          //   recieverId: item,
+          //   subject: "you've been invited to group",
+          // });
 
           await this.prisma.channelMember.create({
             data: {
@@ -230,11 +230,11 @@ export class ChannelService {
         });
         this.createMessageInfoChannel(senderId, channelId, userId, "added");
 
-        this.notificationService.createNotification({
-          senderId: senderId,
-          recieverId: userId,
-          subject: "you've been invited to group",
-        });
+        // this.notificationService.createNotification({
+        //   senderId: senderId,
+        //   recieverId: userId,
+        //   subject: "you've been invited to group",
+        // });
       }
     } catch (error) {
       return { error: true };

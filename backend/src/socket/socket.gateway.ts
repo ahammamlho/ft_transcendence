@@ -39,7 +39,7 @@ export class SocketGateway
     // //console.log("Gateway Initialized");
   }
 
- 
+
   async handleConnection(client: Socket) {
     console.log("handleConnection------------");
     this.socketGatewayService.handleConnection(client, this.server);
@@ -118,6 +118,12 @@ export class SocketGateway
   @SubscribeMessage("messagsSeenEmit")
   async messagsSeenEmit(@MessageBody() ids: CreateMessageDto) {
     this.socketGatewayService.messagsSeenEmit(ids, this.server);
+  }
+
+
+  @SubscribeMessage("sendNotification")
+  async handleNotif(@MessageBody() receivedId: string) {
+    this.server.to(receivedId).emit("sendNotification");
   }
 
 
