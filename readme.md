@@ -1,6 +1,6 @@
 # transcendence
 
-![home](https://github.com/ahammamlho/ft_transcendence/screen-shot/Welcome-page.png?raw=true)
+![Welcome](https://github.com/ahammamlho/ft_transcendence/blob/main/screen-shot/Welcome-page.png?raw=true)
 
 Final project of the 42 School.
 
