@@ -41,4 +41,35 @@ A Single Page App where authenticated users engage in real-time 'Pong' competiti
 
 ## Screenshot
 
-![Welcome](https://github.com/ahammamlho/ft_transcendence/blob/main/screen-shot/Welcome-page.png?raw=true)
+- Welcome Page
+  ![Welcome](https://github.com/ahammamlho/ft_transcendence/blob/main/screen-shot/Welcome-page.png?raw=true)
+
+- Settings Page
+  ![settings](https://github.com/ahammamlho/ft_transcendence/blob/main/screen-shot/settings.png?raw=true)
+
+- Verify 2fa Page
+  ![2fa](https://github.com/ahammamlho/ft_transcendence/blob/main/screen-shot/2fa.png?raw=true)
+
+- Dashboard Page
+  ![dashboard](https://github.com/ahammamlho/ft_transcendence/blob/main/screen-shot/dashboard-page.png?raw=true)
+
+- Friendship Page
+  ![Friendship](https://github.com/ahammamlho/ft_transcendence/blob/main/screen-shot/friends-page.png?raw=true)
+
+- Startgame Page
+  ![startgame](https://github.com/ahammamlho/ft_transcendence/blob/main/screen-shot/start-game.png?raw=true)
+
+- Option game Page
+  ![game-2](https://github.com/ahammamlho/ft_transcendence/blob/main/screen-shot/game-2.png?raw=true)
+
+- Game Page
+  ![game](https://github.com/ahammamlho/ft_transcendence/blob/main/screen-shot/game-3.png?raw=true)
+
+- Chat Page
+  ![chat](https://github.com/ahammamlho/ft_transcendence/blob/main/screen-shot/chat-direct-msg.png?raw=true)
+
+- Create Channel Alert
+  ![channel](https://github.com/ahammamlho/ft_transcendence/blob/main/screen-shot/create-channel.png?raw=true)
+
+- Channel Settings
+  ![Channel](https://github.com/ahammamlho/ft_transcendence/blob/main/screen-shot/Channel-Settings.png?raw=true)
