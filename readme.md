@@ -8,6 +8,6 @@ A Single Page App where authenticated users engage in real-time 'Pong' competiti
 
 # Contributors:
 
-> - _<a href="https://github.com/ahammamlho" target="_blank">Ali Zaynoune</a>.<br>_
+> - _<a href="https://github.com/ahammamlho" target="_blank">AHAMMAM LHOUSSAINE</a><br>_
 
 ![Contributors](https://github.com/ahammamlho/ft_transcendence/blob/main/screen-shot/Welcome-page.png?raw=true)
