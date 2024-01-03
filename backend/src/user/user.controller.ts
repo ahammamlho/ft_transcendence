@@ -93,9 +93,12 @@ export class UserController {
     return await this.userService.getUserGeust(id);
   }
 
-  @Get('getChannelGeust/:id')
-  async getChannelGeust(@Param('id') id: string) {
-    return await this.userService.getChannelGeust(id);
+  @Get('getChannelGeust/:senderId/:id')
+  async getChannelGeust(
+    @Param('senderId') senderId: string,
+    @Param('id') id: string,
+  ) {
+    return await this.userService.getChannelGeust(senderId, id);
   }
 
   @Get('checkIsBlocked/:senderId/:receivedId')

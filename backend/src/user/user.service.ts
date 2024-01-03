@@ -3,14 +3,14 @@ import {
   HttpStatus,
   Injectable,
   UnauthorizedException,
-} from "@nestjs/common";
-import { PrismaService } from "src/prisma/prisma.service";
+} from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 
-import { BlockedUser, Prisma, Status, User } from "@prisma/client";
+import { BlockedUser, Prisma, Status, User } from '@prisma/client';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async findById(id: string) {
     try {
@@ -78,7 +78,7 @@ export class UserService {
           if (sendReq) return { ...user, friendship: 3 }; // user who sent a friend request
 
           return { ...user, friendship: 0 }; // user
-        })
+        }),
       );
       return result;
     } catch (error) {
@@ -180,10 +180,10 @@ export class UserService {
         };
       return {
         isUser: true,
-        id: "-1",
-        nickname: "",
-        profilePic: "",
-        status: "",
+        id: '-1',
+        nickname: '',
+        profilePic: '',
+        status: '',
         lastSee: 0,
         lenUser: 0,
         idUserOwner: 0,
@@ -193,22 +193,28 @@ export class UserService {
     }
   }
 
-  async getChannelGeust(id: string) {
+  async getChannelGeust(senderId: string, id: string) {
     try {
-      const channel = await this.prisma.channel.findUnique({ where: { id } });
-      const members = await this.prisma.channelMember.findMany({
-        where: { channelId: id },
+      const isMemberExist = await this.prisma.channelMember.findMany({
+        where: { userId: senderId, channelId: id },
       });
-      return {
-        isUser: false,
-        id: id,
-        nickname: channel.channelName,
-        profilePic: channel.avatar,
-        status: Status.INACTIF,
-        lastSee: channel.createdAt,
-        lenUser: members.length,
-        idUserOwner: channel.channelOwnerId,
-      };
+      console.log('isMemberExist-->', isMemberExist);
+      if (isMemberExist.length !== 0) {
+        const channel = await this.prisma.channel.findUnique({ where: { id } });
+        const members = await this.prisma.channelMember.findMany({
+          where: { channelId: id },
+        });
+        return {
+          isUser: false,
+          id: id,
+          nickname: channel.channelName,
+          profilePic: channel.avatar,
+          status: Status.INACTIF,
+          lastSee: channel.createdAt,
+          lenUser: members.length,
+          idUserOwner: channel.channelOwnerId,
+        };
+      } else return null;
     } catch {
       return { error: true };
     }
@@ -230,7 +236,7 @@ export class UserService {
         },
       });
       return user;
-    } catch (error) { }
+    } catch (error) {}
   }
 
   async setTwoFactorAuthSecret(secret: string, intra_id: string) {
@@ -286,8 +292,8 @@ export class UserService {
       });
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === "P2002") {
-          throw new HttpException("nickname aleady exist", HttpStatus.CONFLICT);
+        if (error.code === 'P2002') {
+          throw new HttpException('nickname aleady exist', HttpStatus.CONFLICT);
         } else {
           return { status: 202, error: true };
         }
@@ -305,7 +311,7 @@ export class UserService {
           profilePic: process.env.BACK_HOST + `/${path}`,
         },
       });
-    } catch (error) { }
+    } catch (error) {}
   }
 
   async findByIntraId(intra_id: string) {
@@ -315,12 +321,13 @@ export class UserService {
     return user;
   }
 
-
   async findByOwnerById(intra_id: string) {
     const user = await this.prisma.user.findUnique({
       where: { intra_id: intra_id },
     });
-    const noti = await this.prisma.notificationTable.findMany({ where: { recieverId: user.id } })
+    const noti = await this.prisma.notificationTable.findMany({
+      where: { recieverId: user.id },
+    });
     const temp = {
       id: user.id,
       intra_id: user.intra_id,
@@ -331,7 +338,7 @@ export class UserService {
       isTwoFactorAuthEnabled: user.isTwoFactorAuthEnabled,
       level: user.level,
       inGaming: user.inGaming,
-      nbrNotifications: noti.length
+      nbrNotifications: noti.length,
     };
     return temp;
   }

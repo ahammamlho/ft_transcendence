@@ -1,25 +1,25 @@
-"use client";
+'use client';
 import {
   getAllFriends,
   getIsBlocked,
   getUserByNick,
-} from "@/app/FriendsPage/apiFriend/friendshipApi";
+} from '@/app/FriendsPage/apiFriend/friendshipApi';
 import {
   getAchievmentsData,
   getGameHistory,
   getGlobalInfos,
   getUserRanking,
-} from "@/app/FriendsPage/apiFriend/gameApi";
-import CardInfo from "@/app/DashboardPage/components/CardInfo";
-import HomeSection from "@/app/DashboardPage/components/HomeSection";
-import LevelBar from "@/app/DashboardPage/components/LevelBar";
-import HistoryItem from "@/app/HistoryPage/components/HistoryItem";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import AchievementItem from "../../AchievementsPage/components/AchievementItem";
-import { useGlobalContext } from "../../context/store";
-import PopoverMenuDash from "./PopoverMenuDash";
-import Badge from "@mui/material/Badge";
+} from '@/app/FriendsPage/apiFriend/gameApi';
+import CardInfo from '@/app/DashboardPage/components/CardInfo';
+import HomeSection from '@/app/DashboardPage/components/HomeSection';
+import LevelBar from '@/app/DashboardPage/components/LevelBar';
+import HistoryItem from '@/app/HistoryPage/components/HistoryItem';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import AchievementItem from '../../AchievementsPage/components/AchievementItem';
+import { useGlobalContext } from '../../context/store';
+import PopoverMenuDash from './PopoverMenuDash';
+import Badge from '@mui/material/Badge';
 
 export default function DashBoard(prompt: { friend: ownerDto }) {
   const router = useRouter();
@@ -37,7 +37,7 @@ export default function DashBoard(prompt: { friend: ownerDto }) {
   const [rank, setRank] = useState(0);
   const [winRate, setWinRate] = useState(0);
   let achievementsList = getAchievmentsData(globalInfo).filter(
-    (acheiv) => acheiv.isUnlocked
+    (acheiv) => acheiv.isUnlocked,
   );
   const [level, setLevel] = useState([0, 0]);
   const [isBlocked, setIsBlocked] = useState(true);
@@ -51,13 +51,13 @@ export default function DashBoard(prompt: { friend: ownerDto }) {
 
         // for fetch the level
         const usr = await getUserByNick(prompt.friend.nickname);
-        const levelTmp = usr.level.split(".");
+        const levelTmp = usr.level.split('.');
         setLevel([parseInt(levelTmp[0]), parseInt(levelTmp[1])]);
 
         // for fetch the gameHistory
-        console.log("prompt.friend.id=", prompt.friend.id)
+        console.log('prompt.friend.id=', prompt.friend.id);
         const gameHistoryTmp = await getGameHistory(prompt.friend.id);
-        console.log("gameHistoryTmp=", gameHistoryTmp)
+        console.log('gameHistoryTmp=', gameHistoryTmp);
         if (gameHistoryTmp.length !== 0) {
           setGameHistory(gameHistoryTmp);
         }
@@ -65,7 +65,7 @@ export default function DashBoard(prompt: { friend: ownerDto }) {
         // for fetch the friends
         const dataTmp = await getAllFriends(prompt.friend.id);
         setIsFriend(
-          dataTmp.some((element: friendDto) => element.id === user.id)
+          dataTmp.some((element: friendDto) => element.id === user.id),
         );
 
         // for fetch the globalInfoTmp
@@ -89,7 +89,7 @@ export default function DashBoard(prompt: { friend: ownerDto }) {
     }
     getData();
     achievementsList = getAchievmentsData(globalInfo).filter(
-      (acheiv) => acheiv.isUnlocked
+      (acheiv) => acheiv.isUnlocked,
     );
   }, [updateInfo, prompt.friend.id]);
 
@@ -146,28 +146,28 @@ export default function DashBoard(prompt: { friend: ownerDto }) {
             <Badge
               badgeContent={
                 prompt.friend.inGaming
-                  ? "in game"
-                  : prompt.friend.status === "ACTIF"
-                    ? "online"
-                    : "offline"
+                  ? 'in game'
+                  : prompt.friend.status === 'ACTIF'
+                  ? 'online'
+                  : 'offline'
               }
               sx={{
-                "& .MuiBadge-badge": {
+                '& .MuiBadge-badge': {
                   backgroundColor: prompt.friend.inGaming
-                    ? "#4069FF"
-                    : prompt.friend.status === "ACTIF"
-                      ? "#49D629"
-                      : "#7C7D7C",
+                    ? '#4069FF'
+                    : prompt.friend.status === 'ACTIF'
+                    ? '#49D629'
+                    : '#7C7D7C',
 
-                  margin: "0.5rem 0 0.6rem 0",
+                  margin: '0.5rem 0 0.6rem 0',
                   borderRadius: 50,
-                  border: "2px solid #111623",
+                  border: '2px solid #111623',
                 },
               }}
               overlap="rectangular"
               anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
+                vertical: 'bottom',
+                horizontal: 'right',
               }}
             >
               <img
@@ -259,7 +259,7 @@ export default function DashBoard(prompt: { friend: ownerDto }) {
           sectionName="Last Games"
           btnName="See All History"
           btnClicked={() => {
-            router.push("/HistoryPage/" + prompt.friend.nickname);
+            router.push('/HistoryPage/' + prompt.friend.nickname);
           }}
         >
           {gameHistory.length !== 0 ? (
@@ -287,9 +287,7 @@ export default function DashBoard(prompt: { friend: ownerDto }) {
           sectionName="Achievements"
           btnName="See All Achievements"
           btnClicked={() => {
-            router.push(
-              "/AchievementsPage/" + prompt.friend.nickname
-            );
+            router.push('/AchievementsPage/' + prompt.friend.nickname);
           }}
         >
           {achievementsList.length !== 0 ? (

@@ -17,20 +17,20 @@ const PageChat = () => {
 
   useEffect(() => {
     const getDataGeust = async () => {
-      const idChannel = localStorage.getItem('geust.id');
+      const idChannel = localStorage.getItem('geust.id-channel');
       if (idChannel) {
-        const temp = await getVueGeust(idChannel, false);
-        setGeust(temp);
+        const temp = await getVueGeust(user.id, idChannel, false);
+        if (temp) setGeust(temp);
+        else router.back();
       }
     };
-    if (geust.id === '-1') getDataGeust();
-    if (geust.id !== '-1') localStorage.setItem('geust.id', geust.id);
+    if (geust.id === '-1' && user.id !== '-1') getDataGeust();
   }, [user.id]);
 
   useEffect(() => {
     const getDataGeust = async () => {
       if (geust.id !== '-1') {
-        const temp = await getVueGeust(geust.id, false);
+        const temp = await getVueGeust(user.id, geust.id, false);
         setGeust(temp);
       }
     };
@@ -47,9 +47,11 @@ const PageChat = () => {
     const getData = async (data: { channelId: string }) => {
       if (geust.id === data.channelId) {
         const tmp: boolean = await checkOwnerIsAdmin(user.id, geust.id);
+        console.log('setIsOwnerAdmin=', isOwnerAdmin);
         setIsOwnerAdmin(tmp);
       }
     };
+
     if (geust.id !== '-1' && user.id !== '-1' && !geust.isUser)
       getData({ channelId: geust.id });
 
@@ -59,7 +61,7 @@ const PageChat = () => {
         socket.off('changeStatusMember', getData);
       };
     }
-  }, [geust.id]);
+  }, [geust.id, user.id]);
 
   return (
     <div className="bg-color-main">
@@ -87,7 +89,6 @@ const PageChat = () => {
             ) : (
               <></>
             )}
-
             <div className="pl-16 pt-4 flex justify-start">
               <Text style={{ color: 'white', fontSize: 20 }}>Members</Text>
             </div>
@@ -95,7 +96,14 @@ const PageChat = () => {
           </div>
         </div>
       ) : (
-        <div></div>
+        <div
+          className="text-white"
+          onClick={() => {
+            console.log(user.id, geust.id);
+          }}
+        >
+          ok
+        </div>
       )}
     </div>
   );

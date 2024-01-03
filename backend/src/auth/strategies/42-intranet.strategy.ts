@@ -1,17 +1,15 @@
-import { Injectable } from "@nestjs/common";
-import { PassportStrategy } from "@nestjs/passport";
-import { Profile, Strategy, VerifyCallback } from "passport-42";
-import { UserService } from "src/user/user.service";
+import { Injectable } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+import { Profile, Strategy, VerifyCallback } from 'passport-42';
+import { UserService } from 'src/user/user.service';
 // import { UserService } from 'src/users/UserService';
 
 @Injectable({})
 export class FortyTwoIntranetStrategy extends PassportStrategy(
   Strategy,
-  "42-intranet"
+  '42-intranet',
 ) {
-
   constructor(private userService: UserService) {
-
     super({
       clientID: process.env.CLIENT_ID_42,
       clientSecret: process.env.CLIENT_SECRET_42,
@@ -23,8 +21,8 @@ export class FortyTwoIntranetStrategy extends PassportStrategy(
   validateUser(profile: Profile) {
     const { id, first_name, last_name, image, login } = profile._json;
     const user = {
-      intra_id: typeof id === "string" ? id : id.toString(),
-      email: profile["emails"][0]["value"],
+      intra_id: typeof id === 'string' ? id : id.toString(),
+      email: profile['emails'][0]['value'],
       first_name: first_name,
       last_name: last_name,
       profilePicture: image.link,
@@ -37,10 +35,9 @@ export class FortyTwoIntranetStrategy extends PassportStrategy(
     accessToken: String,
     refreshToken: string,
     profile: Profile,
-    done: VerifyCallback
+    done: VerifyCallback,
   ) {
     try {
-      console.log("object")
       const user = await this.validateUser(profile);
       let checkuser = await this.userService.findByIntraId(user.intra_id);
       if (checkuser) {
