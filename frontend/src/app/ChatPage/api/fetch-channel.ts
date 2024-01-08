@@ -1,8 +1,8 @@
-import axios from "axios";
-import Cookies from "js-cookie";
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
 export async function createChannel(channelData: channelDto, senderId: string) {
-  const token = Cookies.get("access_token");
+  const token = Cookies.get('access_token');
   try {
     const res = await axios.post(
       `${process.env.NEXT_PUBLIC_BACK}/channel/createChannel/${senderId}`,
@@ -11,7 +11,7 @@ export async function createChannel(channelData: channelDto, senderId: string) {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
     const data = await res.data;
     return data;
@@ -21,10 +21,10 @@ export async function createChannel(channelData: channelDto, senderId: string) {
 export async function updateChannel(
   channelData: channelDto,
   senderId: string,
-  channelId: string
+  channelId: string,
 ) {
   try {
-    const token = Cookies.get("access_token");
+    const token = Cookies.get('access_token');
     const res = await axios.post(
       `${process.env.NEXT_PUBLIC_BACK}/channel/updateChannel/${senderId}/${channelId}`,
       channelData,
@@ -32,7 +32,7 @@ export async function updateChannel(
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
     const data = await res.data;
     return data;
@@ -42,17 +42,17 @@ export async function updateChannel(
 export async function addUserToChannel(
   senderId: string,
   channelId: string,
-  userId: string
+  userId: string,
 ) {
   try {
-    const token = Cookies.get("access_token");
+    const token = Cookies.get('access_token');
     const res = await axios.get(
       `${process.env.NEXT_PUBLIC_BACK}/channel/addUserToChannel/${senderId}/${channelId}/${userId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
     const data = await res.data;
     return data;
@@ -61,14 +61,14 @@ export async function addUserToChannel(
 //
 export async function checkOwnerIsAdmin(senderId: string, channelId: string) {
   try {
-    const token = Cookies.get("access_token");
+    const token = Cookies.get('access_token');
     const res = await axios.get(
       `${process.env.NEXT_PUBLIC_BACK}/channel/checkOwnerIsAdmin/${senderId}/${channelId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
     const data = await res.data;
     return data;
@@ -77,14 +77,14 @@ export async function checkOwnerIsAdmin(senderId: string, channelId: string) {
 
 export async function leaveChannel(senderId: string, channelId: string) {
   try {
-    const token = Cookies.get("access_token");
+    const token = Cookies.get('access_token');
     const res = await axios.get(
       `${process.env.NEXT_PUBLIC_BACK}/channel/leaveChannel/${senderId}/${channelId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
     const data = await res.data;
     return data;
@@ -94,17 +94,17 @@ export async function leaveChannel(senderId: string, channelId: string) {
 export async function changeStatusAdmin(
   senderId: string,
   channelId: string,
-  userId: string
+  userId: string,
 ) {
   try {
-    const token = Cookies.get("access_token");
+    const token = Cookies.get('access_token');
     const res = await axios.get(
       `${process.env.NEXT_PUBLIC_BACK}/channel/changeStatusAdmin/${senderId}/${channelId}/${userId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
     const data = await res.data;
     return data;
@@ -113,14 +113,14 @@ export async function changeStatusAdmin(
 
 export async function getChannel(senderId: string, channelId: string) {
   try {
-    const token = Cookies.get("access_token");
+    const token = Cookies.get('access_token');
     const res = await axios.get(
       `${process.env.NEXT_PUBLIC_BACK}/channel/getChannel/${senderId}/${channelId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
     const data = await res.data;
     return data;
@@ -130,17 +130,17 @@ export async function getChannel(senderId: string, channelId: string) {
 export async function validePassword(
   senderId: string,
   channelId: string,
-  password: string
+  password: string,
 ) {
   try {
-    const token = Cookies.get("access_token");
+    const token = Cookies.get('access_token');
     const res = await axios.get(
       `${process.env.NEXT_PUBLIC_BACK}/channel/validePassword/${senderId}/${channelId}/${password}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
     const data = await res.data;
     return data;
@@ -150,17 +150,17 @@ export async function validePassword(
 export async function kickMember(
   senderId: string,
   channelId: string,
-  userId: string
+  userId: string,
 ) {
   try {
-    const token = Cookies.get("access_token");
+    const token = Cookies.get('access_token');
     const res = await axios.get(
       `${process.env.NEXT_PUBLIC_BACK}/channel/kickmember/${senderId}/${channelId}/${userId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
     const data = await res.data;
     return data;
@@ -170,17 +170,17 @@ export async function kickMember(
 export async function cancelTimeOut(
   senderId: string,
   channelId: string,
-  userId: string
+  userId: string,
 ) {
   try {
-    const token = Cookies.get("access_token");
+    const token = Cookies.get('access_token');
     const res = await axios.get(
       `${process.env.NEXT_PUBLIC_BACK}/channel/cancelTimeOutByAdmin/${senderId}/${channelId}/${userId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
     const data = await res.data;
     return data;
@@ -190,17 +190,17 @@ export async function cancelTimeOut(
 export async function ChangeStatusBanned(
   senderId: string,
   channelId: string,
-  userId: string
+  userId: string,
 ) {
   try {
-    const token = Cookies.get("access_token");
+    const token = Cookies.get('access_token');
     const res = await axios.get(
       `${process.env.NEXT_PUBLIC_BACK}/channel/bannedmember/${senderId}/${channelId}/${userId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
     const data = await res.data;
     return data;
@@ -209,17 +209,17 @@ export async function ChangeStatusBanned(
 
 export async function checkUserIsInChannel(
   senderId: string,
-  channelId: string
+  channelId: string,
 ) {
   try {
-    const token = Cookies.get("access_token");
+    const token = Cookies.get('access_token');
     const res = await axios.get(
       `${process.env.NEXT_PUBLIC_BACK}/channel/checkUserIsInChannel/${senderId}/${channelId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
     const data = await res.data;
     return data;
@@ -228,14 +228,14 @@ export async function checkUserIsInChannel(
 
 export async function joinChannel(senderId: string, channelId: string) {
   try {
-    const token = Cookies.get("access_token");
+    const token = Cookies.get('access_token');
     const res = await axios.get(
       `${process.env.NEXT_PUBLIC_BACK}/channel/joinChannel/${senderId}/${channelId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
     const data = await res.data;
     return data;
@@ -246,17 +246,17 @@ export async function muteUserChannel(
   senderId: string,
   channelId: string,
   userId: string,
-  timer: string
+  timer: string,
 ) {
   try {
-    const token = Cookies.get("access_token");
+    const token = Cookies.get('access_token');
     const res = await axios.get(
       `${process.env.NEXT_PUBLIC_BACK}/channel/muteUserChannel/${senderId}/${channelId}/${userId}/${timer}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
     const data = await res.data;
     return data;
@@ -265,14 +265,14 @@ export async function muteUserChannel(
 
 export async function checkIsMuted(senderId: string, channelId: string) {
   try {
-    const token = Cookies.get("access_token");
+    const token = Cookies.get('access_token');
     const res = await axios.get(
       `${process.env.NEXT_PUBLIC_BACK}/channel/checkIsMuted/${senderId}/${channelId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
     const data = await res.data;
     return data;
