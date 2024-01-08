@@ -22,7 +22,7 @@ const PageChat = () => {
         const temp = await getVueGeust(user.id, idChannel, false);
         if (temp) setGeust(temp);
         else router.back();
-      }
+      } else router.back();
     };
     if (geust.id === '-1' && user.id !== '-1') getDataGeust();
   }, [user.id]);
@@ -96,12 +96,7 @@ const PageChat = () => {
           </div>
         </div>
       ) : (
-        <div
-          className="text-white"
-          onClick={() => {
-            console.log(user.id, geust.id);
-          }}
-        >
+        <div>
           ok
         </div>
       )}

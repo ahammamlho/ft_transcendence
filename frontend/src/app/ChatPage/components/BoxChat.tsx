@@ -53,7 +53,7 @@ const BoxChat = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [Allmsg, isTyping, user.id, geust.id]);
+  }, [Allmsg, user.id, geust.id]);
 
   useEffect(() => {
     if (user.id !== '-1' && socket) {
@@ -151,7 +151,7 @@ const BoxChat = () => {
         socket.off('mutedUserInChannel', checkUserIsMuted);
       };
     }
-  }, [socket, geust.id, user.id, updateInfo]);
+  }, [socket, geust.id, user.id]);
 
   const handleSendMessage = () => {
     if (msg.trim() != '') {
@@ -216,6 +216,8 @@ const BoxChat = () => {
     }
   }, [socket, Allmsg.length]);
 
+
+  // for game
   useEffect(() => {
     if (socket) {
       const updateStatusGeust = async () => {
@@ -263,11 +265,10 @@ const BoxChat = () => {
               }
               sx={{
                 '& .MuiBadge-badge': {
-                  backgroundColor: `${
-                    geust.status === 'ACTIF' && isBlocked === 0
-                      ? '#07F102'
-                      : '#B4B4B4'
-                  }`,
+                  backgroundColor: `${geust.status === 'ACTIF' && isBlocked === 0
+                    ? '#07F102'
+                    : '#B4B4B4'
+                    }`,
                   width: 15,
                   height: 15,
                   borderRadius: 50,
@@ -307,9 +308,8 @@ const BoxChat = () => {
               }}
               size="2"
               weight="bold"
-              className={`${
-                geust.isUser ? 'hover:underline cursor-pointer pl-2' : 'pl-2'
-              }`}
+              className={`${geust.isUser ? 'hover:underline cursor-pointer pl-2' : 'pl-2'
+                }`}
             >
               {geust.nickname}
             </Text>
@@ -401,8 +401,7 @@ const BoxChat = () => {
 
             <div
               className={`flex items-center justify-center w-[30px] h-[30px] 
-                rounded-[10px] bg-[#254BD6]  m-[1px] ${
-                  isMuted ? '' : 'cursor-pointer'
+                rounded-[10px] bg-[#254BD6]  m-[1px] ${isMuted ? '' : 'cursor-pointer'
                 } `}
             >
               {!isMuted ? (

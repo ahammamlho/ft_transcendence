@@ -22,7 +22,7 @@ export default function FriendItem(prompt: {
   itemsStatus: string;
 }) {
   // ==================== handleUnblock =====================
-  const { user, socket, setGeust } = useGlobalContext();
+  const { user, socket, setGeust, geust } = useGlobalContext();
   const contxt = useGlobalDataContext();
   const router = useRouter();
   async function handleUnblock(): Promise<void> {
@@ -215,6 +215,8 @@ export default function FriendItem(prompt: {
                     prompt.friendInfo.id
                   );
                   setGeust(geustTemp);
+                  console.log(geust)
+
                   router.push("/ChatPage");
                 }}
               />
