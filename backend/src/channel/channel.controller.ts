@@ -74,9 +74,9 @@ export class ChannelController {
     return this.channelService.getChannel(senderId, channelId);
   }
 
-  @Get('/getMembersChannel/:id')
-  getMembersChannel(@Param('id') id: string) {
-    return this.channelService.getMembersChannel(id);
+  @Get('/getMembersChannel/:senderId/:id')
+  getMembersChannel(@Param('senderId') senderId: string, @Param('id') id: string) {
+    return this.channelService.getMembersChannel(senderId, id);
   }
 
 
@@ -109,7 +109,7 @@ export class ChannelController {
   }
 
 
-  @Get('/getValideChannels/:senderId')
+  @Get('/getValideChannels/:senderId') // null
   getValideChannels(@Param('senderId') senderId: string) {
     return this.channelService.getValideChannels(senderId);
   }

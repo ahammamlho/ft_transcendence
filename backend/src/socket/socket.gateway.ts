@@ -60,7 +60,7 @@ export class SocketGateway
     }
   }
 
-  @UseGuards(JwtGuardSocket)
+  // @UseGuards(JwtGuardSocket)
   @SubscribeMessage("createMessage")
   async createMessage(@MessageBody() createMessageDto: CreateMessageDto) {
     await this.messagesService.createMessage(this.server, createMessageDto);

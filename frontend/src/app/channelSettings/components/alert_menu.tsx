@@ -13,7 +13,6 @@ import {
   changeStatusAdmin,
   kickMember,
   muteUserChannel,
-  validePassword,
 } from "../../ChatPage/api/fetch-channel";
 import { Text } from "@radix-ui/themes";
 import { MdOutlineCancel } from "react-icons/md";

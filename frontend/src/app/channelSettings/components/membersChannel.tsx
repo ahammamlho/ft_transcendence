@@ -27,11 +27,11 @@ export default function MembersChannel() {
   const router = useRouter();
 
   const getMemberChannel = async () => {
-    if (geust.id !== '-1') {
+    if (geust.id !== '-1', user.id != '-1') {
       const tmp: {
         regularMembres: memberChannelDto[];
         bannedMembers: memberChannelDto[];
-      } = await getMembersChannel(geust.id);
+      } = await getMembersChannel(user.id, geust.id);
       setMembers(tmp.regularMembres);
       setBannedMembers(tmp.bannedMembers);
       setMembersFlitred(tmp.regularMembres);
@@ -40,13 +40,12 @@ export default function MembersChannel() {
   };
 
   const getMemberChannelForEmit = async (data: { idChannel: string }) => {
-    //console.log(geust.id)
-    //console.log(data.idChannel);
+
     if (geust.id === data.idChannel) {
       const tmp: {
         regularMembres: memberChannelDto[];
         bannedMembers: memberChannelDto[];
-      } = await getMembersChannel(geust.id);
+      } = await getMembersChannel(user.id, geust.id);
       setMembers(tmp.regularMembres);
       setBannedMembers(tmp.bannedMembers);
       setMembersFlitred(tmp.regularMembres);
