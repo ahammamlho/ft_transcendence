@@ -20,12 +20,15 @@ import {
 import AlertAddChannel from './AddChannel';
 import { extractHoursAndM } from './widgetMsg';
 
+import { useRouter } from 'next/navigation';
+
 enum Status {
   ACTIF = 'ACTIF',
   INACTIF = 'INACTIF',
 }
 
 const ListUser = () => {
+  const router = useRouter();
   const { setGeust, geust, socket, user, displayChat, setDisplayChat } =
     useGlobalContext();
 
@@ -46,7 +49,7 @@ const ListUser = () => {
         socket.off('emitNewMessage', getListUsers);
       };
     }
-  }, [socket, user.id, geust.id, direct]);
+  }, [socket, user.id, direct]);
 
   const getDataGeust = async (tmp: messageDto) => {
     let geustTemp: geustDto;
@@ -57,20 +60,20 @@ const ListUser = () => {
 
   useEffect(() => {
     if (socket) {
-      const updateStatusGeust = async () => {
-        if (geust.id !== '-1' && geust.isUser) {
-          const geustTemp = await getUserGeust(geust.id);
-          if (geustTemp !== undefined) setGeust(geustTemp);
-        }
-        const usersList = await getUserForMsg(user.id);
-        if (usersList !== undefined) setItemList(usersList);
-      };
-      socket.on('updateStatusGeust', updateStatusGeust);
-      return () => {
-        socket.off('updateStatusGeust', updateStatusGeust);
-      };
+      // const updateStatusGeust = async () => {
+      //   if (geust.id !== '-1' && geust.isUser) {
+      //     const geustTemp = await getUserGeust(geust.id);
+      //     if (geustTemp !== undefined) setGeust(geustTemp);
+      //   }
+      //   const usersList = await getUserForMsg(user.id);
+      //   if (usersList !== undefined) setItemList(usersList);
+      // };
+      // socket.on('updateStatusGeust', updateStatusGeust);
+      // return () => {
+      //   socket.off('updateStatusGeust', updateStatusGeust);
+      // };
     }
-  }, [socket, geust.id]);
+  }, [socket]);
 
   useEffect(() => {
     if (socket && user.id !== '-1' && geust.id !== '-1' && geust.isUser) {
@@ -90,39 +93,10 @@ const ListUser = () => {
   }, [socket, user.id, geust.id]);
 
   useEffect(() => {
-    if (geust.id === '-1') {
-      if (direct) {
-        if (itemListDirect.length !== 0) {
-          getDataGeust(itemListDirect[0]);
-        } else if (itemListChannel.length !== 0) {
-          getDataGeust(itemListChannel[0]);
-        }
-      } else {
-        if (itemListChannel.length !== 0) {
-          getDataGeust(itemListChannel[0]);
-        } else if (itemListDirect.length !== 0) {
-          getDataGeust(itemListDirect[0]);
-        }
-      }
-    }
-  }, [direct, itemList, geust.id]);
-
-  useEffect(() => {
+    console.log(geust)
     if (socket) {
       const kickedFromChannel = async (data: any) => {
-        //console.log("kickedFromChannel called", data)
         if (geust.id === data.channelId) {
-          setGeust({
-            isUser: false,
-            id: '-1',
-            nickname: 'blabla',
-            profilePic: '',
-            status: Status.INACTIF,
-            lastSee: 0,
-            lenUser: 0,
-            idUserOwner: '',
-            inGaming: false,
-          });
           setDirect(true);
         } else {
           const usersList = await getUserForMsg(user.id);
@@ -136,12 +110,10 @@ const ListUser = () => {
     }
   }, [socket, geust.id]);
 
-  useEffect(() => {
-    if (geust.id !== '-1' && !geust.isUser)
-      localStorage.setItem('geust.id-channel', geust.id);
-  }, [geust.id]);
+
 
   const widgetUser = (el: messageDto, index: number) => {
+
     return (
       <Flex
         align="center"
@@ -152,7 +124,10 @@ const ListUser = () => {
         }}
         onClick={() => {
           if (el.isDirectMessage || el.contentMsg !== '') {
-            getDataGeust(el);
+            if (user.id === el.receivedId)
+              router.push(`/ChatPage/${el.senderId}`);
+            router.push(`/ChatPage/${el.receivedId}`);
+            // getDataGeust(el);
             setDisplayChat(true);
           }
         }}
@@ -162,11 +137,10 @@ const ListUser = () => {
             badgeContent={<div>{el.inGaming ? <FaGamepad /> : <></>}</div>}
             sx={{
               '& .MuiBadge-badge': {
-                backgroundColor: `${
-                  el.receivedStatus === 'ACTIF' && !el.isBlocked
-                    ? '#07F102'
-                    : '#B4B4B4'
-                }`,
+                backgroundColor: `${el.receivedStatus === 'ACTIF' && !el.isBlocked
+                  ? '#07F102'
+                  : '#B4B4B4'
+                  }`,
                 width: 15,
                 height: 15,
                 borderRadius: 50,
@@ -273,6 +247,7 @@ const ListUser = () => {
         search === '*')
     );
   });
+
   const userWidgetDirect: JSX.Element | JSX.Element[] =
     itemListDirect.length != 0 ? (
       itemListDirect.map((el, index) => {

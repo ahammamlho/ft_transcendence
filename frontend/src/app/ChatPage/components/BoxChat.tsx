@@ -23,10 +23,14 @@ import { useRouter } from 'next/navigation';
 import { FaGamepad } from 'react-icons/fa';
 import PlayInvite from '../../GamePage/components/Invite';
 import WelcomeMessage from './welcome';
+import { usePathname } from "next/navigation";
 
 const BoxChat = () => {
   const router = useRouter();
-
+  const pathname = usePathname();
+  useEffect(() => {
+    console.log("pathname=", pathname);
+  }, [pathname]);
   const scrollAreaRef = useRef<HTMLDivElement | null>(null);
 
   const [msg, setMsg] = useState('');
