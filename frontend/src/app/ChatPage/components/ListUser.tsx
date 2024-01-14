@@ -19,14 +19,15 @@ import {
 } from '../api/fetch-users';
 import AlertAddChannel from './AddChannel';
 import { extractHoursAndM } from './widgetMsg';
+import { Socket } from 'socket.io-client';
 
 enum Status {
   ACTIF = 'ACTIF',
   INACTIF = 'INACTIF',
 }
 
-const ListUser = () => {
-  const { setGeust, geust, socket, user, displayChat, setDisplayChat } =
+const ListUser = ({ socketChat }: { socketChat: Socket }) => {
+  const { setGeust, geust, user, socket, displayChat, setDisplayChat } =
     useGlobalContext();
 
   const [itemList, setItemList] = useState<messageDto[]>([]);
@@ -35,25 +36,20 @@ const ListUser = () => {
   const [search, setSearch] = useState<string>('');
 
   useEffect(() => {
-    if (socket && user.id !== '-1') {
+    if (user.id !== '-1') {
       const getListUsers = async () => {
         const usersList = await getUserForMsg(user.id);
         if (usersList !== undefined) setItemList(usersList);
       };
       getListUsers();
-      socket.on('emitNewMessage', getListUsers);
+      socketChat.on('emitNewMessage', getListUsers);
       return () => {
-        socket.off('emitNewMessage', getListUsers);
+        socketChat.off('emitNewMessage', getListUsers);
       };
     }
-  }, [socket, user.id, geust.id, direct]);
+  }, [user.id, geust.id, direct]);
 
-  const getDataGeust = async (tmp: messageDto) => {
-    let geustTemp: geustDto;
-    if (tmp.isDirectMessage) geustTemp = await getUserGeust(tmp.receivedId);
-    else geustTemp = await getChannelGeust(user.id, tmp.receivedId);
-    if (geustTemp !== undefined) setGeust(geustTemp);
-  };
+
 
   useEffect(() => {
     if (socket) {
@@ -73,7 +69,7 @@ const ListUser = () => {
   }, [socket, geust.id]);
 
   useEffect(() => {
-    if (socket && user.id !== '-1' && geust.id !== '-1' && geust.isUser) {
+    if (user.id !== '-1' && geust.id !== '-1' && geust.isUser) {
       const updateStatusGeust = async () => {
         if (geust.id !== '-1' && geust.isUser) {
           const geustTemp = await getUserGeust(geust.id);
@@ -82,59 +78,45 @@ const ListUser = () => {
         const usersList = await getUserForMsg(user.id);
         if (usersList !== undefined) setItemList(usersList);
       };
-      socket.on('blockUserToUser', updateStatusGeust);
+      socketChat.on('blockUserToUser', updateStatusGeust);
       return () => {
-        socket.off('blockUserToUser', updateStatusGeust);
+        socketChat.off('blockUserToUser', updateStatusGeust);
       };
     }
-  }, [socket, user.id, geust.id]);
+  }, [user.id, geust.id]);
+
+
+
+  const getDataGeust = async (tmp: messageDto) => {
+    let geustTemp: geustDto;
+    if (tmp.isDirectMessage) geustTemp = await getUserGeust(tmp.receivedId);
+    else geustTemp = await getChannelGeust(user.id, tmp.receivedId);
+    if (geustTemp !== undefined) setGeust(geustTemp);
+  };
 
   useEffect(() => {
+    const getData = async (id: string) => {
+      const tmp = await getUserGeust(id);
+      setGeust(tmp);
+    }
     if (geust.id === '-1') {
-      if (direct) {
+      const idGeust = localStorage.getItem("geust.id-user") || "id";
+      localStorage.removeItem('geust.id-user');
+      if (idGeust !== 'id')
+        getData(idGeust);
+      else {
         if (itemListDirect.length !== 0) {
           getDataGeust(itemListDirect[0]);
         } else if (itemListChannel.length !== 0) {
           getDataGeust(itemListChannel[0]);
         }
-      } else {
-        if (itemListChannel.length !== 0) {
-          getDataGeust(itemListChannel[0]);
-        } else if (itemListDirect.length !== 0) {
-          getDataGeust(itemListDirect[0]);
-        }
       }
+
     }
+
   }, [direct, itemList, geust.id]);
 
-  useEffect(() => {
-    if (socket) {
-      const kickedFromChannel = async (data: any) => {
-        //console.log("kickedFromChannel called", data)
-        if (geust.id === data.channelId) {
-          setGeust({
-            isUser: false,
-            id: '-1',
-            nickname: 'blabla',
-            profilePic: '',
-            status: Status.INACTIF,
-            lastSee: 0,
-            lenUser: 0,
-            idUserOwner: '',
-            inGaming: false,
-          });
-          setDirect(true);
-        } else {
-          const usersList = await getUserForMsg(user.id);
-          if (usersList !== undefined) setItemList(usersList);
-        }
-      };
-      socket.on('kickedFromChannel', kickedFromChannel);
-      return () => {
-        socket.off('kickedFromChannel', kickedFromChannel);
-      };
-    }
-  }, [socket, geust.id]);
+
 
   useEffect(() => {
     if (geust.id !== '-1' && !geust.isUser)
@@ -162,11 +144,10 @@ const ListUser = () => {
             badgeContent={<div>{el.inGaming ? <FaGamepad /> : <></>}</div>}
             sx={{
               '& .MuiBadge-badge': {
-                backgroundColor: `${
-                  el.receivedStatus === 'ACTIF' && !el.isBlocked
-                    ? '#07F102'
-                    : '#B4B4B4'
-                }`,
+                backgroundColor: `${el.receivedStatus === 'ACTIF' && !el.isBlocked
+                  ? '#07F102'
+                  : '#B4B4B4'
+                  }`,
                 width: 15,
                 height: 15,
                 borderRadius: 50,
@@ -243,11 +224,7 @@ const ListUser = () => {
             onClick={async () => {
               if (!el.isChannProtected) {
                 await joinChannel(user.id, el.receivedId);
-                socket?.emit('updateChannel', {
-                  senderId: user.id,
-                  receivedId: el.receivedId,
-                  isDirectMessage: false,
-                });
+
                 getDataGeust(el);
                 setDisplayChat(true);
               } else {
@@ -427,11 +404,7 @@ const ListUser = () => {
                   setOpenConfirm(false);
                   await joinChannel(user.id, idChannel);
                   const gst = await getChannelGeust(user.id, idChannel);
-                  socket?.emit('updateChannel', {
-                    senderId: user.id,
-                    receivedId: idChannel,
-                    isDirectMessage: false,
-                  });
+
                   setGeust(gst);
                   setDisplayChat(true);
                   setPassword('');

@@ -5,12 +5,12 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-
+import { z } from 'zod';
 import { BlockedUser, Prisma, Status, User } from '@prisma/client';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async findById(id: string) {
     try {
@@ -198,7 +198,6 @@ export class UserService {
       const isMemberExist = await this.prisma.channelMember.findMany({
         where: { userId: senderId, channelId: id },
       });
-      console.log('isMemberExist-->', isMemberExist);
       if (isMemberExist.length !== 0) {
         const channel = await this.prisma.channel.findUnique({ where: { id } });
         const members = await this.prisma.channelMember.findMany({
@@ -236,7 +235,7 @@ export class UserService {
         },
       });
       return user;
-    } catch (error) {}
+    } catch (error) { }
   }
 
   async setTwoFactorAuthSecret(secret: string, intra_id: string) {
@@ -281,6 +280,14 @@ export class UserService {
     if (usr.nickname === nickname) {
       return;
     }
+    const validName = z
+      .string()
+      .min(3)
+      .max(15)
+      .refine((name) => /^[a-zA-Z0-9_\-]+$/.test(name)).safeParse(nickname);
+    if (!validName.success) {
+      throw new HttpException('Invalid nickname', HttpStatus.BAD_REQUEST);
+    }
     try {
       const user = await this.prisma.user.update({
         where: {
@@ -311,7 +318,7 @@ export class UserService {
           profilePic: process.env.BACK_HOST + `/${path}`,
         },
       });
-    } catch (error) {}
+    } catch (error) { }
   }
 
   async findByIntraId(intra_id: string) {

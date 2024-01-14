@@ -12,7 +12,7 @@ async function bootstrap() {
     }));
     app.enableCors({
         origin: process.env.FRONT_HOST,
-        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
         credentials: true,
     });
     app.use(cookieParser());

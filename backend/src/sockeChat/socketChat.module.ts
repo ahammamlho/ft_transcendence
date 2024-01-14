@@ -1,23 +1,21 @@
 import { Module } from "@nestjs/common";
 import { ChannelService } from "src/channel/channel.service";
 import { FriendshipService } from "src/friendship/friendship.service";
-import { GameService } from "src/game/game.service";
+import { MessagesService } from "src/messages/messages.service";
 import { NotificationService } from "src/notification/notification.service";
-import { PrismaService } from "src/prisma/prisma.service";
 import { UserService } from "src/user/user.service";
-import { SocketGateway } from "./socket.gateway";
-import { SocketGatewayService } from "./socket.service";
+import { SocketChatGateway } from "./socketChat.gateway";
+import { SocketChatGatewayService } from "./socketChat.service";
 
 @Module({
   providers: [
-    SocketGateway,
-    SocketGatewayService,
+    SocketChatGateway,
+    SocketChatGatewayService,
+    MessagesService,
     UserService,
     ChannelService,
-    GameService,
     FriendshipService,
-    PrismaService,
     NotificationService
   ],
 })
-export class SocketGatewayModule { }
+export class SocketChatGatewayModule { }

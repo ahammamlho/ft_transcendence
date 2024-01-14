@@ -49,7 +49,7 @@ interface ContextProps {
 
 const GlobalContext = createContext<ContextProps>({
   isAuthenticated: false,
-  setIsAuthenticated: () => {},
+  setIsAuthenticated: () => { },
 
   inviteData: {
     userId1: '-1',
@@ -58,13 +58,13 @@ const GlobalContext = createContext<ContextProps>({
     selectedMap: 'isLeft',
     isLeft: true,
   },
-  setInviteData: () => {},
+  setInviteData: () => { },
 
   displayChat: false,
-  setDisplayChat: () => {},
+  setDisplayChat: () => { },
 
   updateInfo: 1,
-  setUpdateInfo: () => {},
+  setUpdateInfo: () => { },
 
   user: {
     id: '-1',
@@ -79,7 +79,7 @@ const GlobalContext = createContext<ContextProps>({
     level: '0.0',
     nbrNotifications: 0,
   },
-  setUser: () => {},
+  setUser: () => { },
 
   geust: {
     isUser: true,
@@ -92,7 +92,7 @@ const GlobalContext = createContext<ContextProps>({
     idUserOwner: '',
     inGaming: false,
   },
-  setGeust: () => {},
+  setGeust: () => { },
 
   socket: null,
 });
@@ -156,8 +156,6 @@ export const GlobalContextProvider = ({
         },
       });
       setSocket(socket);
-      socket.on('connect', () => {});
-      socket.on('disconnect', () => {});
     }
   }, [user.id]);
 
@@ -174,7 +172,6 @@ export const GlobalContextProvider = ({
         });
 
         if (res.ok) {
-          console.log('---------- fetch owner user data ----------');
           const owner = await res.json();
           setIsAuthenticated(true);
           setUser(owner);
@@ -209,7 +206,6 @@ export const GlobalContextProvider = ({
   const [data, setData] = useState('');
 
   useEffect(() => {
-    // socket here <<< ---------------------------------->>>
     if (socket) {
       socket.on('invite', (data) => {
         setData(data);
@@ -244,6 +240,8 @@ export const GlobalContextProvider = ({
   const [openConfirm, setOpenConfirm] = useState(false);
   const [inviterdName, setInvitedName] = useState('');
 
+  console.log('---------- useContext Called ----------');
+  if (socket === null) return <></>
   return (
     <GlobalContext.Provider
       value={{
@@ -312,7 +310,6 @@ export const GlobalContextProvider = ({
                     onClick={async () => {
                       socket?.emit('decline', inviteData.userId1);
                       setOpenConfirm(false);
-
                       // router.push("/GamePage/invite");
                     }}
                     className="w-fit font-meduim  rounded-md   text-white bg-[#323C52] hover:bg-[#43516e]

@@ -115,14 +115,7 @@ export class SocketGatewayService {
     } else wss.to(ids.receivedId).emit("emitNewMessage", {});
   }
 
-  async updateChannel(ids: CreateMessageDto, wss: Server) {
-    const channelMembers = await this.prisma.channelMember.findMany({
-      where: { channelId: ids.receivedId },
-    });
-    for (const member of channelMembers) {
-      wss.to(member.userId).emit("updateChannel", { idChannel: ids.receivedId });
-    }
-  }
+
 
 
 
@@ -135,39 +128,9 @@ export class SocketGatewayService {
     }
   }
 
-  async changeStatusMember(idChannel: string, wss: Server) {
-    const channelMembers = await this.prisma.channelMember.findMany({
-      where: { channelId: idChannel },
-    });
-    for (const member of channelMembers) {
-      wss.to(member.userId).emit("changeStatusMember", { channelId: idChannel });
-    }
-  }
-
-  async kickedFromChannel(ids: any, wss: Server) {
-    const channelMembers = await this.prisma.channelMember.findMany({
-      where: { channelId: ids.channelId },
-    });
-    for (const member of channelMembers) {
-      wss.to(member.userId).emit("kickedFromChannel", ids);
-    }
-    wss.to(ids.memberId).emit("kickedFromChannel", ids);
-  }
 
 
 
-  async messagsSeenEmit(ids: CreateMessageDto, wss: Server) {
-    await this.prisma.message.updateMany({
-      where: {
-        senderId: ids.receivedId,
-        receivedId: ids.senderId,
-      },
-      data: {
-        messageStatus: MessageStatus.Seen,
-      },
-    });
-    wss.to(ids.receivedId).emit("messagsSeenEmit");
-  }
 
 
 }

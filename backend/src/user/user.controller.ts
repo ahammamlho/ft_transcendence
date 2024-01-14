@@ -20,7 +20,7 @@ import { UserService } from './user.service';
 @Controller('user')
 @UseGuards(JwtGuard)
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) { }
 
   @Get('geust/:id')
   async getUserProfile(@Param('id') id: string) {
@@ -32,7 +32,7 @@ export class UserController {
     try {
       const user = await this.userService.findByOwnerById(req.user.sub);
       return user;
-    } catch (error) {}
+    } catch (error) { }
   }
 
   @Get('/all')

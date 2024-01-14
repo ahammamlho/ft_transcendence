@@ -65,12 +65,7 @@ export default function UpdateChannel() {
       }
     };
     if (geust.id !== '-1' && !geust.isUser) getData({ idChannel: geust.id });
-    if (socket) {
-      socket.on('updateChannel', getData);
-      return () => {
-        socket.off('updateChannel', getData);
-      };
-    }
+
   }, [socket, geust.id]);
 
   const [isOwnerAdmin, setIsOwnerAdmin] = useState(false);
@@ -80,7 +75,7 @@ export default function UpdateChannel() {
       setIsOwnerAdmin(tmp);
     };
     if (geust.id !== '-1' && user.id !== '-1' && !geust.isUser) getData();
-  }, []);
+  }, [socket, geust.id]);
 
   const isSameChannel = (
     channel1: channelDto,
@@ -97,16 +92,11 @@ export default function UpdateChannel() {
 
   const updateChannelServer = async () => {
     const res = await updateChannel(channelData, user.id, geust.id);
-    if (res && res.status === 202) {
-      setErrorName(res.error);
-    } else if (res && res.status === 200) {
-      setChannel(res.channel);
-      setChannelData(res.channel);
-      socket?.emit('updateChannel', {
-        content: '',
-        senderId: user.id,
-        receivedId: geust.id,
-      });
+    console.log("res=", res);
+    if (res && res.status === 409) {
+      setErrorName('Name is already used');
+    } else if (res && res.status === 201) {
+      setChannel(channelData);
       toast.success('Channel has been updated');
     }
   };
@@ -329,7 +319,8 @@ export default function UpdateChannel() {
                 channelData.channelPassword,
               );
               if (
-                parsName.success &&
+                parsName.success
+                &&
                 (parskey.success || !channelData.protected)
               ) {
                 updateChannelServer();
@@ -340,7 +331,7 @@ export default function UpdateChannel() {
               }
             }
           }}
-          className="rounded-sm text-[#254BD6] hover:text-white hover:bg-[#254BD6] ml-3 p-1 px-3"
+          className="rounded-lg text-[#254BD6] hover:text-white hover:bg-[#254BD6] ml-6 p-0.5 px-3 border "
         >
           <Text size="3" weight="bold">
             {' '}

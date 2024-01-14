@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import {
   BannedMember,
   Channel,
@@ -8,18 +8,18 @@ import {
   Prisma,
   User,
 } from '@prisma/client';
+import { AES, enc } from 'crypto-js';
+import { NotificationService } from 'src/notification/notification.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateChannelDto, memberChannelDto } from './dto/create-channel.dto';
-import * as bcrypt from 'bcrypt';
-import { NotificationService } from 'src/notification/notification.service';
-// import { AES, enc } from 'crypto-js';
+import { z } from 'zod';
 
 @Injectable()
 export class ChannelService {
   constructor(
     private prisma: PrismaService,
     private readonly notificationService: NotificationService,
-  ) {}
+  ) { }
 
   async createMessageInfoChannel(
     senderId: string,
@@ -48,7 +48,7 @@ export class ChannelService {
       const bytes = AES.decrypt(cipherText, process.env.CRYPTO_JS_KEY);
       const decrypted = bytes.toString(enc.Utf8);
       return decrypted;
-    } catch (err) {}
+    } catch (err) { }
   };
 
   async createChannel(createChannelDto: CreateChannelDto, senderId: string) {
@@ -125,6 +125,9 @@ export class ChannelService {
     updateChannelDto: CreateChannelDto,
   ) {
     try {
+
+      console.log('000000000000')
+
       const memberAdmin = await this.prisma.channelMember.findFirst({
         where: {
           channelId: channelId,
@@ -134,11 +137,29 @@ export class ChannelService {
       });
       if (!memberAdmin) return { status: 204, error: 'you are not admin' };
       let pass: string = '';
-      if (updateChannelDto.channelPassword != '' && updateChannelDto.protected)
+      if (updateChannelDto.channelPassword != '' && updateChannelDto.protected) {
+        const validPass = z
+          .string()
+          .min(3)
+          .max(12)
+          .refine((name) => /^[a-zA-Z0-9_\-@#*!.]+$/.test(name)).safeParse(updateChannelDto.channelPassword);
+        if (!validPass.success) {
+          throw new HttpException('Invalid password', HttpStatus.BAD_REQUEST);
+        }
         pass = AES.encrypt(
           updateChannelDto.channelPassword,
           process.env.CRYPTO_JS_KEY,
         );
+      }
+
+      const validName = z
+        .string()
+        .min(3)
+        .max(15)
+        .refine((name) => /^[a-zA-Z0-9_-]+$/.test(name)).safeParse(updateChannelDto.channelName);
+      if (!validName.success) {
+        throw new HttpException('Invalid nickname', HttpStatus.BAD_REQUEST);
+      }
       const channelUpdate: Channel = await this.prisma.channel.update({
         where: { id: channelId },
         data: {
@@ -162,21 +183,18 @@ export class ChannelService {
       let pass2 = '';
       if (channelUpdate.channelPassword !== '')
         pass2 = this.decryptMessage(channelUpdate.channelPassword);
-      return {
-        status: 200,
-        channel: {
-          ...channelUpdate,
-          channelPassword: pass2,
-        },
-      };
+
+      return { ...channelUpdate, channelPassword: pass2 };
     } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      console.log(error);
+      if (error instanceof HttpException) {
+        throw error;
+      } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
-          return { status: 202, error: 'Name is already used' };
-        } else {
-          return { error: true };
+          throw new HttpException('Name is already used', HttpStatus.CONFLICT);
         }
       }
+      throw new HttpException('Internal Server Error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -195,7 +213,7 @@ export class ChannelService {
           },
         });
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   async checkOwnerIsAdmin(senderId: string, channelId: string) {
@@ -207,7 +225,7 @@ export class ChannelService {
       });
       if (user) return user.isAdmin;
     } catch (error) {
-      return { error: true };
+      return false;
     }
   }
 
@@ -235,33 +253,40 @@ export class ChannelService {
         // });
       }
     } catch (error) {
-      return { error: true };
     }
   }
 
   async getChannel(senderId: string, channelId: string) {
     try {
-      const channel = await this.prisma.channel.findUnique({
+      const member = await this.prisma.channelMember.findMany({
         where: {
-          id: channelId,
-        },
+          userId: senderId,
+          channelId: channelId
+        }
       });
+      if (member.length !== 0) {
+        const channel = await this.prisma.channel.findUnique({
+          where: {
+            id: channelId,
+          },
+        });
 
-      if (channel) {
-        let pass = '';
-        if (channel.channelPassword !== '')
-          pass = this.decryptMessage(channel.channelPassword);
-        return {
-          channelName: channel.channelName,
-          channelType: channel.channelType,
-          channelPassword: pass,
-          protected: channel.protected,
-          avatar: channel.avatar,
-          channelOwnerId: channel.channelOwnerId,
-        };
+        if (channel) {
+          let pass = '';
+          if (channel.channelPassword !== '')
+            pass = this.decryptMessage(channel.channelPassword);
+          return {
+            channelName: channel.channelName,
+            channelType: channel.channelType,
+            channelPassword: pass,
+            protected: channel.protected,
+            avatar: channel.avatar,
+            channelOwnerId: channel.channelOwnerId,
+          };
+        }
       }
     } catch (error) {
-      return { error: true };
+      return null;
     }
   }
 
@@ -327,8 +352,8 @@ export class ChannelService {
           member.userId === channel.channelOwnerId
             ? 'Owner'
             : member.isAdmin
-            ? 'Admin'
-            : 'User',
+              ? 'Admin'
+              : 'User',
         unmuted_at,
       };
       result.push(temp);
@@ -339,14 +364,22 @@ export class ChannelService {
     return result;
   }
 
-  async getMembersChannel(id: string) {
+  async getMembersChannel(senderId: string, channelId: string) {
     try {
-      const bannedMembers: memberChannelDto[] = await this.getMembersBanned(id);
-      const regularMembres: memberChannelDto[] =
-        await this.getRegularMembers(id);
-      return { bannedMembers, regularMembres };
+      const isMember = await this.prisma.channelMember.findMany({
+        where: {
+          userId: senderId,
+          channelId,
+        }
+      })
+      if (isMember.length !== 0) {
+        const bannedMembers: memberChannelDto[] = await this.getMembersBanned(channelId);
+        const regularMembres: memberChannelDto[] =
+          await this.getRegularMembers(channelId);
+        return { bannedMembers, regularMembres };
+      }
     } catch (error) {
-      return { error: true };
+      return null;
     }
   }
 
@@ -357,26 +390,28 @@ export class ChannelService {
           Unique_userId_channelId: { channelId, userId: senderId },
         },
       });
-      const user: ChannelMember = await this.prisma.channelMember.findUnique({
-        where: {
-          Unique_userId_channelId: { channelId, userId },
-        },
-      });
+
       if (admin.isAdmin) {
-        const update: ChannelMember = await this.prisma.channelMember.update({
+        const user: ChannelMember = await this.prisma.channelMember.findUnique({
           where: {
             Unique_userId_channelId: { channelId, userId },
           },
-          data: {
-            isAdmin: !user.isAdmin,
-          },
         });
+        if (user) {
+          await this.prisma.channelMember.update({
+            where: {
+              Unique_userId_channelId: { channelId, userId },
+            },
+            data: {
+              isAdmin: !user.isAdmin,
+            },
+          });
+        }
         return true;
       }
       return false;
-    } catch (error) {
-      return { error: true };
-    }
+    } catch (error) { }
+    return false;
   }
 
   async leaveChannel(senderId: string, channelId: string) {
@@ -395,7 +430,7 @@ export class ChannelService {
         },
       });
 
-      if (user) {
+      if (user && channel) {
         await this.prisma.channelMember.delete({
           where: { Unique_userId_channelId: { channelId, userId: senderId } },
         });
@@ -416,9 +451,9 @@ export class ChannelService {
               });
             }
             if (newOwner) {
-              const user = await this.prisma.user.findUnique({
-                where: { id: newOwner.userId },
-              });
+              // const user = await this.prisma.user.findUnique({
+              //   where: { id: newOwner.userId },
+              // });
               await this.prisma.channel.update({
                 where: { id: channelId },
                 data: {
@@ -441,8 +476,8 @@ export class ChannelService {
       }
       return false;
     } catch (error) {
-      return { error: true };
     }
+    return false;
   }
 
   async KickMember(senderId: string, channelId: string, userId: string) {
@@ -464,10 +499,9 @@ export class ChannelService {
         this.createMessageInfoChannel(senderId, channelId, userId, 'kicked');
         return true;
       }
-      return false;
-    } catch (error) {
-      return { error: true };
-    }
+
+    } catch (error) { }
+    return false;
   }
 
   async checkUserIsInChannel(senderId: string, channelId: string) {
@@ -518,10 +552,8 @@ export class ChannelService {
         }
         return true;
       }
-      return false;
-    } catch (error) {
-      return { error: true };
-    }
+    } catch (error) { }
+    return false;
   }
 
   async validePassword(senderId: string, channelId: string, password: string) {
@@ -530,17 +562,17 @@ export class ChannelService {
         where: { id: channelId },
       });
 
-      let pass = '';
-      if (channel.channelPassword !== '')
-        pass = this.decryptMessage(channel.channelPassword);
-      if (pass === password) {
-        return true;
-      } else {
-        return false;
+      const user = await this.prisma.channelMember.findMany({ where: { channelId, userId: senderId } })
+      if (user.length === 0) {
+        let pass = '';
+        if (channel.channelPassword !== '')
+          pass = this.decryptMessage(channel.channelPassword);
+        if (pass === password) {
+          return true;
+        }
       }
-    } catch (error) {
-      return { error: true };
-    }
+    } catch (error) { }
+    return false;
   }
 
   async checkIsBanner(senderId: string, channelId: string) {
@@ -551,10 +583,10 @@ export class ChannelService {
         },
       );
       if (bannedUser) return true;
-      return false;
     } catch (error) {
-      return { error: true };
+      return false;
     }
+    return false;
   }
 
   async getValideChannels(senderId: string) {
@@ -565,8 +597,8 @@ export class ChannelService {
       const result = await Promise.all(
         publicChannels
           .filter(async (channel: Channel) => {
-            const test1 = await this.checkIsBanner(senderId, channel.id);
-            return !test1;
+            const isBanner = await this.checkIsBanner(senderId, channel.id);
+            return !isBanner;
           })
           .map(async (channel: Channel) => {
             let status: string = 'user';
@@ -596,14 +628,18 @@ export class ChannelService {
 
   async joinChannel(senderId: string, channelId: string) {
     try {
-      await this.prisma.channelMember.create({
-        data: {
-          userId: senderId,
-          isAdmin: false,
-          channelId: channelId,
-        },
-      });
-      this.createMessageInfoChannel(senderId, channelId, '', 'join Channel');
+      const channel = await this.prisma.channel.findUnique({ where: { id: channelId } });
+      const isAlredyJoined = await this.prisma.channelMember.findMany({ where: { channelId, userId: senderId } });
+      if (channel && isAlredyJoined.length === 0) {
+        await this.prisma.channelMember.create({
+          data: {
+            userId: senderId,
+            isAdmin: false,
+            channelId: channelId,
+          },
+        });
+        this.createMessageInfoChannel(senderId, channelId, '', 'join Channel');
+      }
     } catch (error) {
       return { error: true };
     }
@@ -625,7 +661,7 @@ export class ChannelService {
         });
         if (user) {
           const tm = parseInt(timer);
-          const mute = await this.prisma.mutedMember.create({
+          await this.prisma.mutedMember.create({
             data: {
               userId,
               unmuted_at: new Date(new Date().getTime() + tm),
@@ -634,9 +670,7 @@ export class ChannelService {
           });
         }
       }
-    } catch (error) {
-      return { error: true };
-    }
+    } catch (error) { }
   }
 
   async cancelTimeOutByAdmin(
@@ -701,7 +735,7 @@ export class ChannelService {
       }
       return -1;
     } catch (error) {
-      return { error: true };
     }
+    return 0;
   }
 }

@@ -23,8 +23,9 @@ import { useRouter } from 'next/navigation';
 import { FaGamepad } from 'react-icons/fa';
 import PlayInvite from '../../GamePage/components/Invite';
 import WelcomeMessage from './welcome';
+import { Socket } from 'socket.io-client';
 
-const BoxChat = () => {
+const BoxChat = ({ socketChat }: { socketChat: Socket }) => {
   const router = useRouter();
 
   const scrollAreaRef = useRef<HTMLDivElement | null>(null);
@@ -35,10 +36,9 @@ const BoxChat = () => {
 
   const {
     geust,
-    user,
     socket,
+    user,
     setGeust,
-    updateInfo,
     displayChat,
     setDisplayChat,
   } = useGlobalContext();
@@ -53,10 +53,10 @@ const BoxChat = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [Allmsg, isTyping, user.id, geust.id]);
+  }, [Allmsg, user.id, geust.id]);
 
   useEffect(() => {
-    if (user.id !== '-1' && socket) {
+    if (user.id !== '-1') {
       const handleReceivedMessage = (data: messageDto) => {
         if (
           (geust.isUser &&
@@ -70,19 +70,19 @@ const BoxChat = () => {
           setAllMessage((prevMessages) => [...prevMessages, data]);
 
           if (data.senderId !== user.id) {
-            socket.emit('messagsSeenEmit', {
+            socketChat.emit('messagsSeenEmit', {
               senderId: user.id,
               receivedId: geust.id,
             });
           }
         }
       };
-      socket.on('emitNewMessage', handleReceivedMessage);
+      socketChat.on('emitNewMessage', handleReceivedMessage);
       return () => {
-        socket.off('emitNewMessage', handleReceivedMessage);
+        socketChat.off('emitNewMessage', handleReceivedMessage);
       };
     }
-  }, [socket, user.id, geust.id]);
+  }, [user.id, geust.id]);
 
   const [isBlocked, setIsBlocked] = useState<number>(0);
   const [showUnblockAlert, setUnblockAlert] = useState<boolean>(false);
@@ -98,11 +98,11 @@ const BoxChat = () => {
         socket.off('blockUserToUser', upDateGeust);
       };
     }
-  }, [socket, user.id, geust.id]);
+  }, [user.id, geust.id, socket]);
 
   useEffect(() => {
-    if (msg != '' && socket && !isBlocked) {
-      socket.emit('isTyping', {
+    if (msg != '' && !isBlocked) {
+      socketChat.emit('isTyping', {
         content: '',
         senderId: user.id,
         receivedId: geust.id,
@@ -111,7 +111,7 @@ const BoxChat = () => {
   }, [msg]);
 
   useEffect(() => {
-    if (user.id !== '-1' && socket) {
+    if (user.id !== '-1') {
       const updateIsTyping = (data: messageDto) => {
         if (data.senderId === geust.id) {
           setIsTyping(true);
@@ -120,9 +120,9 @@ const BoxChat = () => {
           }, 2000);
         }
       };
-      socket.on('isTyping', updateIsTyping);
+      socketChat.on('isTyping', updateIsTyping);
       return () => {
-        socket.off('isTyping', updateIsTyping);
+        socketChat.off('isTyping', updateIsTyping);
       };
     }
   }, [geust.id, user.id]);
@@ -151,21 +151,19 @@ const BoxChat = () => {
         socket.off('mutedUserInChannel', checkUserIsMuted);
       };
     }
-  }, [socket, geust.id, user.id, updateInfo]);
+  }, [geust.id, user.id]);
 
   const handleSendMessage = () => {
     if (msg.trim() != '') {
       if (isBlocked === 1) {
         setUnblockAlert(true);
       } else {
-        if (socket) {
-          socket.emit('createMessage', {
-            isDirectMessage: geust.isUser,
-            content: msg.trim(),
-            senderId: user.id,
-            receivedId: geust.id,
-          });
-        }
+        socketChat.emit('createMessage', {
+          isDirectMessage: geust.isUser,
+          content: msg.trim(),
+          senderId: user.id,
+          receivedId: geust.id,
+        });
         setMsg('');
       }
     }
@@ -179,58 +177,46 @@ const BoxChat = () => {
   }
 
   useEffect(() => {
-    if (socket && geust.id !== '-1' && user.id !== '-1') {
+    if (geust.id !== '-1' && user.id !== '-1') {
       getDataAllMessage();
-      socket.emit('messagsSeenEmit', {
+      socketChat.emit('messagsSeenEmit', {
         senderId: user.id,
         receivedId: geust.id,
       });
     }
-  }, [socket, geust.id, user.id]);
+  }, [geust.id, user.id]);
+
+
 
   useEffect(() => {
-    const getDataGeust = async (data: { idChannel: string }) => {
-      if (geust.id == data.idChannel) {
-        const temp = await getVueGeust(user.id, geust.id, false);
-        setGeust(temp);
-        getDataAllMessage();
+
+    const getMessageEmit = () => {
+      getDataAllMessage();
+    };
+    socketChat.on('messagsSeenEmit', getMessageEmit);
+    return () => {
+      socketChat.off('messagsSeenEmit', getMessageEmit);
+    };
+
+  }, [Allmsg.length]);
+
+
+  // for game
+  useEffect(() => {
+
+    const updateStatusGeust = async () => {
+      if (geust.id !== '-1' && geust.isUser) {
+        const geustTemp = await getUserGeust(geust.id);
+        if (geustTemp !== undefined) setGeust(geustTemp);
       }
     };
-    if (socket) {
-      socket.on('updateChannel', getDataGeust);
-      return () => {
-        socket.off('updateChannel', getDataGeust);
-      };
-    }
-  }, [socket, geust.id]);
+    updateStatusGeust();
+    socketChat.on('updateStatusGeust', updateStatusGeust);
+    return () => {
+      socketChat.off('updateStatusGeust', updateStatusGeust);
+    };
 
-  useEffect(() => {
-    if (socket) {
-      const getMessageEmit = () => {
-        getDataAllMessage();
-      };
-      socket.on('messagsSeenEmit', getMessageEmit);
-      return () => {
-        socket.off('messagsSeenEmit', getMessageEmit);
-      };
-    }
-  }, [socket, Allmsg.length]);
-
-  useEffect(() => {
-    if (socket) {
-      const updateStatusGeust = async () => {
-        if (geust.id !== '-1' && geust.isUser) {
-          const geustTemp = await getUserGeust(geust.id);
-          if (geustTemp !== undefined) setGeust(geustTemp);
-        }
-      };
-      updateStatusGeust();
-      socket.on('updateStatusGeust', updateStatusGeust);
-      return () => {
-        socket.off('updateStatusGeust', updateStatusGeust);
-      };
-    }
-  }, [socket, geust.id]);
+  }, [geust.id]);
 
   return geust.id != '-1' ? (
     <Box
@@ -263,11 +249,10 @@ const BoxChat = () => {
               }
               sx={{
                 '& .MuiBadge-badge': {
-                  backgroundColor: `${
-                    geust.status === 'ACTIF' && isBlocked === 0
-                      ? '#07F102'
-                      : '#B4B4B4'
-                  }`,
+                  backgroundColor: `${geust.status === 'ACTIF' && isBlocked === 0
+                    ? '#07F102'
+                    : '#B4B4B4'
+                    }`,
                   width: 15,
                   height: 15,
                   borderRadius: 50,
@@ -307,9 +292,8 @@ const BoxChat = () => {
               }}
               size="2"
               weight="bold"
-              className={`${
-                geust.isUser ? 'hover:underline cursor-pointer pl-2' : 'pl-2'
-              }`}
+              className={`${geust.isUser ? 'hover:underline cursor-pointer pl-2' : 'pl-2'
+                }`}
             >
               {geust.nickname}
             </Text>
@@ -401,8 +385,7 @@ const BoxChat = () => {
 
             <div
               className={`flex items-center justify-center w-[30px] h-[30px] 
-                rounded-[10px] bg-[#254BD6]  m-[1px] ${
-                  isMuted ? '' : 'cursor-pointer'
+                rounded-[10px] bg-[#254BD6]  m-[1px] ${isMuted ? '' : 'cursor-pointer'
                 } `}
             >
               {!isMuted ? (
@@ -432,10 +415,10 @@ const BoxChat = () => {
               <button
                 onClick={async () => {
                   await unBlockedUser(user.id, geust.id);
-                  socket?.emit('blockUserToUser', {
-                    senderId: user.id,
-                    receivedId: geust.id,
-                  });
+                  // socket?.emit('blockUserToUser', {
+                  //   senderId: user.id,
+                  //   receivedId: geust.id,
+                  // });
                   setUnblockAlert(false);
                   setIsBlocked(0);
                 }}

@@ -11,9 +11,7 @@ export default function Home() {
         Games
       </h1>
       <div
-        className=" flex flex-col 
-      "
-      >
+        className=" flex flex-col">
         <h2 className="text-[#C4C4C4]  text-xl/[18px] text-left w-full  font-700 font-normal mb-5">
           Training
         </h2>

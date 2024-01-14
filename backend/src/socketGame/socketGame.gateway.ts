@@ -12,7 +12,7 @@ import {
 import { Server, Socket } from "socket.io";
 import { MessagesService } from "src/messages/messages.service";
 import { CreateMessageDto } from "src/messages/dto/create-message.dto";
-import { SocketGatewayService } from "./socket.service";
+import { SocketGameGatewayService } from "./socketGame.service";
 import { PrismaService } from "src/prisma/prisma.service";
 import { GameService } from "src/game/game.service";
 import { BallDto, PaddleDto } from "src/game/dto";
@@ -20,14 +20,19 @@ import { UseGuards } from "@nestjs/common";
 import { JwtGuardSocket } from 'src/auth/guard/jwt.guard-socket';
 // import { PongServise } from "src/game/game.service";
 
+interface RoomState {
+  player1: PaddleDto;
+  player2: PaddleDto;
+  ball: BallDto;
+}
+
 
 @UseGuards(JwtGuardSocket)
-@WebSocketGateway()
-export class SocketGateway
+@WebSocketGateway({ transports: ['websocket'], namespace: 'game' })
+export class SocketGameGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   constructor(
-    // private gameService: PongServise,
-    private socketGatewayService: SocketGatewayService,
+    private socketGameGatewayService: SocketGameGatewayService,
     private gameService: GameService,
     private prisma: PrismaService
   ) { }
@@ -35,18 +40,26 @@ export class SocketGateway
   @WebSocketServer() server: Server;
 
   afterInit(server: any) {
-    // //console.log("Gateway Initialized");
   }
+
+  onModuleInit() { }
+
+  private clients: Map<string, Socket> = new Map();
+  private joindClients: Map<string, number> = new Map();
+  private rooms: Map<string, string[]> = new Map();
+  private roomState: Map<string, RoomState> = new Map();
+  private ballPositionInterval: Map<string, NodeJS.Timeout> = new Map();
+
+  ROUND_LIMIT = 6;
+  joindRoom = 0;
 
 
   async handleConnection(client: Socket) {
-    console.log("handleConnection------------");
-    this.socketGatewayService.handleConnection(client, this.server);
+    console.log("Socket game has been connected");
   }
 
   async handleDisconnect(client: Socket) {
-    console.log("clientDisconnected------------");
-    this.socketGatewayService.handleDisconnect(client, this.server);
+    console.log("Socket game has been disconnected");
     if (this.clients.has(client.id)) {
       this.clients.delete(client.id);
       const room = this.findRoomByClientId(client.id);
@@ -59,38 +72,7 @@ export class SocketGateway
     }
   }
 
-  @SubscribeMessage("updateData")
-  async updateData(@MessageBody() ids: CreateMessageDto) {
-    this.socketGatewayService.updateData(ids, this.server);
-  }
 
-
-  @SubscribeMessage("updateStatusGeust")
-  async updateStatusGeust(@MessageBody() senderId: string) {
-    this.socketGatewayService.updateStatusGeust(senderId, this.server);
-  }
-
-
-
-  @SubscribeMessage("blockUserToUser")
-  async blockUserToUser(@MessageBody() ids: CreateMessageDto) {
-    this.server.to(ids.receivedId).emit("blockUserToUser", {});
-    this.server.to(ids.senderId).emit("blockUserToUser", {});
-  }
-
-  @SubscribeMessage("mutedUserInChannel")
-  async mutedUserInChannel(@MessageBody() idChannel: string) {
-    this.socketGatewayService.mutedUserInChannel(idChannel, this.server);
-  }
-
-  @SubscribeMessage("sendNotification")
-  async handleNotif(@MessageBody() receivedId: string) {
-    this.server.to(receivedId).emit("sendNotification");
-  }
-
-
-  ROUND_LIMIT = 6;
-  joindRoom = 0;
   private GameInit(roomName: string) {
     this.roomState.set(roomName, {
       player1: {
@@ -121,13 +103,9 @@ export class SocketGateway
     });
   }
 
-  private clients: Map<string, Socket> = new Map();
-  private joindClients: Map<string, number> = new Map();
-  private rooms: Map<string, string[]> = new Map();
-  private roomState: Map<string, RoomState> = new Map();
-  private ballPositionInterval: Map<string, NodeJS.Timeout> = new Map();
 
-  onModuleInit() { }
+
+
 
   collision(ball: any, player: any) {
     ball.top = ball.y - (ball.radius + 1);
@@ -485,8 +463,3 @@ export class SocketGateway
   }
 }
 
-interface RoomState {
-  player1: PaddleDto;
-  player2: PaddleDto;
-  ball: BallDto;
-}

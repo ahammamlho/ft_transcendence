@@ -117,6 +117,9 @@ export class MessagesService {
     try {
       let notSendTo: string = "";
 
+      const isUserInChannel = await this.prisma.channelMember.findUnique(
+        { where: { Unique_userId_channelId: { userId: createMessageDto.senderId, channelId: createMessageDto.receivedId } } });
+      if (!isUserInChannel) return;
       const channel = await this.prisma.channel.findUnique({ where: { id: createMessageDto.receivedId } })
 
       const channelMember = await this.prisma.channelMember.findMany(
@@ -184,16 +187,17 @@ export class MessagesService {
         server.to(member.userId).emit('emitNewMessage', temp);
       }
     } catch (error) {
-      return { error: true }
     }
   }
 
   async getDirectMessage(senderId: string, receivedId: string) {
+
     try {
       const msgUserTemp = await this.prisma.message.findMany({
         where: {
-          OR: [{ senderId, receivedId },
-          { senderId: receivedId, receivedId: senderId },
+          OR: [
+            { senderId, receivedId },
+            { senderId: receivedId, receivedId: senderId },
           ],
         },
         orderBy: {
@@ -249,8 +253,8 @@ export class MessagesService {
       )
       return result;
     } catch (error) {
-      return { error: true }
     }
+    return null;
   }
 
   async getChannelMessage(senderId: string, channelId: string) {
@@ -271,11 +275,8 @@ export class MessagesService {
         const result = await Promise.all(
           msgUserTemp
             .filter((msg: Message) => {
-              return (!msg.notSendTo.includes(senderId) && user.createdAt < msg.createdAt)
-                || (msg.content.includes('create') ||
-                  msg.content.includes('add') ||
-                  (msg.content.includes('create'))
-                  && msg.InfoMessage == true)
+              return ((!msg.notSendTo.includes(senderId) && user.createdAt < msg.createdAt)
+                || ((msg.content.includes('create') || msg.content.includes('add') || msg.content.includes('create')) && msg.InfoMessage == true))
             })
             .map(async (msg: Message) => {
               const senderUser = await this.prisma.user.findUnique({ where: { id: msg.senderId } });
@@ -358,6 +359,7 @@ export class MessagesService {
     }
 
     for (const channel of myChannels) {
+
       const lastMessageChannel: Message = await this.prisma.message.findFirst({
         where: {
           isDirectMessage: false,
@@ -367,6 +369,7 @@ export class MessagesService {
           createdAt: "desc",
         },
       });
+
       const userSender = await this.prisma.user.findUnique({ where: { id: lastMessageChannel.senderId } });
       const temp: messageDto = {
         isDirectMessage: false,
@@ -585,7 +588,8 @@ export class MessagesService {
       return result;
 
     } catch (error) {
-      return { error: true }
+
     }
+    return null;
   }
 }
