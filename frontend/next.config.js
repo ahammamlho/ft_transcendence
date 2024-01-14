@@ -1,20 +1,20 @@
 /** @type {import('next').NextConfig} */
 
-require("dotenv").config();
+require('dotenv').config();
 
 const nextConfig = {
   async redirects() {
     return [
       {
-        source: "/",
-        destination: "/HomePage",
+        source: '/',
+        destination: '/HomePage',
         permanent: true,
       },
     ];
   },
 
   images: {
-    domains: ["cdn.intra.42.fr", "localhost", "lh3.googleusercontent.com"],
+    domains: ['cdn.intra.42.fr', 'localhost', 'lh3.googleusercontent.com'],
   },
 };
 

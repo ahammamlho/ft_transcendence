@@ -1,8 +1,8 @@
-"use client";
-import { useEffect, useState } from "react";
-import LeaderBItem from "./components/LeaderBItem";
-import { useGlobalContext } from "../context/store";
-import { getLeaderBoard } from "@/app/FriendsPage/apiFriend/gameApi";
+'use client';
+import { useEffect, useState } from 'react';
+import LeaderBItem from './components/LeaderBItem';
+import { useGlobalContext } from '../context/store';
+import { getLeaderBoard } from '@/app/FriendsPage/apiFriend/gameApi';
 
 export default function LeaderboardPage() {
   const { updateInfo } = useGlobalContext();
@@ -47,13 +47,13 @@ export default function LeaderboardPage() {
         </div>
         {leaderBoardList.map((item, index) => (
           <LeaderBItem
-            key={"leaderboard-" + index}
+            key={'leaderboard-' + index}
             playerRank={item.rank}
             playerAvatar={item.userAvatar}
             playerUser={item.userName}
-            playerLevel={item.level + "%"}
+            playerLevel={item.level + '%'}
             PlayerNbrOfMatches={item.nbrOfMatches}
-            playerWinRate={item.winRate + "%"}
+            playerWinRate={item.winRate + '%'}
           />
         ))}
       </div>

@@ -12,7 +12,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateChannelDto, memberChannelDto } from './dto/create-channel.dto';
 import * as bcrypt from 'bcrypt';
 import { NotificationService } from 'src/notification/notification.service';
-import { AES, enc } from 'crypto-js';
+// import { AES, enc } from 'crypto-js';
 
 @Injectable()
 export class ChannelService {

@@ -316,8 +316,8 @@ export const GlobalContextProvider = ({
                       // router.push("/GamePage/invite");
                     }}
                     className="w-fit font-meduim  rounded-md   text-white bg-[#323C52] hover:bg-[#43516e]
-                          text-xs  px-4 py-2 mx-2
-                          md:text-sm lg:text-md lg:px-4"
+                        text-xs  px-4 py-2 mx-2
+                        md:text-sm lg:text-md lg:px-4"
                   >
                     Decline
                   </button>
@@ -328,8 +328,8 @@ export const GlobalContextProvider = ({
                       router.push('/GamePage/invite');
                     }}
                     className="w-fit font-meduim  rounded-md   text-white bg-color-main-whith hover:bg-[#2d55e6]
-              text-xs  px-4 py-2 mx-2
-              md:text-sm lg:text-md lg:px-4"
+            text-xs  px-4 py-2 mx-2
+            md:text-sm lg:text-md lg:px-4"
                   >
                     Accept
                   </button>
