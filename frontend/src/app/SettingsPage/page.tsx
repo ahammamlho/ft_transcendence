@@ -159,7 +159,7 @@ export default function SettingsPage() {
                       } else {
                         toast.error('Wrong authentication code');
                       }
-                    } catch (e) {}
+                    } catch (e) { }
                   }}
                 >
                   Active 2FA
@@ -175,13 +175,12 @@ export default function SettingsPage() {
                   const validationResult =
                     newNickNameSchema.safeParse(newNickName);
                   if (!validationResult.success) {
-                    toast.error('nickname error');
+                    toast.error('Invalid username');
                   } else {
                     try {
                       const token = Cookies.get('access_token');
                       const response = await fetch(
-                        `${process.env.NEXT_PUBLIC_BACK}/user/updateNickname/${
-                          user.intra_id
+                        `${process.env.NEXT_PUBLIC_BACK}/user/updateNickname/${user.intra_id
                         }/${newNickName.toLowerCase()}`,
                         {
                           method: 'POST',
@@ -191,14 +190,17 @@ export default function SettingsPage() {
                           },
                         },
                       );
+                      console.log(response);
                       if (response.status === 409)
                         toast.error('nickname aleady exist');
-                      else if (response.status === 201) {
+                      else if (response.status === 400) {
+                        toast.error('Invalid usernames');
+                      } else if (response.status === 201) {
                         toast.success('nickname has been change');
                         const tmp = await getDataOwner();
                         setUser(tmp);
                       }
-                    } catch (error) {}
+                    } catch (error) { }
                   }
                 } else {
                   router.push('/DashboardPage');

@@ -16,7 +16,9 @@ enum Status {
 }
 
 export default function MembersChannel() {
+
   const [searsh, setSearsh] = useState('');
+  const [update, setUpdate] = useState(0);
   const { user, geust, socket, setGeust } = useGlobalContext();
   const [members, setMembers] = useState<memberChannelDto[]>([]);
   const [bannedmembers, setBannedMembers] = useState<memberChannelDto[]>([]);
@@ -39,84 +41,11 @@ export default function MembersChannel() {
     }
   };
 
-  const getMemberChannelForEmit = async (data: { idChannel: string }) => {
-
-    if (geust.id === data.idChannel) {
-      const tmp: {
-        regularMembres: memberChannelDto[];
-        bannedMembers: memberChannelDto[];
-      } = await getMembersChannel(user.id, geust.id);
-      setMembers(tmp.regularMembres);
-      setBannedMembers(tmp.bannedMembers);
-      setMembersFlitred(tmp.regularMembres);
-      setBannedMembersFlitred(tmp.bannedMembers);
-    }
-  };
 
   useEffect(() => {
     if (geust.id !== '-1' && !geust.isUser) getMemberChannel();
-  }, [geust.id]);
+  }, [geust.id, update]);
 
-  useEffect(() => {
-    if (socket) {
-      socket.on('mutedUserInChannel', getMemberChannelForEmit);
-      return () => {
-        socket.off('mutedUserInChannel', getMemberChannelForEmit);
-      };
-    }
-  }, [socket, geust.id]);
-
-  useEffect(() => {
-    if (socket) {
-      socket.on('changeStatusMember', getMemberChannel);
-      return () => {
-        socket.off('changeStatusMember', getMemberChannel);
-      };
-    }
-  }, [socket, geust.id]);
-
-  useEffect(() => {
-    if (socket) {
-      socket.on('leaveChannel', getMemberChannel);
-      return () => {
-        socket.off('leaveChannel', getMemberChannel);
-      };
-    }
-  }, [socket, geust.id]);
-
-  useEffect(() => {
-    if (socket) {
-      socket.on('updateChannel', getMemberChannel);
-      return () => {
-        socket.off('updateChannel', getMemberChannel);
-      };
-    }
-  }, [socket, geust.id]);
-
-  useEffect(() => {
-    const handleKickedMemeber = async (data: {
-      channelId: string;
-      memberId: string;
-    }) => {
-      if (user.id === data.memberId) {
-        router.push('/ChatPage');
-        setGeust((pre) => {
-          return {
-            ...pre,
-            id: '-1',
-          };
-        });
-      } else {
-        getMemberChannel();
-      }
-    };
-    if (socket) {
-      socket.on('kickedFromChannel', handleKickedMemeber);
-      return () => {
-        socket.off('kickedFromChannel', handleKickedMemeber);
-      };
-    }
-  }, [socket, geust.id]);
 
   useEffect(() => {
     const mutedTimer = async () => {
@@ -179,6 +108,8 @@ export default function MembersChannel() {
                 <LongMenu
                   member={member}
                   banned={isMemberExist(member, bannedmembers)}
+                  setUpdate={setUpdate}
+
                 />
               ) : (
                 <></>
@@ -253,7 +184,7 @@ export default function MembersChannel() {
           }}
         ></input>
 
-        {isUserAdmin() ? <AlertsAddUserChannel /> : <></>}
+        {isUserAdmin() ? <AlertsAddUserChannel setUpdate={setUpdate} /> : <></>}
       </div>
 
       <div className="mt-2">
@@ -270,7 +201,6 @@ export default function MembersChannel() {
         <div></div>
       )}
 
-      {/* <hr className="border-b-[0.5px] mt-4 border-gray-600 w-3/4" /> */}
 
       <div className="flex pt-3 items-center justify-end text-red-500  w-3/4">
         <button
@@ -287,11 +217,7 @@ export default function MembersChannel() {
               inGaming: false,
             });
             const tmp = await leaveChannel(user.id, geust.id);
-            socket?.emit('updateChannel', {
-              senderId: user.id,
-              receivedId: geust.id,
-              isDirectMessage: false,
-            });
+
             router.push('/ChatPage');
           }}
           className="flex items-center rounded-md text-red-500 px-2

@@ -156,8 +156,6 @@ export const GlobalContextProvider = ({
         },
       });
       setSocket(socket);
-      socket.on('connect', () => { });
-      socket.on('disconnect', () => { });
     }
   }, [user.id]);
 
@@ -243,6 +241,7 @@ export const GlobalContextProvider = ({
   const [inviterdName, setInvitedName] = useState('');
 
   console.log('---------- useContext Called ----------');
+  if (socket === null) return <></>
   return (
     <GlobalContext.Provider
       value={{

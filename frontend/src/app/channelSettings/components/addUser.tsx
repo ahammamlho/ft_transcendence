@@ -14,7 +14,9 @@ import {
 } from "../../ChatPage/api/fetch-channel";
 import { usersCanJoinChannel } from "../../ChatPage/api/fetch-users";
 
-export default function AlertsAddUserChannel() {
+export default function AlertsAddUserChannel(
+  { setUpdate }: { setUpdate: any }
+) {
   const [open, setOpen] = React.useState(false);
   const [searsh, setSearsh] = useState("");
   const [valideUsers, setValideUsers] = useState<userDto[]>([]);
@@ -94,12 +96,12 @@ export default function AlertsAddUserChannel() {
                   async () => {
                     await addUserToChannel(user.id, geust.id, elm.id);
                     setSearsh("");
+                    setUpdate((pre: number) => pre + 1)
                     socket?.emit('emitNewMessage', {
                       senderId: user.id,
                       receivedId: geust.id,
                       isDirectMessage: false
                     });
-                    socket?.emit('changeStatusMember', geust.id);
                     socket?.emit("sendNotification", elm.id);
                     handleClose();
                   }}>

@@ -24,19 +24,36 @@ export async function updateChannel(
   channelId: string,
 ) {
   try {
+
     const token = Cookies.get('access_token');
-    const res = await axios.post(
+    const res = await fetch(
       `${process.env.NEXT_PUBLIC_BACK}/channel/updateChannel/${senderId}/${channelId}`,
-      channelData,
       {
+        method: 'POST',
         headers: {
-          Authorization: `Bearer ${token}`,
+          authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify(channelData)
       },
     );
-    const data = await res.data;
-    return data;
-  } catch (error) { }
+    // const res = await axios.post(
+    //   ``,
+    //   channelData,
+    //   {
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //   },
+    // );
+    // const data = await res.data;
+    return res;
+  } catch (error) {
+    return {
+      status: 409,
+      channel: {},
+    }
+  }
 }
 
 export async function addUserToChannel(

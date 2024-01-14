@@ -16,14 +16,12 @@ interface PongProps {
 
 const Pong = ({ room, isLeft, difficulty }: PongProps) => {
 
-  const ROUND_LIMIT = 6;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvasCtx = useCanvas();
   const { user, socket } = useGlobalContext();
   let animationFrameId: number;
   let animationFrameId1: number;
   const router = useRouter();
-  const [alert, setAlert] = useState(0);
 
   const player: Padlle = {
     x: 10,
@@ -70,18 +68,10 @@ const Pong = ({ room, isLeft, difficulty }: PongProps) => {
     const handleMouseMove = (e: any) => {
       const rect = canvas.getBoundingClientRect();
       if (!isLeft) {
-        // const mouseY = e.clientY - rect.top - computer.height / 2;
-        // computer.color = "red";
-        // computer.y = Math.min(
-        //   Math.max(mouseY, 0),
-        //   canvas.height - computer.height
-        // );
         computer.y = e.clientY - rect.top - player.height / 2;
       } else {
-        // const mouseY = e.clientY - rect.top - player.height / 2;
         player.color = "red";
         player.y = e.clientY - rect.top - player.height / 2;
-        // player.y = Math.min(Math.max(mouseY, 0), canvas.height - player.height);
       }
 
       socket.emit("updatePaddle", {
@@ -122,10 +112,8 @@ const Pong = ({ room, isLeft, difficulty }: PongProps) => {
     socket.on("resivePaddle", (data: any) => {
       if (!isLeft) {
         player.y = data;
-        // player.score = data.score;
       } else {
         computer.y = data;
-        // computer.score = data;
       }
     });
 
@@ -181,12 +169,6 @@ const Pong = ({ room, isLeft, difficulty }: PongProps) => {
 
     };
 
-    // function handlePopstate(){
-    //   socket?.emit("opponentLeft", {room: room, userId:user.id});
-    //   // router.push('/GamePage/random');
-    // };
-
-    // window.addEventListener('popstate', handlePopstate);
     window.addEventListener('beforeunload', handleBeforeUnload);
     window.addEventListener("resize", handleWindowResize);
     window.addEventListener("mousemove", handleMouseMove);
@@ -194,17 +176,13 @@ const Pong = ({ room, isLeft, difficulty }: PongProps) => {
 
 
     return () => {
-      // socket?.emit("opponentLeft", { room: inviteData.room, userId: user.id });
       window.cancelAnimationFrame(animationFrameId);
       window.cancelAnimationFrame(animationFrameId1);
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener('beforeunload', handleBeforeUnload);
       window.removeEventListener("resize", handleWindowResize);
       window.removeEventListener("keydown", handleKey);
-      // window.removeEventListener('popstate', () => {
-      // });
       socket.off("gameOver");
-      // socket.off("clientDisconnected");
       socket.off("updateScore");
       socket.off("updateTheBall");
       socket.off("resivePaddle");

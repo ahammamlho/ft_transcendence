@@ -117,6 +117,9 @@ export class MessagesService {
     try {
       let notSendTo: string = "";
 
+      const isUserInChannel = await this.prisma.channelMember.findUnique(
+        { where: { Unique_userId_channelId: { userId: createMessageDto.senderId, channelId: createMessageDto.receivedId } } });
+      if (!isUserInChannel) return;
       const channel = await this.prisma.channel.findUnique({ where: { id: createMessageDto.receivedId } })
 
       const channelMember = await this.prisma.channelMember.findMany(
@@ -184,7 +187,6 @@ export class MessagesService {
         server.to(member.userId).emit('emitNewMessage', temp);
       }
     } catch (error) {
-      return { error: true }
     }
   }
 

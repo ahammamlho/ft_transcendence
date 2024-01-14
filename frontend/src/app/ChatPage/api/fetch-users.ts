@@ -34,9 +34,8 @@ export async function getUserGeust(id: string) {
         },
       },
     );
-
+    console.log("getUserGeust", res);
     const geust = await res.data;
-    if (geust.error) throw Error;
     return geust;
   } catch (error) { }
 }

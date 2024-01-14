@@ -12,6 +12,7 @@ import { ServeStaticModule } from "@nestjs/serve-static";
 import { join } from "path";
 import { GameModule } from "./game/game.module";
 import { NotificationModule } from "./notification/notification.module";
+import { SocketChatGatewayModule } from "./sockeChat/socketChat.module";
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { NotificationModule } from "./notification/notification.module";
     FriendshipModule,
     ChannelModule,
     SocketGatewayModule,
+    SocketChatGatewayModule,
     GameModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, "..", "uploads"),

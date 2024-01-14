@@ -27,20 +27,7 @@ const PageChat = () => {
     if (geust.id === '-1' && user.id !== '-1') getDataGeust();
   }, [user.id]);
 
-  useEffect(() => {
-    const getDataGeust = async () => {
-      if (geust.id !== '-1') {
-        const temp = await getVueGeust(user.id, geust.id, false);
-        setGeust(temp);
-      }
-    };
-    if (socket) {
-      socket.on('updateChannel', getDataGeust);
-      return () => {
-        socket.off('updateChannel', getDataGeust);
-      };
-    }
-  }, [socket]);
+
 
   const [isOwnerAdmin, setIsOwnerAdmin] = useState(false);
   useEffect(() => {
@@ -55,12 +42,6 @@ const PageChat = () => {
     if (geust.id !== '-1' && user.id !== '-1' && !geust.isUser)
       getData({ channelId: geust.id });
 
-    if (socket) {
-      socket.on('changeStatusMember', getData);
-      return () => {
-        socket.off('changeStatusMember', getData);
-      };
-    }
   }, [geust.id, user.id]);
 
   return (

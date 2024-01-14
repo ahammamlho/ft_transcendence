@@ -5,13 +5,13 @@ import { GameService } from "src/game/game.service";
 import { NotificationService } from "src/notification/notification.service";
 import { PrismaService } from "src/prisma/prisma.service";
 import { UserService } from "src/user/user.service";
-import { SocketGateway } from "./socket.gateway";
-import { SocketGatewayService } from "./socket.service";
+import { SocketGameGateway } from "./socketGame.gateway";
+import { SocketGameGatewayService } from "./socketGame.service";
 
 @Module({
   providers: [
-    SocketGateway,
-    SocketGatewayService,
+    SocketGameGateway,
+    SocketGameGatewayService,
     UserService,
     ChannelService,
     GameService,
@@ -20,4 +20,4 @@ import { SocketGatewayService } from "./socket.service";
     NotificationService
   ],
 })
-export class SocketGatewayModule { }
+export class SocketGameGatewayModule { }
