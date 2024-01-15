@@ -45,6 +45,8 @@ interface ContextProps {
   setGeust: Dispatch<SetStateAction<geustDto>>;
 
   socket: Socket | null; // Add the socket property
+
+  socketGame: Socket | null; // Add the socket property
 }
 
 const GlobalContext = createContext<ContextProps>({
@@ -95,6 +97,8 @@ const GlobalContext = createContext<ContextProps>({
   setGeust: () => { },
 
   socket: null,
+
+  socketGame: null,
 });
 
 export const GlobalContextProvider = ({
@@ -144,7 +148,6 @@ export const GlobalContextProvider = ({
   });
 
   const [socket, setSocket] = useState<Socket | null>(null);
-
   useEffect(() => {
     if (user.id && user.id != '-1') {
       const token = Cookies.get('access_token');
@@ -156,6 +159,23 @@ export const GlobalContextProvider = ({
         },
       });
       setSocket(socket);
+    }
+  }, [user.id]);
+
+  const [socketGame, setSocketGame] = useState<Socket | null>(null);
+  useEffect(() => {
+    if (user.id && user.id != '-1') {
+      const token = Cookies.get('access_token');
+      const socketgame = io(`${process.env.NEXT_PUBLIC_BACK}/game` || 'localhost', {
+        transports: ['websocket'],
+        query: {
+          senderId: user.id,
+          token: `Bearer ${token}`,
+        },
+      });
+      setSocketGame(socketgame);
+      socketgame.on("connect", () => { });
+      socketgame.on("disconnect", () => { });
     }
   }, [user.id]);
 
@@ -206,8 +226,8 @@ export const GlobalContextProvider = ({
   const [data, setData] = useState('');
 
   useEffect(() => {
-    if (socket) {
-      socket.on('invite', (data) => {
+    if (socketGame) {
+      socketGame.on('invite', (data) => {
         setData(data);
         setInviteData({
           userId1: data.userId1,
@@ -220,7 +240,8 @@ export const GlobalContextProvider = ({
         setInvitedName(data.nameInveted);
       });
 
-      socket.on('startGame', (data) => {
+      socketGame.on('startGame', (data) => {
+
         setInviteData({
           userId1: data.userId1,
           userId2: data.userId2,
@@ -228,14 +249,19 @@ export const GlobalContextProvider = ({
           selectedMap: 2,
           isLeft: data.userId1 == user.id ? false : true,
         });
+
         setOpenConfirm(false);
         router.push('/GamePage/invite');
       });
-      socket.on('declien', () => {
+      socketGame.on('declien', () => {
         setOpenConfirm(false);
       });
     }
-  }, [socket, data]);
+  }, [socketGame, data]);
+
+  useEffect(() => {
+    console.log('-------> ', inviteData);
+  }, [inviteData])
 
   const [openConfirm, setOpenConfirm] = useState(false);
   const [inviterdName, setInvitedName] = useState('');
@@ -258,6 +284,7 @@ export const GlobalContextProvider = ({
         setDisplayChat,
         inviteData,
         setInviteData,
+        socketGame
       }}
     >
       <div>
@@ -279,8 +306,8 @@ export const GlobalContextProvider = ({
             <div
               onClick={() => {
                 if (user.id === inviteData.userId1)
-                  socket?.emit('decline', inviteData.userId2);
-                else socket?.emit('decline', inviteData.userId1);
+                  socketGame?.emit('decline', inviteData.userId2);
+                else socketGame?.emit('decline', inviteData.userId1);
                 setOpenConfirm(false);
               }}
               className="flex flex-row justify-end mb-2 text-sm md:text-md lg:text-lg"
@@ -308,7 +335,7 @@ export const GlobalContextProvider = ({
                   <div className="flex flex-row items-center justify-center"></div>
                   <button
                     onClick={async () => {
-                      socket?.emit('decline', inviteData.userId1);
+                      socketGame?.emit('decline', inviteData.userId1);
                       setOpenConfirm(false);
                       // router.push("/GamePage/invite");
                     }}
@@ -320,9 +347,9 @@ export const GlobalContextProvider = ({
                   </button>
                   <button
                     onClick={async () => {
-                      socket?.emit('accept', data);
                       setOpenConfirm(false);
-                      router.push('/GamePage/invite');
+                      socketGame?.emit('accept', data);
+                      // router.push('/GamePage/invite');
                     }}
                     className="w-fit font-meduim  rounded-md   text-white bg-color-main-whith hover:bg-[#2d55e6]
             text-xs  px-4 py-2 mx-2

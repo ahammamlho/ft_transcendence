@@ -16,7 +16,7 @@ const MyComponent = ({
   title,
   link,
 }: MyComponentProps) => {
-  const { user, socket } = useGlobalContext();
+  const { socketGame } = useGlobalContext();
   const router = useRouter();
   return (
     <div
@@ -58,7 +58,7 @@ const MyComponent = ({
           "
         onClick={() => {
           if (link == "/GamePage/random") {
-            if (socket?.connected) router.push(link);
+            if (socketGame?.connected) router.push(link);
             else window.alert("Refresh the page and try again!");
           } else {
             router.push(link);

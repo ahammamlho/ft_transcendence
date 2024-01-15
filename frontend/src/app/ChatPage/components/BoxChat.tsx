@@ -1,29 +1,28 @@
 'use client';
+import Badge from '@mui/material/Badge';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import { Avatar, Box, Flex, ScrollArea, Text } from '@radix-ui/themes';
 import { formatDistance } from 'date-fns';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { BsFillSendFill } from 'react-icons/bs';
-import { RiPingPongFill } from 'react-icons/ri';
-import { IoSettingsSharp } from 'react-icons/io5';
+import { FaGamepad, FaRegStopCircle } from 'react-icons/fa';
 import { IoMdArrowRoundBack } from 'react-icons/io';
+import { IoSettingsSharp } from 'react-icons/io5';
+import { RiPingPongFill } from 'react-icons/ri';
+import { Socket } from 'socket.io-client';
 import { useGlobalContext } from '../../context/store';
 import { checkIsMuted } from '../api/fetch-channel';
 import { getMessageTwoUsers, getMessagesChannel } from '../api/fetch-msg';
-import { checkIsBlocked, getUserGeust, getVueGeust } from '../api/fetch-users';
+import { checkIsBlocked, getUserGeust } from '../api/fetch-users';
 import { unBlockedUser } from '../api/send-Friend-req';
-import { IsTypingMsg, ShowMessages } from './widgetMsg';
-import Badge from '@mui/material/Badge';
-import { FaRegStopCircle } from 'react-icons/fa';
-import { useRouter } from 'next/navigation';
-import { FaGamepad } from 'react-icons/fa';
-import PlayInvite from '../../GamePage/components/Invite';
 import WelcomeMessage from './welcome';
-import { Socket } from 'socket.io-client';
+import { IsTypingMsg, ShowMessages } from './widgetMsg';
+import PlayInvite from '@/app/GamePage/components/Invite';
 
 const BoxChat = ({ socketChat }: { socketChat: Socket }) => {
   const router = useRouter();
@@ -37,6 +36,7 @@ const BoxChat = ({ socketChat }: { socketChat: Socket }) => {
   const {
     geust,
     socket,
+    socketGame,
     user,
     setGeust,
     displayChat,
@@ -329,10 +329,11 @@ const BoxChat = ({ socketChat }: { socketChat: Socket }) => {
               size={20}
               className="cursor-pointer"
               onClick={() => {
+                console.log("clclclclcl", socketGame)
                 PlayInvite({
                   userId1: user.id,
                   userId2: geust.id,
-                  socket: socket,
+                  socket: socketGame,
                   nameInveted: user.nickname,
                 });
               }}

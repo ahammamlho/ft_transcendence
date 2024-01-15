@@ -21,6 +21,7 @@ const path_1 = require("path");
 const game_module_1 = require("./game/game.module");
 const notification_module_1 = require("./notification/notification.module");
 const socketChat_module_1 = require("./sockeChat/socketChat.module");
+const socketGame_module_1 = require("./socketGame/socketGame.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -36,6 +37,7 @@ exports.AppModule = AppModule = __decorate([
             channel_module_1.ChannelModule,
             socket_module_1.SocketGatewayModule,
             socketChat_module_1.SocketChatGatewayModule,
+            socketGame_module_1.SocketGameGatewayModule,
             game_module_1.GameModule,
             serve_static_1.ServeStaticModule.forRoot({
                 rootPath: (0, path_1.join)(__dirname, "..", "uploads"),

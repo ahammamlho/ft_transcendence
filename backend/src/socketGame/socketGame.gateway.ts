@@ -55,11 +55,15 @@ export class SocketGameGateway
 
 
   async handleConnection(client: Socket) {
-    console.log("Socket game has been connected");
+    console.log("***** Socket game has been connected ****");
+    try {
+      const senderId: string = client.handshake.query.senderId.toString();
+      client.join(senderId);
+    } catch (error) { }
   }
 
   async handleDisconnect(client: Socket) {
-    console.log("Socket game has been disconnected");
+    console.log("***** Socket game has been disconnected ****");
     if (this.clients.has(client.id)) {
       this.clients.delete(client.id);
       const room = this.findRoomByClientId(client.id);
@@ -403,9 +407,9 @@ export class SocketGameGateway
 
   @SubscribeMessage("invite")
   onIvite(client: Socket, data: any) {
+    console.log("--> invited function called")
     this.inviteRoom.set(data.userId1, client);
     client.join(data.userId1);
-
     // this.rooms.set(data.userId1 + data.userId2, [data.userId1, data.userId2]);
     this.server.to(data.userId1).emit("invite", data);
     this.server.to(data.userId2).emit("invite", data);
@@ -413,6 +417,7 @@ export class SocketGameGateway
 
   @SubscribeMessage("accept")
   onAccept(client: Socket, data: any) {
+    console.log(data);
     this.inviteRoom.set(data.userId2, client);
     client.join(data.userId2);
 

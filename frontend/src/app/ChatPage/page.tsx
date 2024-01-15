@@ -23,6 +23,9 @@ const PageChat = () => {
         },
       });
       setSocketChat(socket);
+      return () => {
+        socket.disconnect();
+      };
     }
   }, [user.id]);
 

@@ -18,7 +18,7 @@ const Pong = ({ room, isLeft, difficulty }: PongProps) => {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvasCtx = useCanvas();
-  const { user, socket } = useGlobalContext();
+  const { user, socketGame } = useGlobalContext();
   let animationFrameId: number;
   let animationFrameId1: number;
   const router = useRouter();
@@ -61,7 +61,7 @@ const Pong = ({ room, isLeft, difficulty }: PongProps) => {
 
   useEffect(() => {
 
-    if (!socket) return;
+    if (!socketGame) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -74,7 +74,7 @@ const Pong = ({ room, isLeft, difficulty }: PongProps) => {
         player.y = e.clientY - rect.top - player.height / 2;
       }
 
-      socket.emit("updatePaddle", {
+      socketGame.emit("updatePaddle", {
         userId: user.id,
         room: room,
         paddle: isLeft ? player.y : computer.y,
@@ -99,7 +99,7 @@ const Pong = ({ room, isLeft, difficulty }: PongProps) => {
           player.y += 25;
         }
       }
-      socket.emit("updatePaddle", {
+      socketGame.emit("updatePaddle", {
         userId: user.id,
         room: room,
         paddle: isLeft ? player.y : computer.y,
@@ -109,7 +109,7 @@ const Pong = ({ room, isLeft, difficulty }: PongProps) => {
 
 
 
-    socket.on("resivePaddle", (data: any) => {
+    socketGame.on("resivePaddle", (data: any) => {
       if (!isLeft) {
         player.y = data;
       } else {
@@ -117,7 +117,7 @@ const Pong = ({ room, isLeft, difficulty }: PongProps) => {
       }
     });
 
-    socket.on("updateTheBall", (ballPosition: Ball) => {
+    socketGame.on("updateTheBall", (ballPosition: Ball) => {
       ball.x = ballPosition.x * ratio;
       ball.y = ballPosition.y;
       ball.velocityX = ballPosition.velocityX * ratio;
@@ -125,15 +125,15 @@ const Pong = ({ room, isLeft, difficulty }: PongProps) => {
       drawCanvas(ctx, canvas, canvasCtx, ball, computer, player, difficulty);
     });
 
-    socket.on("updateScore", (scorePlayer1: number, scorePlayer2: number) => {
+    socketGame.on("updateScore", (scorePlayer1: number, scorePlayer2: number) => {
       player.score = scorePlayer1;
       computer.score = scorePlayer2;
     });
 
-    socket.on("clientDisconnected", () => {
+    socketGame.on("clientDisconnected", () => {
 
     });
-    socket.on("gameOver", (state: string) => {
+    socketGame.on("gameOver", (state: string) => {
       setInterval(() => {
         if (state === "win") {
           drawText(ctx, "You win!", canvasCtx.width / 2, canvasCtx.height / 2);
@@ -165,7 +165,7 @@ const Pong = ({ room, isLeft, difficulty }: PongProps) => {
 
     function handleBeforeUnload(event: BeforeUnloadEvent) {
       router.replace('/GamePage/random');
-      socket?.emit("opponentLeft", { room: room, userId: user.id });
+      socketGame?.emit("opponentLeft", { room: room, userId: user.id });
 
     };
 
@@ -182,11 +182,11 @@ const Pong = ({ room, isLeft, difficulty }: PongProps) => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
       window.removeEventListener("resize", handleWindowResize);
       window.removeEventListener("keydown", handleKey);
-      socket.off("gameOver");
-      socket.off("updateScore");
-      socket.off("updateTheBall");
-      socket.off("resivePaddle");
-      socket.off("updatePaddle");
+      socketGame.off("gameOver");
+      socketGame.off("updateScore");
+      socketGame.off("updateTheBall");
+      socketGame.off("resivePaddle");
+      socketGame.off("updatePaddle");
 
     };
   }, [router]);

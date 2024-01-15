@@ -5,16 +5,16 @@ import { useGlobalContext } from "../../context/store";
 
 const WaitingForPlayer = () => {
   // const socket = useContext(WebsocketContext);
-  const { socket } = useGlobalContext()
+  const { socketGame } = useGlobalContext()
   const [message, setMessage] = useState("Waiting for another player...");
 
   useEffect(() => {
-    socket?.on("startGame", () => {
+    socketGame?.on("startGame", () => {
       // setMessage('Game started! You can play now.');
     });
 
     return () => {
-      socket?.off("startGame");
+      socketGame?.off("startGame");
     };
   }, []);
 

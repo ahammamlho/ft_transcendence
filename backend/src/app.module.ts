@@ -13,6 +13,7 @@ import { join } from "path";
 import { GameModule } from "./game/game.module";
 import { NotificationModule } from "./notification/notification.module";
 import { SocketChatGatewayModule } from "./sockeChat/socketChat.module";
+import { SocketGameGatewayModule } from "./socketGame/socketGame.module";
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { SocketChatGatewayModule } from "./sockeChat/socketChat.module";
     ChannelModule,
     SocketGatewayModule,
     SocketChatGatewayModule,
+    SocketGameGatewayModule,
     GameModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, "..", "uploads"),

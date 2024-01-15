@@ -216,8 +216,6 @@ export default function FriendItem(prompt: {
                   );
                   // setGeust(geustTemp);
                   localStorage.setItem('geust.id-user', prompt.friendInfo.id);
-                  console.log(geust)
-
                   router.push("/ChatPage");
                 }}
               />

@@ -9,7 +9,7 @@ import { Canvas, canvasContext } from "../components/interface";
 
 export default function Home() {
   const [showAlert, setShowAlert] = useState(false);
-  const { inviteData, socket, user } = useGlobalContext();
+  const { inviteData, socketGame, user,  } = useGlobalContext();
   const router = useRouter();
 
 
@@ -20,7 +20,7 @@ export default function Home() {
   };
   useEffect(() => {
 
-    socket?.on("opponentLeft", () => {
+    socketGame?.on("opponentLeft", () => {
       router.push("/GamePage");
 
     });
@@ -30,7 +30,6 @@ export default function Home() {
         setShowAlert(false);
       }, 3000);
     }
-
     const handlePopstate = (event: PopStateEvent) => {
 
 
@@ -41,7 +40,8 @@ export default function Home() {
       // if(gameStarted)
       // {
       // if (gameStarted)
-      socket?.emit("opponentLeft", { userId: user.id, room: inviteData.room, });
+
+      socketGame?.emit("opponentLeft", { userId: user.id, room: inviteData.room, });
       // setRoom("");
       // setButtonClicked(false);
       // setGameStarted(false);
@@ -56,9 +56,9 @@ export default function Home() {
     };
     window.addEventListener("popstate", handlePopstate);
     return () => {
-      socket?.off("opponentLeft");
+      socketGame?.off("opponentLeft");
     }
-  }, [socket, showAlert])
+  }, [socketGame, showAlert, inviteData.room])
 
   return (
     <canvasContext.Provider value={canvas}>

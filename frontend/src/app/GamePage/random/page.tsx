@@ -14,7 +14,7 @@ import { getUser } from "@/app/ChatPage/api/fetch-users";
 
 export default function Home() {
 
-  const { user, socket } = useGlobalContext();
+  const { user, socketGame } = useGlobalContext();
   const router = useRouter();
   const [message, setMessage] = useState("Start game!");
   const [room, setRoom] = useState("");
@@ -26,8 +26,8 @@ export default function Home() {
 
     if (!buttonClicked) {
       setMessage("Waiting ...");
-      socket?.emit("clientId", user.id);
-      socket?.emit("joinRoom", user.id);
+      socketGame?.emit("clientId", user.id);
+      socketGame?.emit("joinRoom", user.id);
       setButtonClicked(true);
     }
   };
@@ -54,7 +54,7 @@ export default function Home() {
   const [playerId, setPlayerIs] = useState({ "id1": "", "id2": "" })
   useEffect(() => {
     if (typeof window !== "undefined") {
-      socket?.on("opponentLeft", () => {
+      socketGame?.on("opponentLeft", () => {
         router.replace("/GamePage/random");
         setShowAlert(true);
         setGameStarted(false);
@@ -68,16 +68,16 @@ export default function Home() {
         }, 3000);
       }
 
-      socket?.on("startGame", (data: any) => {
+      socketGame?.on("startGame", (data: any) => {
         setPlayerIs({ "id1": data.player1, "id2": data.player2 })
         setRoom(data.roomName);
         setGameStarted(true);
         setMessage("Play again!");
       });
-      socket?.on("whichSide", (isLeft: boolean) => {
+      socketGame?.on("whichSide", (isLeft: boolean) => {
         setLeft(isLeft);
       });
-      socket?.on("alreadyExist", () => {
+      socketGame?.on("alreadyExist", () => {
         setButtonClicked(false);
         setShowAlert(true);
         setGameStarted(false);
@@ -86,7 +86,7 @@ export default function Home() {
       });
       const handlePopstate = (event: PopStateEvent) => {
         if (gameStarted)
-          socket?.emit("opponentLeft", { userId: user.id, room: room, });
+          socketGame?.emit("opponentLeft", { userId: user.id, room: room, });
         setButtonClicked(false);
         setGameStarted(false);
         setMessage("Start game!");
@@ -97,13 +97,13 @@ export default function Home() {
       return () => {
 
         // window.removeEventListener("popstate", handlePopstate);
-        socket?.off("startGame");
-        socket?.off("whichSide");
-        socket?.off("alreadyExist");
-        socket?.off("opponentLeft");
+        socketGame?.off("startGame");
+        socketGame?.off("whichSide");
+        socketGame?.off("alreadyExist");
+        socketGame?.off("opponentLeft");
       };
     } else return;
-  }, [user.id, gameStarted, showAlert, message, buttonClicked, room, socket]);
+  }, [user.id, gameStarted, showAlert, message, buttonClicked, room, socketGame]);
 
 
   useEffect(() => {
@@ -126,12 +126,12 @@ export default function Home() {
   }, [room, left, playerId.id1, playerId.id2, gameStarted])
 
   useEffect(() => {
-    if (socket) {
+    if (socketGame) {
       return () => {
-        socket.emit("clear", user.id);
+        socketGame.emit("clear", user.id);
       }
     }
-  }, [socket])
+  }, [socketGame])
   // 
   return (
     <div className="mt-2  h-full flex items-center justify-center">
