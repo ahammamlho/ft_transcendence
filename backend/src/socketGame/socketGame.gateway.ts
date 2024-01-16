@@ -278,9 +278,11 @@ export class SocketGameGateway
         data: { inGaming: false },
       });
       const users = await this.prisma.user.findMany();
+
       for (const user of users) {
         this.server.to(user.id).emit("updateStatusGeust", {});
       }
+
       delete this.joindClients[id];
       delete this.joindClients[id2];
     }
@@ -340,7 +342,6 @@ export class SocketGameGateway
 
   // @SubscribeMessage("invite")
   // onInvite(client: Socket, data: any) {
-
   //   this.
   //   this.server.to(data.userId).emit("invite", data);
   // }
