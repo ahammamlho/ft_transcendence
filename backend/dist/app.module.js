@@ -22,6 +22,8 @@ const game_module_1 = require("./game/game.module");
 const notification_module_1 = require("./notification/notification.module");
 const socketChat_module_1 = require("./sockeChat/socketChat.module");
 const socketGame_module_1 = require("./socketGame/socketGame.module");
+const app_controller_1 = require("./app.controller");
+const app_service_1 = require("./app.service");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -45,6 +47,8 @@ exports.AppModule = AppModule = __decorate([
             }),
             notification_module_1.NotificationModule
         ],
+        controllers: [app_controller_1.AppController],
+        providers: [app_service_1.AppService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

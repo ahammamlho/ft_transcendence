@@ -14,6 +14,8 @@ import { GameModule } from "./game/game.module";
 import { NotificationModule } from "./notification/notification.module";
 import { SocketChatGatewayModule } from "./sockeChat/socketChat.module";
 import { SocketGameGatewayModule } from "./socketGame/socketGame.module";
+import { AppController } from "./app.controller";
+import { AppService } from "./app.service";
 
 @Module({
   imports: [
@@ -34,5 +36,10 @@ import { SocketGameGatewayModule } from "./socketGame/socketGame.module";
     }),
     NotificationModule
   ],
+
+
+  controllers: [AppController],
+  providers: [AppService],
+
 })
 export class AppModule { }
