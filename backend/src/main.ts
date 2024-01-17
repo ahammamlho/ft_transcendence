@@ -20,7 +20,7 @@ async function bootstrap() {
     credentials: true,
   });
 
-  app.use(cookieParser());
+  // app.use(cookieParser());
 
   await app.listen(4000);
 }

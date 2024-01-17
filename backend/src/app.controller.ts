@@ -7,6 +7,6 @@ export class AppController {
 
     @Get()
     getMain() {
-        this.appService.getMain();
+        return this.appService.getMain();
     }
 }
